@@ -41,11 +41,11 @@ const CategoryGridBlock: React.FC<CategoriesProps> = ({
             spaceBetween: 10
         },
         '1280': {
-            slidesPerView: 5,
+            slidesPerView: 6,
             spaceBetween: 10
         },
         '1024': {
-            slidesPerView: 5,
+            slidesPerView: 6,
             spaceBetween: 10
         },
         '768': {

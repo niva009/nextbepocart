@@ -23,20 +23,20 @@ export default function ListingTabsElectronicFeed(props: BoxProps) {
         limit: LIMITS.ELETRONIC_PRODUCTS_LIMITS,
     });
     const {colSiderbar, lang} = props;
-    const [activeTabId, setActiveTab] = useState(1);
+    // const [activeTabId, setActiveTab] = useState(1);
     
-    const activeTab = useMemo(() => {
-        // @ts-ignore
-        category?.children.map((currentItem: any, idx: number) => (
-            currentItem.id === activeTabId
-        ))
-    }, [activeTabId, data]);
+    // const activeTab = useMemo(() => {
+    //     // @ts-ignore
+    //     category?.children.map((currentItem: any, idx: number) => (
+    //         currentItem.id === activeTabId
+    //     ))
+    // }, [activeTabId, data]);
     
     return (
         <div className="mb-8 lg:mb-15">
             <div className="listing-tabs">
-                <ListingTabsList lang={lang} className={`px-5 py-2.5 rounded bg-white ltabs-heading`} data={category} onNavClick={setActiveTab} activeTabId={activeTabId}/>
-                <ListingTabsContainer lang={lang} data={data} isLoading={isLoading} error={error} colSiderbar={colSiderbar} variant="medium"/>
+                {/* <ListingTabsList lang={lang} className={`px-5 py-2.5 rounded bg-white ltabs-heading`} data={category} onNavClick={setActiveTab} activeTabId={activeTabId}/> */}
+                <ListingTabsContainer lang={lang} data={data} isLoading={isLoading} error={error}  variant="medium"/>
             </div>
         </div>
     );

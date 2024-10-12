@@ -63,30 +63,14 @@ const ProductFlashSellCard: React.FC<ProductProps> = ({
                                                           className,
                                                           date,
                                                       }) => {
-    const { id, name, image, sold,unit, quantity, slug, product_type } = product ?? {};
+    const { id, name, image,unit, quantity, slug, price ,salePrice } = product ?? {};
     const {openModal} = useModalAction();
     const {t} = useTranslation(lang,'common');
     const { width } = useWindowSize();
     const { isInCart, isInStock } = useCart();
     const outOfStock = isInCart(id) && !isInStock(id);
     const iconSize = width! > 1024 ? '20' : '17';
-    const {price, basePrice} = usePrice({
-        amount: product?.sale_price ? product?.sale_price : product?.price,
-        baseAmount: product?.price,
-        currencyCode: 'USD',
-    });
-    const {price: minPrice} = usePrice({
-        amount: product?.min_price ?? 0,
-        currencyCode: 'USD',
-    });
-    const {price: maxPrice} = usePrice({
-        amount: product?.max_price ?? 0,
-        currencyCode: 'USD',
-    });
-
-    function handlePopupView() {
-        openModal('PRODUCT_VIEW', product);
-    }
+  
 
     return (
       <article
@@ -102,7 +86,7 @@ const ProductFlashSellCard: React.FC<ProductProps> = ({
         <div className="relative flex-shrink-0 ">
           <div className="relative card-img-container overflow-hidden mx-auto w-full h-[180px] md:h-[200px] ">
             <Image
-              src={image?.original ?? productPlaceholder}
+              src={image || productPlaceholder}
               alt={name || 'Product Image'}
               width={250}
               height={250}
@@ -140,23 +124,17 @@ const ProductFlashSellCard: React.FC<ProductProps> = ({
             </div>
             <span className="text-[13px] leading-4">(1 review)</span>
           </div>
-          <div className="space-s-2 mb-1 lg:mb-4">
-            <span className="inline-block font-semibold text-sm sm:text-15px lg:text-base text-skin-primary">
-              {product_type === 'variable'
-                ? `${minPrice} - ${maxPrice}`
-                : price}
-            </span>
-            {basePrice && (
-              <del className="text-sm text-skin-base text-opacity-70">
-                {basePrice}
-              </del>
-            )}
-          </div>
-          <ProgressCard
-            lang={lang}
-            soldProduct={sold}
-            totalProduct={quantity}
-          />
+          <div className="space-s-2">
+        
+        <span className="inline-block font-semibold text-[18px] text-brand">
+            ${salePrice}
+        </span>
+        {price && (
+<del className="mx-1  text-black-400 text-opacity-70">
+  {price}
+</del>
+)}
+    </div>
           <div className="product-cart-button">
             <RenderPopupOrAddToCart props={{ data: product, lang: lang }} />
           </div>

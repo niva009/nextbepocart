@@ -17,7 +17,7 @@ import ListingTabsElectronicFeed from '@components/product/feeds/listingtabs-ele
 import LatestblogCarousel from '@components/common/latestblog-carousel';
 
 export const metadata: Metadata = {
-    title: 'Home Digital',
+    title: 'Bepocart',
     description: 'Fastest E-commerce template built with React, NextJS, TypeScript, React-Query and Tailwind CSS.',
 };
 
@@ -40,8 +40,7 @@ export default async function Page({ params: {lang} }: {params:{ lang:string}}){
                         showHeroContent={true}
                         className={`xl:col-span-8 mb-5 xl:mb-12`}
                         contentClassName="p-7 sm:py-18 xl:py-16 sm:px-16 xl:px-24 md:min-h-[270px] xl:min-h-[375px] rounded"
-                        lang={lang}
-                    />
+                        lang={lang} variant={''}                    />
                     <BannerGrid
                         lang={lang}
                         data={gridSlider}
@@ -50,7 +49,7 @@ export default async function Page({ params: {lang} }: {params:{ lang:string}}){
                         className="xl:col-span-4 mb-5 xl:mb-12"
                     />
                 </div>
-                <CategoryGridBlock lang={lang} className="mb-8 lg:mb-12"/>
+                <CategoryGridBlock lang={lang} className="mb-8 lg:mb-12" variant={''}/>
             </Container>
             <div className={'bg-zinc-100 py-10 sm:py-14'}>
                 <Container>
@@ -70,7 +69,7 @@ export default async function Page({ params: {lang} }: {params:{ lang:string}}){
                         className="mb-8 lg:mb-15"
                     />
                     <PopularProductFeed lang={lang} className="mb-8 lg:mb-15"/>
-                    <LatestblogCarousel lang={lang}/>
+                    <LatestblogCarousel lang={lang} variant={''}/>
                 </Container>
             </div>
         </>

@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { usePopularProductsQuery } from '@framework/product/get-all-popular-products';
+import { getBestSale } from '@framework/product/get-best-sale-products';
 import ProductsCarousel from '@components/product/products-carousel';
 import { LIMITS } from '@framework/utils/limits';
 
@@ -17,12 +17,12 @@ const PopularProductFeed: FC<ProductFeedProps> = ({
   variant,
 }) => {
   const limit = LIMITS.POPULAR_PRODUCTS_LIMITS;
-  const { data, isLoading, error } = usePopularProductsQuery({
+  const { data, isLoading, error } = getBestSale({
     limit: limit,
   });
   return (
     <ProductsCarousel
-      sectionHeading="text-popular-product"
+      sectionHeading="popular products"
       className={className}
       products={data}
       loading={isLoading}

@@ -15,41 +15,19 @@ const ListingTabsContainer: React.FC<Props> = ({
   data,
   isLoading,
   error,
-  colSiderbar = true,
   variant,
 }) => {
   let breakpoints = {};
-  if (colSiderbar) {
+ {
     breakpoints = {
       '1536': {
-        slidesPerView: 3,
+        slidesPerView: 4,
       },
       '1280': {
-        slidesPerView: 3,
+        slidesPerView: 4,
       },
       '1024': {
-        slidesPerView: 3,
-      },
-      '640': {
-        slidesPerView: 3,
-      },
-      '360': {
-        slidesPerView: 2,
-      },
-      '0': {
-        slidesPerView: 1,
-      },
-    };
-  } else {
-    breakpoints = {
-      '1536': {
-        slidesPerView: 3,
-      },
-      '1280': {
-        slidesPerView: 3,
-      },
-      '1024': {
-        slidesPerView: 3,
+        slidesPerView: 4,
       },
       '640': {
         slidesPerView: 3,
@@ -66,7 +44,7 @@ const ListingTabsContainer: React.FC<Props> = ({
   return (
     <ProductsCarousel
       lang={lang}
-      sectionHeading=""
+      sectionHeading="new arrivals"
       categorySlug={ROUTES.PRODUCTS}
       products={data}
       loading={isLoading}
