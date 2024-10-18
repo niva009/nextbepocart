@@ -39,14 +39,15 @@ export default function SignUpForm({
   function handleSignIn() {
     return openModal('LOGIN_VIEW');
   }
-  function onSubmit({ name, email, password, remember_me }: SignUpInputType) {
+  function onSubmit({ first_name, last_name, email, phone,password }: SignUpInputType) {
     signUp({
-      name,
-      email,
-      password,
-      remember_me,
+       first_name,
+       last_name,
+       email,
+       phone,
+       password,
     });
-    console.log(name, email, password, 'sign form values');
+    // console.log(name, email, password, 'sign form values');
   }
   return (
     <div
@@ -87,14 +88,24 @@ export default function SignUpForm({
             noValidate
           >
             <div className="flex flex-col space-y-4">
-              <Input
-                label={t('forms:label-name') as string}
+            <Input
+              label="First Name"
+              type="text"
+              variant="solid"
+              {...register('first_name', {
+                required: 'forms:firstname required',
+              })}
+              error={errors.first_name?.message}
+              lang={lang}
+            />
+               <Input
+                label="Last name"
                 type="text"
                 variant="solid"
-                {...register('name', {
-                  required: 'forms:name-required',
+                {...register('last_name', {
+                  required: 'forms:lastname required',
                 })}
-                error={errors.name?.message}
+                error={errors.last_name?.message}
                 lang={lang}
               />
               <Input
@@ -110,6 +121,16 @@ export default function SignUpForm({
                   },
                 })}
                 error={errors.email?.message}
+                lang={lang}
+              />
+                <Input
+                label="Phone number"
+                type="number"
+                variant="solid"
+                {...register('phone', {
+                  required: 'forms:phone required',
+                })}
+                error={errors.phone?.message}
                 lang={lang}
               />
               <PasswordInput

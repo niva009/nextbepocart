@@ -1,28 +1,39 @@
 import { useUI } from '@contexts/ui.context';
-import Cookies from 'js-cookie';
 import { useMutation } from 'react-query';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/navigation';
+
+
 
 export interface SignUpInputType {
+  first_name: string;
+  last_name: string;
   email: string;
   password: string;
-  name: string;
-  remember_me: boolean;
+  phone: number;
 }
+
 async function signUp(input: SignUpInputType) {
-  return {
-    token: `${input.email}.${input.name}`.split('').reverse().join(''),
-  };
+  const response = await axios.post('https://bepocart.in/register/', input);
+  console.log(response)
+  return response.data;
 }
+
 export const useSignUpMutation = () => {
-  const { authorize, closeModal } = useUI();
+  // const { closeModal } = useUI();
+  const router = useRouter();
+  
   return useMutation((input: SignUpInputType) => signUp(input), {
     onSuccess: (data) => {
-      Cookies.set('auth_token', data.token);
-      authorize();
-      closeModal();
+      toast.success("registraion successfull..please login!")
+      console.log("data after signup",data);
+      router.push('/home/signin');
     },
-    onError: (data) => {
-      console.log(data, 'login error response');
+    onError: (error) => {
+      toast.error("registraion failed..please try again!")
+      console.log(error, 'signup error response');
     },
   });
 };

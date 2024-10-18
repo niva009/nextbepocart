@@ -6,16 +6,15 @@ import {
   Thumbs,
 } from '@components/ui/carousel/slider';
 import Image from '@components/ui/image';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import cn from 'classnames';
 import { productGalleryPlaceholder } from '@assets/placeholders';
 import { getDirection } from '@utils/get-direction';
-import { useRouter } from 'next/navigation';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import ImageLightBox from '@components/ui/image-lightbox';
 
 interface Props {
-  gallery: any[];
+  gallery: any[]; // This will be your 'images' array
   thumbnailClassName?: string;
   galleryClassName?: string;
   lang: string;
@@ -43,46 +42,61 @@ const swiperParams: SwiperOptions = {
 };
 
 const ThumbnailCarousel: React.FC<Props> = ({
-  gallery,
+  gallery, // this is the images array
   thumbnailClassName = 'xl:w-[600px]',
   galleryClassName = 'xl:w-[100px] 2xl:w-[120px]',
   lang,
 }) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null); // Swiper instance for thumbnails
+  const [mainSwiper, setMainSwiper] = useState<any>(null); // Swiper instance for main gallery
   const prevRef = useRef<HTMLDivElement>(null);
   const nextRef = useRef<HTMLDivElement>(null);
   const dir = getDirection(lang);
 
+  // Get all the image URLs from the gallery
+  const imageUrls = gallery.flatMap((item) => [
+    item.image1,
+    item.image2,
+    item.image3,
+    item.image4,
+    item.image5,
+  ]);
+
+  // Ensure Swiper is properly instantiated by using useEffect
+  useEffect(() => {
+    if (thumbsSwiper && !thumbsSwiper.destroyed) {
+      mainSwiper?.thumbs?.update();
+    }
+  }, [thumbsSwiper, mainSwiper]);
+
   return (
-    <div className="w-full xl:flex xl:flex-row-reverse relative ">
-      <ImageLightBox gallery={gallery} />
+    <div className="w-full xl:flex xl:flex-row-reverse relative">
+      <ImageLightBox gallery={imageUrls} />
       <div
         className={cn(
-          'w-full xl:ltr:ml-7 xl:rtl:mr-7  overflow-hidden rounded-md relative flex items-center justify-between',
+          'w-full xl:ltr:ml-7 xl:rtl:mr-7 overflow-hidden rounded-md relative flex items-center justify-between',
           thumbnailClassName
         )}
       >
         <Swiper
           id="productGallery"
-          thumbs={{
-            swiper:
-              thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
-          }}
+          thumbs={{ swiper: thumbsSwiper }} // Sync with thumbsSwiper
           modules={[Navigation, Thumbs]}
           navigation={{
             prevEl: prevRef.current!, // Assert non-null
             nextEl: nextRef.current!, // Assert non-null
           }}
+          onSwiper={setMainSwiper} // Set the instance of the main swiper
           {...swiperParams}
         >
-          {gallery?.map((item: any) => (
+          {imageUrls?.map((url: string, index: number) => (
             <SwiperSlide
-              key={`product-gallery-${item.id}`}
+              key={`product-gallery-${index}`}
               className="flex items-center justify-center"
             >
               <Image
-                src={item?.original ?? productGalleryPlaceholder}
-                alt={`Product gallery ${item.id}`}
+                src={url ?? productGalleryPlaceholder}
+                alt={`Product gallery ${index}`}
                 width={650}
                 height={590}
                 className="mx-auto rounded-lg"
@@ -111,34 +125,21 @@ const ThumbnailCarousel: React.FC<Props> = ({
       <div className={`py-5 shrink-0 ${galleryClassName}`}>
         <Swiper
           id="productGalleryThumbs"
-          onSwiper={setThumbsSwiper}
+          onSwiper={setThumbsSwiper} // Set the thumbsSwiper
           spaceBetween={12}
           watchSlidesProgress={true}
           freeMode={true}
           effect={'slide'}
-          breakpoints={{
-            1280: {
-              slidesPerView: 4,
-              direction: 'vertical',
-            },
-            767: {
-              slidesPerView: 4,
-              direction: 'horizontal',
-            },
-            0: {
-              slidesPerView: 3,
-              direction: 'horizontal',
-            },
-          }}
+          breakpoints={galleryCarouselBreakpoints}
         >
-          {gallery?.map((item: any) => (
+          {imageUrls?.map((url: string, index: number) => (
             <SwiperSlide
-              key={`product-thumb-gallery-${item.id}`}
+              key={`product-thumb-gallery-${index}`}
               className="flex items-center justify-center cursor-pointer rounded overflow-hidden border border-border-base transition hover:opacity-75"
             >
               <Image
-                src={item?.thumbnail ?? productGalleryPlaceholder}
-                alt={`Product thumb gallery ${item.id}`}
+                src={url ?? productGalleryPlaceholder}
+                alt={`Product thumb gallery ${index}`}
                 width={170}
                 height={170}
                 style={{ width: 'auto' }}

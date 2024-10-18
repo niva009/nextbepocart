@@ -37,20 +37,17 @@ const LoginForm: React.FC<LoginFormProps> = ({
     formState: { errors },
   } = useForm<LoginInputType>();
 
-  function onSubmit({ email, password, remember_me }: LoginInputType) {
+  function onSubmit({ email, password }: LoginInputType) {
     login({
       email,
       password,
-      remember_me,
     });
     closeModal();
-    console.log(email, password, remember_me, 'data');
   }
   function handelSocialLogin() {
     login({
       email: 'demo@demo.com',
       password: 'demo',
-      remember_me: true,
     });
     closeModal();
   }
@@ -97,7 +94,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
           >
             <div className="flex flex-col space-y-3.5">
               <Input
-                label={t('forms:label-email') as string}
+                label="email"
                 type="email"
                 variant="solid"
                 {...register('email', {
@@ -112,7 +109,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 lang={lang}
               />
               <PasswordInput
-                label={t('forms:label-password') as string}
+                label="password"
                 error={errors.password?.message}
                 {...register('password', {
                   required: `${t('forms:password-required')}`,

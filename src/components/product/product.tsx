@@ -8,10 +8,8 @@ import { ROUTES } from '@utils/routes';
 import useWindowSize from '@utils/use-window-size';
 import { useProductQuery } from '@framework/product/get-product';
 import { getVariations } from '@framework/utils/get-variations';
-import usePrice from '@framework/product/use-price';
 import { useCart } from '@contexts/cart/cart.context';
 import { generateCartItem } from '@utils/generate-cart-item';
-import ProductAttributes from '@components/product/product-attributes';
 import isEmpty from 'lodash/isEmpty';
 import { toast } from 'react-toastify';
 import ThumbnailCarousel from '@components/ui/carousel/thumbnail-carousel';
@@ -23,7 +21,6 @@ import LabelIcon from '@components/icons/label-icon';
 import { IoArrowRedoOutline } from 'react-icons/io5';
 import SocialShareBox from '@components/ui/social-share-box';
 import ProductDetailsTab from '@components/product/product-details/product-tab';
-import VariationPrice from './variation-price';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'src/app/i18n/client';
 
@@ -38,22 +35,20 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
   const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
   const [favorite, setFavorite] = useState<boolean>(false);
   const [quantity, setQuantity] = useState(1);
+  const [selectedColor, setSelectedColor] = useState<string>(""); // Track selected color
+  const [sizes, setSizes] = useState<string[]>([]); // Track sizes based on color selection
+  const [stock, setStock] = useState<number>(0); // Track stock for selected size
   const [addToCartLoader, setAddToCartLoader] = useState<boolean>(false);
-  const [addToWishlistLoader, setAddToWishlistLoader] =
-    useState<boolean>(false);
+  const [addToWishlistLoader, setAddToWishlistLoader] = useState<boolean>(false);
   const [shareButtonStatus, setShareButtonStatus] = useState<boolean>(false);
   const productUrl = `${process.env.NEXT_PUBLIC_WEBSITE_URL}${ROUTES.PRODUCT}/${pathname.slug}`;
-  const { price, basePrice, discount } = usePrice(
-    data && {
-      amount: data.sale_price ? data.sale_price : data.price,
-      baseAmount: data.price,
-      currencyCode: 'USD',
-    }
-  );
+
   const handleChange = () => {
     setShareButtonStatus(!shareButtonStatus);
   };
+
   if (isLoading) return <p className={"pt-8 pb-8"}>Loading...</p>;
+
   const variations = getVariations(data?.variations);
 
   const isSelected = !isEmpty(variations)
@@ -62,6 +57,7 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
         attributes.hasOwnProperty(variation)
       )
     : true;
+
   let selectedVariation: any = {};
   if (isSelected) {
     const dataVaiOption: any = data?.variation_options;
@@ -72,11 +68,13 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
       )
     );
   }
+
   const item = generateCartItem(data!, selectedVariation);
   const outOfStock = isInCart(item.id) && !isInStock(item.id);
+
+  // Function to handle "Add to Cart"
   function addToCart() {
-    if (!isSelected) return;
-    // to show btn feedback while product carting
+    if (!isSelected || stock === 0) return;
     setAddToCartLoader(true);
     setTimeout(() => {
       setAddToCartLoader(false);
@@ -94,8 +92,8 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
       draggable: true,
     });
   }
+
   function addToWishlist() {
-    // to show btn feedback while product wishlist
     setAddToWishlistLoader(true);
     setFavorite(!favorite);
     const toastStatus: string =
@@ -114,24 +112,57 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
     });
   }
 
+  // Handle color change and update sizes and stock based on selected color
+  const handleColorChange = (color: string) => {
+    setSelectedColor(color);
+
+    // Find the image with the selected color and update sizes and stock
+    const selectedImage = data?.images.find((image) => image.color === color);
+    if (selectedImage && selectedImage.stock_info) {
+      const availableSizes = selectedImage.stock_info
+        .filter((variant) => variant.stock > 0)
+        .map((variant) => variant.size);
+      setSizes(availableSizes);
+
+      // Update the stock based on the selected size for the color
+      const initialStock = selectedImage.stock_info.find(
+        (variant) => variant.size === availableSizes[0]
+      )?.stock;
+      setStock(initialStock || 0); // Set stock of the first size
+      setAttributes({ ...attributes, size: availableSizes[0] });
+    }
+  };
+
+  // Handle size change and update the stock accordingly
+  const handleSizeChange = (size: string) => {
+    setAttributes({ ...attributes, size });
+
+    // Update the stock based on the selected size
+    const selectedImage = data?.images.find((image) => image.color === selectedColor);
+    const selectedVariant = selectedImage?.stock_info.find(
+      (variant) => variant.size === size
+    );
+    setStock(selectedVariant?.stock || 0);
+  };
+
   return (
     <div className="pt-6 pb-2 md:pt-7">
       <div className="grid-cols-10 lg:grid gap-7 2xl:gap-7 mb-8 lg:mb-12 bg-white p-5 rounded">
         <div className="col-span-5 mb-6 overflow-hidden  md:mb-8 lg:mb-0 xl:flex justify-center">
-          {!!data?.gallery?.length ? (
+          {!!data?.images?.length ? (
             <ThumbnailCarousel
-              gallery={data?.gallery}
+              gallery={data?.images}
               galleryClassName="xl:w-[100px]"
               lang={lang}
             />
           ) : (
             <div className="flex items-center justify-center w-auto">
               <Image
-                src={data?.image?.original ?? '/product-placeholder.svg'}
-                alt={data?.name!}
-                width={900}
+                src={data?.product?.image ?? '/product-placeholder.svg'}
+                alt={data?.product.name!}
+                width="full"
                 height={680}
-                style={{ width: 'auto' }}
+                // style={{ width: 'auto' }}
               />
             </div>
           )}
@@ -141,107 +172,84 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
           <div className="pb-4 lg:pb-8">
             <div className="md:mb-2.5 block -mt-1.5">
               <h2 className="text-lg font-medium transition-colors duration-300 text-brand-dark md:text-xl xl:text-2xl">
-                {data?.name}
+                {data?.product.name};
               </h2>
             </div>
-            {data?.unit && isEmpty(variations) ? (
-              <div className="text-sm font-medium md:text-15px">
-                {data?.unit}
+            <div className="flex items-center mt-5">
+              <div className="font-medium text-base md:text-xl xl:text-[30px]"></div>
+              {data && data.product && (
+                <>
+                  <del className="text-sm text-opacity-50 md:text-15px ltr:pl-3 rtl:pr-3 text-brand-dark ">
+                    ₹{data?.product.price}
+                  </del>
+                  <span className="inline-block rounded font-bold text-45px md:text-xl text-brand-tree uppercase px-2 py-1 ltr:ml-2.5 rtl:mr-2.5">
+                    ₹{data?.product?.salePrice}
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+          <p>{data?.product?.short_description}</p>
+
+          {/* Colors for Single and Variant Products */}
+          <div>
+            {data?.product?.type === 'single' ? (
+              <div>
+                <h4 className="text-base font-bold text-qblack mb-2 mt-4">Color</h4>
+                <div className="flex flex-wrap gap-2">
+                  {data?.images.map((image) => (
+                    <button
+                      key={image.id}
+                      className={`px-4 py-2 rounded border ${selectedColor === image.color
+                          ? 'border-qblack text-qblack font-semibold'
+                          : 'border-qgray text-qblack'
+                        }`}
+                      onClick={() => handleColorChange(image.color)}
+                    >
+                      {image.color}
+                    </button>
+                  ))}
+                </div>
               </div>
             ) : (
-              <VariationPrice
-                selectedVariation={selectedVariation}
-                minPrice={data?.min_price}
-                maxPrice={data?.max_price}
-                lang={lang}
-              />
-            )}
-
-            {isEmpty(variations) && (
-              <div className="flex items-center mt-5">
-                <div className="text-brand font-medium text-base md:text-xl xl:text-[30px]">
-                  {price}
+              <div>
+                <h4 className="text-base font-bold text-qblack mb-2 mt-5">Colors</h4>
+                <div className="flex flex-wrap gap-2">
+                  {data?.images.map((image) => (
+                    <button
+                      key={image.id}
+                      className={`px-4 py-2 rounded border ${selectedColor === image.color
+                          ? 'border-qblack text-qblack font-semibold'
+                          : 'border-qgray text-qblack'
+                        }`}
+                      onClick={() => handleColorChange(image.color)}
+                    >
+                      {image.color}
+                    </button>
+                  ))}
                 </div>
-                {discount && (
-                  <>
-                    <del className="text-sm text-opacity-50 md:text-15px ltr:pl-3 rtl:pr-3 text-brand-dark ">
-                      {basePrice}
-                    </del>
-                    <span className="inline-block rounded font-bold text-xs md:text-sm bg-brand-tree bg-opacity-20 text-brand-tree uppercase px-2 py-1 ltr:ml-2.5 rtl:mr-2.5">
-                      {discount} {t('text-off')}
-                    </span>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
 
-          <dl className="productView-info  text-[14px] leading-8 pb-5 mb-5 border-b border-border-base">
-            <dt className={`productView-info-name w-40 ltr:float-left rtl:float-right`}>
-              {t('text-brand')}:
-            </dt>
-            <dd className="productView-info-value">{data?.brand}</dd>
-            <dt className={`productView-info-name w-40 ltr:float-left rtl:float-right`}>
-              {t('text-sku')}:
-            </dt>
-            <dd className="productView-info-value">200101</dd>
-            <dt className={`productView-info-name w-40 ltr:float-left rtl:float-right`}>
-              {t('text-weight')}:
-            </dt>
-            <dd className="productView-info-value" data-product-weight="">
-              {data?.weight} KGS
-            </dd>
-            <dt className={`productView-info-name w-40 ltr:float-left rtl:float-right`}>
-              {t('text-shipping')}:
-            </dt>
-            <dd className="productView-info-value">
-              {t(`text-calculated-checkout`)}
-            </dd>
-          </dl>
-          {Object.keys(variations).map((variation) => {
-            return (
-              <ProductAttributes
-                key={`popup-attribute-key${variation}`}
-                variations={variations}
-                attributes={attributes}
-                setAttributes={setAttributes}
-              />
-            );
-          })}
-
-          <div className="pb-2">
-            {/* check that item isInCart and place the available quantity or the item quantity */}
-            {isEmpty(variations) && (
-              <>
-                {Number(quantity) > 0 || !outOfStock ? (
-                  <span className="text-sm font-medium text-yellow">
-                    {t('text-only') +
-                      ' ' +
-                      quantity +
-                      ' ' +
-                      t('text-left-item')}
-                  </span>
-                ) : (
-                  <div className="text-base text-red-500 whitespace-nowrap">
-                    {t('text-out-stock')}
+                {/* Sizes based on Selected Color */}
+                {sizes.length > 0 && (
+                  <div>
+                    <h4 className="text-base font-bold text-qblack mb-2">Sizes</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {sizes.map((size) => (
+                        <button
+                          key={size}
+                          className={`px-4 py-2 rounded border ${attributes.size === size
+                              ? 'border-qblack text-qblack font-semibold'
+                              : 'border-qgray text-qblack'
+                            }`}
+                          onClick={() => handleSizeChange(size)}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
-              </>
-            )}
-
-            {!isEmpty(selectedVariation) && (
-              <span className="text-sm font-medium text-yellow">
-                {selectedVariation?.is_disable ||
-                selectedVariation.quantity === 0
-                  ? t('text-out-stock')
-                  : `${
-                      t('text-only') +
-                      ' ' +
-                      selectedVariation.quantity +
-                      ' ' +
-                      t('text-left-item')
-                    }`}
-              </span>
+              </div>
             )}
           </div>
 
@@ -254,56 +262,62 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
                 setSelectedQuantity((prev) => (prev !== 1 ? prev - 1 : 1))
               }
               disabled={
-                isInCart(item.id)
-                  ? getItemFromCart(item.id).quantity + selectedQuantity >=
-                    Number(item.stock)
-                  : selectedQuantity >= Number(item.stock)
+                stock === 0 || selectedQuantity >= stock
               }
               lang={lang}
             />
             <Button
               onClick={addToCart}
               className="w-full px-1.5"
-              disabled={!isSelected}
+              disabled={stock === 0} // Disable button if stock is zero
               loading={addToCartLoader}
             >
               <CartIcon color="#ffffff" className="ltr:mr-3 rtl:ml-3" />
               {t('text-add-to-cart')}
             </Button>
+
+            {/* Out of stock message */}
+            {stock === 0 && (
+              <p style={{ color: "red", fontWeight: "bold", fontSize: "18px", padding: "10px 0px" }}>
+                Out of Stock
+              </p>
+            )}
+            {stock > 0 && stock < 10 && (
+              <p style={{ color: "green", fontWeight: "500", fontSize: "18px", padding: "10px 0px" }}>
+                {`${stock} items left`}
+              </p>
+            )}
+
             <div className="grid grid-cols-2 gap-2.5">
               <Button
                 variant="border"
                 onClick={addToWishlist}
                 loading={addToWishlistLoader}
-                className={`group hover:text-brand ${
-                  favorite === true && 'text-brand'
-                }`}
+                className={`group hover:text-brand ${favorite === true && 'text-brand'
+                  }`}
               >
                 {favorite === true ? (
                   <IoIosHeart className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all" />
                 ) : (
                   <IoIosHeartEmpty className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all group-hover:text-brand" />
                 )}
-
                 {t('text-wishlist')}
               </Button>
               <div className="relative group">
                 <Button
                   variant="border"
-                  className={`w-full hover:text-brand ${
-                    shareButtonStatus === true && 'text-brand'
-                  }`}
+                  className={`w-full hover:text-brand ${shareButtonStatus === true && 'text-brand'
+                    }`}
                   onClick={handleChange}
                 >
                   <IoArrowRedoOutline className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all group-hover:text-brand" />
                   {t('text-share')}
                 </Button>
                 <SocialShareBox
-                  className={`absolute z-10 ltr:right-0 rtl:left-0 w-[300px] md:min-w-[400px] transition-all duration-300 ${
-                    shareButtonStatus === true
+                  className={`absolute z-10 ltr:right-0 rtl:left-0 w-[300px] md:min-w-[400px] transition-all duration-300 ${shareButtonStatus === true
                       ? 'visible opacity-100 top-full'
                       : 'opacity-0 invisible top-[130%]'
-                  }`}
+                    }`}
                   shareUrl={productUrl}
                   lang={lang}
                 />
@@ -324,7 +338,7 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
           )}
         </div>
       </div>
-      <ProductDetailsTab lang={lang} />
+      <ProductDetailsTab product={data?.product} lang={lang} />
     </div>
   );
 };

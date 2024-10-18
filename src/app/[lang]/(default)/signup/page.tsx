@@ -3,7 +3,7 @@ import Divider from '@components/ui/divider';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Sign Up',
+  title: 'Sign Up Bepocart',
 };
 
 export default async function Page({
