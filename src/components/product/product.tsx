@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Button from '@components/ui/button';
 import Counter from '@components/ui/counter';
 import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ROUTES } from '@utils/routes';
 import useWindowSize from '@utils/use-window-size';
 import { useProductQuery } from '@framework/product/get-product';
@@ -23,10 +24,13 @@ import SocialShareBox from '@components/ui/social-share-box';
 import ProductDetailsTab from '@components/product/product-details/product-tab';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'src/app/i18n/client';
+import axios from "axios";
 
 const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
   const { t } = useTranslation(lang, 'common');
   const pathname = useParams();
+  const token = localStorage.getItem("token");
+  const router = useRouter();
   const { slug } = pathname;
   const { width } = useWindowSize();
   const { data, isLoading } = useProductQuery(slug as string);
@@ -41,7 +45,6 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
   const [addToCartLoader, setAddToCartLoader] = useState<boolean>(false);
   const [addToWishlistLoader, setAddToWishlistLoader] = useState<boolean>(false);
   const [shareButtonStatus, setShareButtonStatus] = useState<boolean>(false);
-  const productUrl = `${process.env.NEXT_PUBLIC_WEBSITE_URL}${ROUTES.PRODUCT}/${pathname.slug}`;
 
   const handleChange = () => {
     setShareButtonStatus(!shareButtonStatus);
@@ -72,7 +75,6 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
   const item = generateCartItem(data!, selectedVariation);
   const outOfStock = isInCart(item.id) && !isInStock(item.id);
 
-  // Function to handle "Add to Cart"
   function addToCart() {
     if (!isSelected || stock === 0) return;
     setAddToCartLoader(true);
@@ -94,21 +96,48 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
   }
 
   function addToWishlist() {
-    setAddToWishlistLoader(true);
-    setFavorite(!favorite);
-    const toastStatus: string =
-      favorite === true ? t('text-remove-favorite') : t('text-added-favorite');
-    setTimeout(() => {
-      setAddToWishlistLoader(false);
-    }, 1500);
-    toast(toastStatus, {
-      progressClassName: 'fancy-progress-bar',
-      position: width! > 768 ? 'bottom-right' : 'top-right',
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
+
+
+    if (!token) {
+      router.push('/home/signin');
+      return; // Stop further execution if no token is found
+    }
+
+    console.log("token information....:",token)
+
+    axios.post(
+      `https://bepocart.in/add-wishlist/${data?.product?.id}/`,{}, // Request body if needed, otherwise keep it empty
+      {
+        headers: {
+          'Authorization': `${token}`,
+        },
+      }
+    )
+    .then((response) => {
+      if (response.status === 201) {
+        setAddToWishlistLoader(true);
+        setFavorite(!favorite);
+        const toastStatus = favorite
+          ? t('text-remove-favorite')
+          : t('text-added-favorite');
+  
+        setTimeout(() => {
+          setAddToWishlistLoader(false);
+        }, 1500);
+  
+        toast(toastStatus, {
+          progressClassName: 'fancy-progress-bar',
+          position: window.innerWidth > 768 ? 'bottom-right' : 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
+    })
+    .catch((error) => {
+      console.log("Error adding to wishlist:", error);
     });
   }
 
@@ -318,7 +347,7 @@ const ProductSingleDetails: React.FC<{ lang: string }> = ({ lang }) => {
                       ? 'visible opacity-100 top-full'
                       : 'opacity-0 invisible top-[130%]'
                     }`}
-                  shareUrl={productUrl}
+                  // shareUrl={productUrl}
                   lang={lang}
                 />
               </div>

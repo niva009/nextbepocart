@@ -13,14 +13,23 @@ import { useTranslation } from 'src/app/i18n/client';
 import Heading from '@components/ui/heading';
 import Text from '@components/ui/text';
 import DeleteIcon from '@components/icons/delete-icon';
+import { useCartQuery } from '@framework/product/get-cart-product';
+
 
 export default function CartSidebar({ lang }: { lang: string }) {
+
+  const limit = 35;
+  const { data, isLoading, error } = useCartQuery({
+    limit: limit,
+  });
+
+console.log("data-in-cart...:",error);
   const { t } = useTranslation(lang, 'common');
   const { closeDrawer } = useUI();
   const { items, total, isEmpty, resetCart } = useCart();
   const { price: cartTotal } = usePrice({
     amount: total,
-    currencyCode: 'USD',
+    currencyCode: 'INR',
   });
   return (
     <div className="flex flex-col justify-between w-full h-full">
@@ -43,7 +52,7 @@ export default function CartSidebar({ lang }: { lang: string }) {
       {!isEmpty ? (
         <Scrollbar className="flex-grow w-full cart-scrollbar ">
           <div className="w-full px-5 md:px-7  h-[calc(100vh_-_420px)]">
-            {items?.map((item) => (
+            {data?.map((item) => (
               <CartItem item={item} key={item.id} lang={lang} />
             ))}
           </div>

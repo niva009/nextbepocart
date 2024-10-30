@@ -1,71 +1,66 @@
+import React, { useState } from 'react';
 import Link from '@components/ui/link';
 import Image from '@components/ui/image';
-import { IoIosCloseCircle } from 'react-icons/io';
-import { useCart } from '@contexts/cart/cart.context';
-import usePrice from '@framework/product/use-price';
 import { ROUTES } from '@utils/routes';
-import Counter from '@components/ui/counter';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 type CartItemProps = {
   item: any;
   lang: string;
+  onRemove: (id: string) => void;
+  onQuantityChange: (id: string, quantity: number) => void;
 };
 
-const CartItem: React.FC<CartItemProps> = ({ lang, item }) => {
-  const { isInStock, addItemToCart, removeItemFromCart, clearItemFromCart } =
-    useCart();
-  const { price: totalPrice } = usePrice({
-    amount: item?.itemTotal,
-    currencyCode: 'USD',
-  });
-  const outOfStock = !isInStock(item.id);
+const CartItem: React.FC<CartItemProps> = ({ lang, item, onRemove, onQuantityChange }) => {
+  const handleDeleteProduct = async (id: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return console.error("User is not authenticated");
+      
+      await axios.delete(`https://bepocart.in/cart-delete/${id}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      onRemove(id);
+      console.log("Item deleted successfully.");
+    } catch (error: any) {
+      console.error("Error deleting product:", error.response?.data?.message || error.message);
+    }
+  };
+
+  const increment = () => item.quantity < item.stock && onQuantityChange(item.id, item.quantity + 1);
+  const decrement = () => item.quantity > 1 && onQuantityChange(item.id, item.quantity - 1);
+
   return (
-    <div
-      className={`group w-full h-auto flex justify-start items-center text-brand-light py-4 md:py-7 border-b border-border-one border-opacity-70 relative last:border-b-0`}
-      title={item?.name}
-    >
-      <div className="relative flex rounded overflow-hidden shrink-0 cursor-pointer w-[90px] md:w-[100px] h-[90px] md:h-[100px]">
+    <div className="group w-full flex items-center text-brand-light py-4 border-b border-border-one relative">
+      <div className="relative flex rounded overflow-hidden w-[90px] h-[90px]">
         <Image
-          src={item?.image ?? '/assets/placeholder/cart-item.svg'}
+          src={item?.image}
           width={100}
           height={100}
-          loading="eager"
           alt={item.name || 'Product Image'}
-          style={{ width: 'auto' }}
-          className="object-cover bg-fill-thumbnail"
+          className="object-cover"
         />
-        <div
-          className="absolute top-0 flex items-center justify-center w-full h-full transition duration-200 ease-in-out bg-black ltr:left-0 rtl:right-0 bg-opacity-30 md:bg-opacity-0 md:group-hover:bg-opacity-30"
-          onClick={() => clearItemFromCart(item.id)}
-          role="button"
-        >
-          <IoIosCloseCircle className="relative text-2xl text-white transition duration-300 ease-in-out transform md:scale-0 md:opacity-0 md:group-hover:scale-100 md:group-hover:opacity-100" />
-        </div>
       </div>
-
-      <div className="flex items-start justify-between w-full overflow-hidden">
-        <div className="ltr:pl-3 rtl:pr-3 md:ltr:pl-4 md:rtl:pr-4">
-          <Link
-            href={`/${lang}${ROUTES.PRODUCT}/${item?.slug}`}
-            className="block leading-5 transition-all text-brand-dark text-13px sm:text-sm lg:text-15px hover:text-brand"
-          >
+      <div className="flex items-start justify-between w-full">
+        <div className="pl-3">
+          <Link href={`/${lang}${ROUTES.PRODUCT}/${item?.slug}`} className="block text-brand-dark text-13px hover:text-brand">
             {item?.name}
           </Link>
-          <div className="text-13px sm:text-sm text-brand-muted mt-1.5 block mb-2">
-            {item.unit} X {item.quantity}
+          <div className="text-13px text-brand-muted mt-1.5">₹{item?.salePrice}</div>
+          <div className="text-13px text-brand-muted mt-1.5">Color: {item?.color}</div>
+          <div className="text-13px text-brand-muted mt-1.5">Size: {item?.size}</div>
+          <div className="flex items-center w-[120px] h-[40px] px-[26px] border border-qgray-border">
+            <button onClick={decrement} className="text-base text-qgray">-</button>
+            <span className="text-qblack">{item.quantity}</span>
+            <button onClick={increment} className="text-base text-qgray" disabled={item.quantity >= item.stock}>+</button>
           </div>
-          <Counter
-            value={item.quantity}
-            onIncrement={() => addItemToCart(item, 1)}
-            onDecrement={() => removeItemFromCart(item.id)}
-            variant="cart"
-            disabled={outOfStock}
-            lang={lang}
-          />
         </div>
-
-        <div className="flex font-semibold text-sm md:text-base text-brand-dark leading-5 shrink-0 min-w-[65px] md:min-w-[80px] justify-end">
-          {totalPrice}
+        <div className="flex flex-col items-end min-w-[80px]">
+          <button className="text-red-500 hover:text-red-700" onClick={() => handleDeleteProduct(item.id)} title="Remove item">
+            <FontAwesomeIcon icon={faTrash} className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </div>

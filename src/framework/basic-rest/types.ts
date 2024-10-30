@@ -88,6 +88,7 @@ export type Product = {
   salePrice?:string;
   min_price?: number;
   max_price?: number;
+  productPrice: string;
   image: Attachment;
   sku?: string;
   gallery?: Attachment[];

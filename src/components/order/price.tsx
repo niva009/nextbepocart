@@ -6,7 +6,7 @@ export const TotalPrice: React.FC<{ items?: any }> = ({ items }) => {
     amount: Math.round(
       calculateTotal(items?.products) + items?.delivery_fee - items?.discount
     ),
-    currencyCode: 'USD',
+    currencyCode: 'INR',
   });
   return <span className="total_price">{price}</span>;
 };

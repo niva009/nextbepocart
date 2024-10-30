@@ -3,13 +3,10 @@
 module.exports = {
   reactStrictMode: true,
   swcMinify: true,
-  images: {
-    domains: ['bepocart-bkt-1.s3.amazonaws.com'], // Add your external image domain here
-  },
   // experimental: {
-  //   // Required:
   //   appDir: true,
   // },
+
   ...(process.env.NODE_ENV === 'production' && {
     typescript: {
       ignoreBuildErrors: true,
@@ -19,4 +16,17 @@ module.exports = {
     },
   }),
 
+  images: {
+    domains: ['bepocart-bkt-1.s3.amazonaws.com'], // Add your external hostname here
+  },
+
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/en',
+        permanent: true, // Set to true for a 308 permanent redirect; false for a 307 temporary redirect
+      },
+    ];
+  },
 };

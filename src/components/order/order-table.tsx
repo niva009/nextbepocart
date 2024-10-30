@@ -84,7 +84,8 @@ const columns = [
   },
 ];
 
-const OrderTable: React.FC<{ orders?: any; lang: string }> = ({
+const 
+OrderTable: React.FC<{ orders?: any; lang: string }> = ({
   orders,
   lang,
 }) => {
