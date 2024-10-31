@@ -47,7 +47,7 @@ const CategoryCard: React.FC<Props> = ({lang, item, href, className,variant}) =>
                     />
                 </div>
                 <div className="category-info text-center">
-                    <h3 className="font-semibold text-brand-dark truncate leading-6 group-hover:text-skin-primary">
+                    <h3 className="font-semibold text-brand-dark truncate leading-6 group-hover:text-custom-green">
                         {name}
                     </h3>
                     

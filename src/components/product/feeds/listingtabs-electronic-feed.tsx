@@ -23,14 +23,7 @@ export default function ListingTabsElectronicFeed(props: BoxProps) {
         limit: LIMITS.ELETRONIC_PRODUCTS_LIMITS,
     });
     const {colSiderbar, lang} = props;
-    // const [activeTabId, setActiveTab] = useState(1);
-    
-    // const activeTab = useMemo(() => {
-    //     // @ts-ignore
-    //     category?.children.map((currentItem: any, idx: number) => (
-    //         currentItem.id === activeTabId
-    //     ))
-    // }, [activeTabId, data]);
+
     
     return (
         <div className="mb-8 lg:mb-15">

@@ -36,7 +36,7 @@ const breakpoints = {
         slidesPerView: 5,
     },
     '1024': {
-        slidesPerView: 4,
+        slidesPerView: 5,
     },
     '640': {
         slidesPerView: 3,
@@ -62,7 +62,6 @@ const ProductsCarousel: React.FC<ProductsCarouselProps> = ({
         carouselBreakpoint,
         lang,
         variant = 'default',
-        borderCarousel,
         rowCarousel = 1,
     }) => {
     const dir = getDirection(lang);

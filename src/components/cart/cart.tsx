@@ -11,6 +11,7 @@ import Heading from '@components/ui/heading';
 import Text from '@components/ui/text';
 import { useTranslation } from 'src/app/i18n/client';
 import { useCartQuery } from '@framework/product/get-cart-product';
+import axios from 'axios';
 
 export default function Cart({ lang }: { lang: string }) {
   const limit = 35;

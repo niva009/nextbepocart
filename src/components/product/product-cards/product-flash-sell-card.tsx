@@ -1,19 +1,18 @@
 import cn from 'classnames';
 import Image from '@components/ui/image';
-import usePrice from '@framework/product/use-price';
 import {Product} from '@framework/types';
 import {useModalAction} from '@components/common/modal/modal.context';
 import {productPlaceholder} from '@assets/placeholders';
-import ProgressCard from '@components/ui/progress-card';
 import { useTranslation } from 'src/app/i18n/client';
 import useWindowSize from "@utils/use-window-size";
 import {useCart} from "@contexts/cart/cart.context";
 import dynamic from "next/dynamic";
 import { ROUTES } from '@utils/routes';
 import Link from '@components/ui/link';
-import SearchIcon from '@components/icons/search-icon';
-import CheckIcon from '@components/icons/check-icon';
+
 import StarIcon from '@components/icons/star-icon';
+import {ProductWishlist} from './product-wishlist';
+
 
 interface ProductProps {
     lang: string;
@@ -84,15 +83,17 @@ const ProductFlashSellCard: React.FC<ProductProps> = ({
         title={name}
       >
         <div className="relative flex-shrink-0 ">
-          <div className="relative card-img-container overflow-hidden mx-auto w-full h-[180px] md:h-[200px] ">
+          <div className="relative card-img-container overflow-hidden cursor-pointer mx-auto w-full h-[180px] md:h-[200px] ">
+            <Link href={`/${lang}${ROUTES.PRODUCTS}/${slug}`} >
             <Image
               src={image || productPlaceholder}
               alt={name || 'Product Image'}
               width={250}
               height={250}
               quality={100}
-              className="object-cover bg-fill-thumbnail"
+              className="object-cover bg-fill-thumbnail cursor-pointer"
             />
+            </Link>
           </div>
 
           <div className="w-full h-full absolute top-0 z-10 -mx-0.5 sm:-mx-1">
@@ -127,16 +128,16 @@ const ProductFlashSellCard: React.FC<ProductProps> = ({
           <div className="space-s-2">
         
         <span className="inline-block font-semibold text-[18px] text-brand">
-            ${salePrice}
+        ₹{salePrice}
         </span>
         {price && (
 <del className="mx-1  text-black-400 text-opacity-70">
-  {price}
+₹ {price}
 </del>
 )}
     </div>
           <div className="product-cart-button">
-            <RenderPopupOrAddToCart props={{ data: product, lang: lang }} />
+            <ProductWishlist id = {id}/>
           </div>
         </div>
       </article>

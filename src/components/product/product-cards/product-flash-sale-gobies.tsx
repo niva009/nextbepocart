@@ -65,27 +65,23 @@ const ProductFlashSaleGobies: React.FC<ProductProps> = ({
   const { price, basePrice } = usePrice({
     amount: product?.sale_price ? product?.sale_price : product?.price,
     baseAmount: product?.price,
-    currencyCode: 'USD',
+    currencyCode: 'INR',
   });
   const { price: minPrice } = usePrice({
     amount: product?.min_price ?? 0,
-    currencyCode: 'USD',
+    currencyCode: 'INR',
   });
   const { price: maxPrice } = usePrice({
     amount: product?.max_price ?? 0,
-    currencyCode: 'USD',
+    currencyCode: 'INR',
   });
 
-  function handlePopupView() {
-    openModal('PRODUCT_VIEW', product);
-  }
   return (
     <article
       className={cn(
         'flex flex-col justify-between group cursor-pointer relative px-5 l pt-16 pb-5',
         className,
       )}
-      onClick={handlePopupView}
       title={name}
     >
       <div className="absolute z-10 top-6 left">

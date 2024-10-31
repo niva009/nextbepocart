@@ -21,16 +21,16 @@ const ListingTabsContainer: React.FC<Props> = ({
  {
     breakpoints = {
       '1536': {
-        slidesPerView: 4,
+        slidesPerView: 5,
       },
       '1280': {
-        slidesPerView: 4,
+        slidesPerView: 5,
       },
       '1024': {
-        slidesPerView: 4,
+        slidesPerView: 5,
       },
       '640': {
-        slidesPerView: 3,
+        slidesPerView: 4,
       },
       '360': {
         slidesPerView: 2,

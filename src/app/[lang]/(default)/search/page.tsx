@@ -1,5 +1,4 @@
 import {Suspense} from 'react';
-import Divider from '@components/ui/divider';
 import SearchPageContent from './search-page-content';
 import {Metadata} from 'next';
 

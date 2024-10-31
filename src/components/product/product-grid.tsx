@@ -1,11 +1,10 @@
 import type { FC } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import ProductCardAlpine from '@components/product/product-cards/product-card';
 import ProductCardLoader from '@components/ui/loaders/product-card-loader';
 import ProductCardList from '@components/product/product-cards/product-list-view';
-import cn from 'classnames';
 import { useProductsQuery } from '@framework/product/get-all-products';
 import { LIMITS } from '@framework/utils/limits';
 import { Product } from '@framework/types';
@@ -21,11 +20,20 @@ interface ProductGridProps {
 export const ProductGrid: FC<ProductGridProps> = ({ className = '', lang,viewAs }) => {
   const { t } = useTranslation(lang, 'common');
   const pathname = usePathname();
+
+  console.log("pathname in subcategory...:", pathname);
+
   const { getParams, query } = useQueryParam(pathname ?? '/');
+
+  console.log("getparams..:", getParams);
   const newQuery: any = getParams(
       // @ts-ignore
       `${process.env.NEXT_PUBLIC_WEBSITE_URL}${query}`,
   );
+
+
+  console.log("query..:", query);
+  console.log("new -query",newQuery);
 
   const {
     isFetching: isLoading,
@@ -34,11 +42,10 @@ export const ProductGrid: FC<ProductGridProps> = ({ className = '', lang,viewAs 
     hasNextPage,
     data,
     error,
-  } = useProductsQuery({
-    limit: LIMITS.PRODUCTS_LIMITS,
-    // @ts-ignore
-    newQuery,
-  });
+  } = useProductsQuery(newQuery); 
+
+
+  
 
   return (
     <>

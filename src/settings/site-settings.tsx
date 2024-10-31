@@ -1,27 +1,27 @@
-import { SAFlag } from '@components/icons/language/SAFlag';
+
 import { USFlag } from '@components/icons/language/USFlag';
-import siteLogo from 'public/assets/images/logo.svg';
-import siteLogoBlack from 'public/assets/images/logo.svg';
+import siteLogo from 'public/assets/images/logo.png';
+import siteLogoBlack from 'public/assets/images/logo.png';
 
 export const siteSettings = {
-  name: 'Razazoror',
+  name: 'bepocart',
   description:
-    'Fastest E-commerce template built with React, NextJS, TypeScript, React-Query and Tailwind CSS.',
+    'Bepocart, an ecommerce website for a wide range of cycles, accessories, and apparel in India,',
   author: {
-    name: 'Wikithemes, Inc.',
+    name: 'Bepocart',
     websiteUrl: '#',
     address: '',
   },
   logo: {
     url: siteLogo,
     urlReverse: siteLogoBlack,
-    alt: 'Razazoror',
+    alt: 'bepocart',
     href: '/en',
     width: 195,
-    height: 26,
+    height: 20,
   },
   defaultLanguage: 'en',
-  currencyCode: 'USD',
+  currencyCode: 'INR',
   site_header: {
     topmenu: [
       {
@@ -41,33 +41,6 @@ export const siteSettings = {
       },
     ],
     menu: [
-      {
-        id: 1,
-        path: '/',
-        label: 'menu-demos',
-        subMenu: [
-          {
-            id: 1,
-            path: '/',
-            label: 'menu-home1',
-          },
-          {
-            id: 2,
-            path: '/home2',
-            label: 'menu-home2',
-          },
-          {
-            id: 3,
-            path: '/home3',
-            label: 'menu-home3',
-          },
-          {
-            id: 4,
-            path: '/home4',
-            label: 'menu-home4',
-          },
-        ],
-      },
       {
         id: 2,
         path: '/search',
@@ -118,43 +91,6 @@ export const siteSettings = {
             ],
           },
           {
-            id: 2,
-            path: '/search',
-            label: 'menu-diet-nutrition',
-            image: {
-              id: 1,
-              thumbnail: '/assets/images/category/collection_2.jpg',
-              original: '/assets/images/category/collection_2.jpg',
-            },
-            subMenu: [
-              {
-                id: 1,
-                path: '/search',
-                label: 'menu-automotive',
-              },
-              {
-                id: 2,
-                path: '/search',
-                label: 'menu-autocar',
-              },
-              {
-                id: 3,
-                path: '/search',
-                label: 'menu-morecar',
-              },
-              {
-                id: 4,
-                path: '/search',
-                label: 'menu-autosecurity',
-              },
-              {
-                id: 5,
-                path: '/search',
-                label: 'menu-battereries',
-              },
-            ],
-          },
-          {
             id: 3,
             path: '/search',
             label: 'menu-healthy-foods',
@@ -194,7 +130,7 @@ export const siteSettings = {
           {
             id: 4,
             path: '/search',
-            label: 'menu-grocery-items',
+            label: 'About',
             image: {
               id: 1,
               thumbnail: '/assets/images/category/collection_4.jpg',
@@ -444,7 +380,7 @@ export const siteSettings = {
       {
         id: 4,
         path: '/shops/',
-        label: 'menu-shops',
+        label: 'About',
       },
       {
         id: 5,
@@ -561,12 +497,6 @@ export const siteSettings = {
       },
     ],
     languageMenu: [
-      {
-        id: 'ar',
-        name: 'عربى',
-        value: 'ar',
-        icon: <SAFlag />,
-      },
       {
         id: 'en',
         name: 'English',

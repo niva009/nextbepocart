@@ -4,7 +4,10 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
-      colors: {
+      colors:
+
+       {
+        'custom-green': '#93ff05',
         skin: {
           DEFAULT: '#2b38d1',
           primary: '#2b38d1',

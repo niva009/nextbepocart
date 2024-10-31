@@ -11,9 +11,10 @@ import dynamic from 'next/dynamic';
 import {useTranslation} from 'src/app/i18n/client';
 import {ROUTES} from '@utils/routes';
 import Link from '@components/ui/link';
-import SearchIcon from '@components/icons/search-icon';
 import CheckIcon from '@components/icons/check-icon';
 import StarIcon from "@components/icons/star-icon";
+
+import {ProductWishlist} from './product-wishlist';
 
 const AddToCart = dynamic(() => import('@components/product/add-to-cart'), {
     ssr: false,
@@ -113,27 +114,17 @@ const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, va
         >
             <div className="relative flex-shrink-0 ">
                 <div className="relative card-img-container overflow-hidden flex item-center w-full">
+                <Link
+                    href={`/${lang}${ROUTES.PRODUCTS}/${slug}`}
+                    className="text-skin-base font-semibold text-sm leading-5 min-h-[40px] line-clamp-2 mt-1 mb-2 hover:text-brand"
+                >
                     <Image
                         src={image || productPlaceholder}
                         alt={name || 'Product Image'}
                         width={180}
                         height={180}
                     />
-                </div>
-                <div className="w-full h-full absolute top-0  z-10">
-                    {/* {discount && (
-                        <span className="text-[10px] font-medium text-white uppercase inline-block bg-red-600 rounded-sm px-2.5 pt-1 pb-[3px] mx-0.5 sm:mx-1">
-                            {t('text-on-sale')}
-                        </span>
-                    )} */}
-
-                    <button
-                        className="buttons--quickview px-4 py-2 bg-brand-light rounded-full hover:bg-brand hover:text-brand-light"
-                        aria-label="Quick View Button"
-                        onClick={handlePopupView}
-                    >
-                        <SearchIcon width={iconSize} height={iconSize} opacity="1" />
-                    </button>
+                    </Link>
                 </div>
             </div>
 
@@ -159,11 +150,11 @@ const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, va
                 <div className="space-s-2">
         
                     <span className="inline-block font-semibold text-[18px] text-brand">
-                        ${salePrice}
+                    ₹{salePrice}
                     </span>
                     {price && (
             <del className="mx-1  text-black-400 text-opacity-70">
-              {price}
+             ₹ {price}
             </del>
           )}
                 </div>
@@ -171,7 +162,7 @@ const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, va
                     <RenderLabelStock props={{ data: product, lang: lang }} />
                 </div>
                 <div className="block product-cart-button font-semibold">
-                    <RenderPopupOrAddToCart props={{ data: product, lang: lang }} />
+                    <ProductWishlist  id={id}/>
                 </div>
             </div>
         </article>
