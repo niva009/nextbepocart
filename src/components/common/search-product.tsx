@@ -10,30 +10,18 @@ type SearchProductProps = {
 };
 
 const SearchProduct: React.FC<SearchProductProps> = ({ lang, item }) => {
-  const { name, image, unit, slug, product_type } = item ?? {};
-  const { price, basePrice, discount } = usePrice({
-    amount: item?.sale_price ? item?.sale_price : item?.price,
-    baseAmount: item?.price,
-    currencyCode: 'USD',
-  });
-  const { price: minPrice } = usePrice({
-    amount: item?.min_price ?? 0,
-    currencyCode: 'USD',
-  });
-  const { price: maxPrice } = usePrice({
-    amount: item?.max_price ?? 0,
-    currencyCode: 'USD',
-  });
+  const { name, image, price, slug, salePrice } = item ?? {};
+
   
 
   return (
     <Link
-      href={`/${lang}${ROUTES.PRODUCT}/${item?.slug}`}
+      href={`/${lang}${ROUTES.PRODUCT}/${slug}`}
       className="flex items-center justify-start w-full h-auto group"
     >
       <div className="relative flex w-20 rounded-md overflow-hidden flex-shrink-0 cursor-pointer me-4">
         <Image
-          src={image?.thumbnail ?? searchProductPlaceholder}
+          src={image  || searchProductPlaceholder}
           width={70}
           height={70}
           alt={name || 'Product Image'}
@@ -46,11 +34,11 @@ const SearchProduct: React.FC<SearchProductProps> = ({ lang, item }) => {
         <h3 className="truncate text-skin-base text-15px  mb-1.5">{name}</h3>
         <div className="space-x-2 ">
           <span className="inline-block font-semibold text-sm sm:text-15px lg:text-base text-skin-primary">
-            {product_type === 'variable' ? `${minPrice} - ${maxPrice}` : price}
+          ₹{salePrice}
           </span>
-          {basePrice && (
+          {price && (
             <del className="text-sm text-skin-base text-opacity-70">
-              {basePrice}
+              ₹{price}
             </del>
           )}
         </div>

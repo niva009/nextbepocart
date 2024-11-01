@@ -2,6 +2,8 @@
 import { USFlag } from '@components/icons/language/USFlag';
 import siteLogo from 'public/assets/images/logo.png';
 import siteLogoBlack from 'public/assets/images/logo.png';
+import bepoCoin from 'public/assets/images/bepocoin.png';
+
 
 export const siteSettings = {
   name: 'bepocart',
@@ -31,13 +33,8 @@ export const siteSettings = {
       },
       {
         id: 2,
-        path: '/checkout/',
-        label: 'menu-checkout',
-      },
-      {
-        id: 3,
-        path: '/',
-        label: 'menu-gift',
+        path: '/my-account/becoin',
+        label: 'bepo-Coin',
       },
     ],
     menu: [

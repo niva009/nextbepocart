@@ -6,14 +6,16 @@ import PasswordInput from '@components/ui/form/password-input';
 import Button from '@components/ui/button';
 import { useForm } from 'react-hook-form';
 import { useLoginMutation, LoginInputType } from '@framework/auth/use-login';
-import Logo from '@components/ui/logo';
 import { useTranslation } from 'src/app/i18n/client';
 import Image from '@components/ui/image';
 import { useModalAction } from '@components/common/modal/modal.context';
 import Switch from '@components/ui/switch';
 import CloseButton from '@components/ui/close-button';
-import { FaFacebook, FaTwitter, FaLinkedinIn } from 'react-icons/fa';
+import { FaGoogle } from 'react-icons/fa';
 import cn from 'classnames';
+import { signIn } from 'next-auth/react';
+import {jwtDecode} from 'jwt-decode';
+import axios from 'axios';
 
 interface LoginFormProps {
   lang: string;
@@ -30,6 +32,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
   const { closeModal, openModal } = useModalAction();
   const { mutate: login, isLoading } = useLoginMutation();
   const [remember, setRemember] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
 
   const {
     register,
@@ -44,19 +48,62 @@ const LoginForm: React.FC<LoginFormProps> = ({
     });
     closeModal();
   }
-  function handelSocialLogin() {
-    login({
-      email: 'demo@demo.com',
-      password: 'demo',
-    });
-    closeModal();
-  }
+
   function handleSignUp() {
     return openModal('SIGN_UP_VIEW');
   }
+
   function handleForgetPassword() {
     return openModal('FORGET_PASSWORD');
   }
+
+  // Handle Google Sign-In with a custom function
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signIn('google', { redirect: false });
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+
+      // Retrieve session to access the token
+      const response = await fetch('/api/auth/session');
+      const session = await response.json();
+
+      if (session && session.accessToken) {
+        const idToken = session.accessToken;
+
+        // Decode the Google ID token to extract user info
+        const decodedIdToken = jwtDecode(idToken);
+        const { name, email } = decodedIdToken;
+
+        console.log("Decoded user information:", name, email);
+
+        // Send the user information to your backend to get your app's token
+        const backendResponse = await axios.post('https://bepocart.in/google-login/', {
+          name,
+          email,
+        });
+        const backendToken = backendResponse.data.token;
+
+        // Store the token in localStorage
+        localStorage.setItem("token", backendToken);
+
+        // Set success message
+        setMessageType("success");
+        setMessage("Login successful!");
+
+        // Redirect the user after successful login
+        window.location.href = '/';
+      } else {
+        throw new Error("Failed to retrieve access token from session.");
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      setMessageType("error");
+      setMessage("Google login failed. Please try again.");
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -72,7 +119,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
         </div>
         <div className="w-full md:w-1/2 lg:w-[45%] xl:w-[40%] py-6 sm:py-10 px-4 sm:px-8 md:px-6 lg:px-8 xl:px-12 rounded-md flex flex-col justify-center">
           <div className="mb-6 text-center">
-
             <h4 className="text-xl font-semibold text-brand-dark sm:text-2xl sm:pt-3 ">
               {t('common:text-welcome-back')}
             </h4>
@@ -151,32 +197,25 @@ const LoginForm: React.FC<LoginFormProps> = ({
               </div>
             </div>
           </form>
-          <div className="relative flex flex-col items-center justify-center text-sm">
-            <span className="mt-6 text-sm text-brand-dark opacity-70">
+
+          <div className="relative flex flex-col items-center justify-center mt-6">
+            <span className="text-sm text-brand-dark opacity-70">
               {t('common:text-or')}
             </span>
+            <button
+              className="flex items-center justify-center w-full mt-4 h-11 md:h-12 border rounded-md bg-white text-brand-dark hover:bg-gray-100 focus:outline-none"
+              onClick={handleGoogleLogin}
+            >
+              <FaGoogle className="w-5 h-5 mr-2" />
+              Sign in with Google
+            </button>
           </div>
 
-          <div className="flex justify-center mt-5 space-x-2.5">
-            <button
-              className="flex items-center justify-center w-10 h-10 transition-all border rounded-full cursor-pointer group border-border-one hover:border-brand focus:border-brand focus:outline-none"
-              onClick={handelSocialLogin}
-            >
-              <FaFacebook className="w-4 h-4 text-opacity-50 transition-all text-brand-dark group-hover:text-brand " />
-            </button>
-            <button
-              className="flex items-center justify-center w-10 h-10 transition-all border rounded-full cursor-pointer group border-border-one hover:border-brand focus:border-brand focus:outline-none"
-              onClick={handelSocialLogin}
-            >
-              <FaTwitter className="w-4 h-4 text-opacity-50 transition-all text-brand-dark group-hover:text-brand" />
-            </button>
-            <button
-              className="flex items-center justify-center w-10 h-10 transition-all border rounded-full cursor-pointer group border-border-one hover:border-brand focus:border-brand focus:outline-none"
-              onClick={handelSocialLogin}
-            >
-              <FaLinkedinIn className="w-4 h-4 text-opacity-50 transition-all text-brand-dark group-hover:text-brand" />
-            </button>
-          </div>
+          {message && (
+            <p className={`mt-4 ${messageType === "error" ? "text-red-500" : "text-green-500"}`}>
+              {message}
+            </p>
+          )}
         </div>
       </div>
     </div>

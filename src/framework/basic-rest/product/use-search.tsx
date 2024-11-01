@@ -1,22 +1,32 @@
 import { QueryOptionsType, Product } from '@framework/types';
-import http from '@framework/utils/http';
 import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
 import { useQuery } from 'react-query';
+import axios from 'axios';
 
 export const fetchSearchedProducts = async ({ queryKey }: any) => {
-  const [_key, _params] = queryKey;
+  const [_key, params] = queryKey;
 
-  const { data } = await http.get(API_ENDPOINTS.SEARCH);
-
-  function searchProduct(product: any) {
-    return product.name.toLowerCase().indexOf(_params.text.toLowerCase()) > -1;
+  // Ensure params.text is defined
+  if (!params?.text) {
+    throw new Error('Search text is missing');
   }
 
-  return data.filter(searchProduct);
+  const { data } = await axios.get(
+    `https://bepocart.in/search-products/?q=${params.text}`
+  );
+
+  return data;
 };
+
 export const useSearchQuery = (options: QueryOptionsType) => {
   return useQuery<Product[], Error>(
     [API_ENDPOINTS.SEARCH, options],
-    fetchSearchedProducts
+    fetchSearchedProducts,
+    {
+      enabled: !!options.text, // Only run if text is provided
+      onError: (error) => {
+        console.error('Error fetching search results:', error);
+      },
+    }
   );
 };

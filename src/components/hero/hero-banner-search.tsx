@@ -31,7 +31,7 @@ const HeroSearchBox: FC<HeroSearchBoxProps> = ({ lang, style, button }) => {
       role="search"
       onSubmit={onSubmit}
     >
-      <label htmlFor="hero-search" className="flex flex-1 items-center py-0.5">
+      {/* <label htmlFor="hero-search" className="flex flex-1 items-center py-0.5">
         <input
           id="hero-search"
           className={`w-full text-sm transition-all duration-200 outline-none text-brand-dark/80 h-14 ${
@@ -45,7 +45,7 @@ const HeroSearchBox: FC<HeroSearchBoxProps> = ({ lang, style, button }) => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </label>
+      </label> */}
 
       <button
         type="submit"

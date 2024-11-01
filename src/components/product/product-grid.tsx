@@ -21,11 +21,8 @@ export const ProductGrid: FC<ProductGridProps> = ({ className = '', lang,viewAs 
   const { t } = useTranslation(lang, 'common');
   const pathname = usePathname();
 
-  console.log("pathname in subcategory...:", pathname);
-
   const { getParams, query } = useQueryParam(pathname ?? '/');
 
-  console.log("getparams..:", getParams);
   const newQuery: any = getParams(
       // @ts-ignore
       `${process.env.NEXT_PUBLIC_WEBSITE_URL}${query}`,

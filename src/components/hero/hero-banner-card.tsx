@@ -4,7 +4,6 @@ import cn from 'classnames';
 import Link from '@components/ui/link';
 import useWindowSize from '@utils/use-window-size';
 import {useTranslation} from 'src/app/i18n/client';
-import HeroSearchBox from '@components/hero/hero-banner-search';
 
 interface BannerProps {
   lang: string;
@@ -31,20 +30,20 @@ export default function HeroBannerCard({
     const selectedImage = getImage(width!, image);
     return heroContentCard ? (
         <div
-            className={cn(
-                'w-full bg-no-repeat bg-cover bg-center flex items-center rounded',
-                {'min-h-[320px] md:min-h-[367px]':variant === 'slider',
-                },
-                {
-                    'bg-fill-thumbnail': variant !== 'antique',
-                },
-                className
-            )}
-            style={{
-                backgroundImage: `url('${image}')`,
-                backgroundPosition: 'center center'
-            }}
-        >
+        className={cn(
+          'w-full bg-no-repeat bg-cover bg-center flex items-center rounded',
+          {
+            'min-h-[500px]': variant === 'slider', // Increase height for mobile view
+            'md:min-h-[367px]': variant === 'slider', // Height for larger screens (md and above)
+            'bg-fill-thumbnail': variant !== 'antique',
+          },
+          className
+        )}
+        style={{
+          backgroundImage: `url('${image}')`,
+          backgroundPosition: 'center center'
+        }}
+      >
             <div
                 className={cn(
                     'sm:absolute inset-0 m-[15px] md:mt-[30px] xl:mt-[50px] w-full',

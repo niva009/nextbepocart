@@ -76,7 +76,8 @@ const Header: React.FC<HeaderProps> = ({className, lang}) => {
                         <Container>
                             <div className="h-11 flex justify-between items-center">
                                 <text className={`hidden md:block truncate`}>
-                                    {t('text-store-location')}
+            
+                                    phone: +91 6235084759
                                 </text>
                                 <div className="flex flex-shrink-0 smx-auto pace-s-5">
                                     <HeaderMenutop
