@@ -17,6 +17,7 @@ export const ROUTES = {
   NOTIFICATION: '/my-account/notification',
   SHOPS: '/shops',
   LOGIN: '/signin',
+  MOBILELOGIN : '/mobilelogin',
   SIGN_UP: '/signup',
   SEARCH: '/search',
   PRODUCTS: '/products',
