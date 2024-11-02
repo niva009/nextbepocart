@@ -1,7 +1,7 @@
 "use client";
 import Alert from '@components/ui/alert';
 import CategoryListCardLoader from '@components/ui/loaders/category-list-card-loader';
-import {useCategoriesQuery} from '@framework/category/get-all-categories';
+import {useCategoriesQuery} from '@framework/category/get-category';
 import cn from 'classnames';
 import CategoryMenu from '@components/ui/category-menu';
 
@@ -47,7 +47,7 @@ export default function CategoryDropdownMenu({
                     </div>
                 ) : (
                     <CategoryMenu
-                        items={data?.categories?.data.slice(0)}
+                        items={data?.categories}
                         categoriesLimit={categoriesLimit}
                         lang={lang}
                     />

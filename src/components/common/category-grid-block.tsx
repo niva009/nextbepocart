@@ -28,7 +28,7 @@ interface CategoriesProps {
 const CategoryGridBlock: React.FC<CategoriesProps> = ({
                                                           className = 'md:pt-3 lg:pt-0 3xl:pb-2 mb-12 sm:mb-14 md:mb-16 xl:mb-24 2xl:mb-16',
                                                           lang,
-                                                          limit = 8,
+                                                          limit = 30,
                                                           variant='default'
                                                       }) => {
     const {width} = useWindowSize();

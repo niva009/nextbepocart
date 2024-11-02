@@ -16,7 +16,7 @@ import {getDirection} from "@utils/get-direction";
 
 function SidebarMenuItem({ className, item, depth = 0, lang }: any) {
   const { t } = useTranslation(lang, 'common');
-  const { name, children: items, icon, type } = item;
+const { name,image, children: subcategories, icon, type , } = item;
     const dir = getDirection(lang);
   return (
     <>
@@ -36,10 +36,10 @@ function SidebarMenuItem({ className, item, depth = 0, lang }: any) {
               { 'text-brand-dark font-medium border-b border-border-base ': depth === 0 },
           )}
         >
-          {icon && (
+          {image && (
             <div className="inline-flex w-8 shrink-0 3xl:h-auto">
               <Image
-                src={icon ?? '/assets/placeholder/category-small.svg'}
+                src={image  || '/assets/placeholder/category-small.svg'}
                 alt={name || t('text-category-thumbnail')}
                 width={25}
                 height={25}
@@ -48,21 +48,21 @@ function SidebarMenuItem({ className, item, depth = 0, lang }: any) {
             </div>
           )}
           <span className="capitalize">{name}</span>
-          {items && (
+          {subcategories && (
             <span className="hidden ltr:ml-auto rtl:mr-auto md:inline-flex">
               {dir === 'rtl' ? <IoIosArrowBack className="text-15px text-skin-base text-opacity-40"/>
                   : <IoIosArrowForward className="text-15px text-skin-base text-opacity-40"/>}
             </span>
           )}
         </Link>
-        {Array.isArray(items) ? (
+        {Array.isArray(subcategories) ? (
           <>
             {type != 'mega' ? (
               <div
                 className={`dropdownMenu absolute top-0 z-10 invisible hidden w-full border opacity-0 md:block left-full bg-brand-light border-border-base subMenu--level${depth} shadow-navigation`}
               >
                 <ul key="content" className="text-xs px-1.5 py-3">
-                  {items?.map((currentItem) => {
+                  {subcategories?.map((currentItem) => {
                     const childDepth = depth + 1;
                     return (
                       <SidebarMenuItem
@@ -79,7 +79,7 @@ function SidebarMenuItem({ className, item, depth = 0, lang }: any) {
                 </ul>
               </div>
             ) : (
-              <SubMegaVertical items={items} lang={lang} />
+              <SubMegaVertical items={subcategories} lang={lang} />
             )}
           </>
         ) : null}
