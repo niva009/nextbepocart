@@ -38,3 +38,5 @@ sw.js
 # ts
 tsconfig.tsbuildinfo
 .vercel
+".env.local" 
+".env.local" 
