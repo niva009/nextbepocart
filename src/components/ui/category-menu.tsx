@@ -16,7 +16,9 @@ import {getDirection} from "@utils/get-direction";
 
 function SidebarMenuItem({ className, item, depth = 0, lang }: any) {
   const { t } = useTranslation(lang, 'common');
+
 const { name,image, children: subcategories, icon, type , slug} = item;
+
     const dir = getDirection(lang);
   return (
     <>
@@ -49,6 +51,7 @@ const { name,image, children: subcategories, icon, type , slug} = item;
           )}
           <span className="capitalize">{name}</span>
           {item?.subcategories && (
+
             <span className="hidden ltr:ml-auto rtl:mr-auto md:inline-flex">
               {dir === 'rtl' ? <IoIosArrowBack className="text-15px text-skin-base text-opacity-40"/>
                   : <IoIosArrowForward className="text-15px text-skin-base text-opacity-40"/>}
@@ -56,6 +59,7 @@ const { name,image, children: subcategories, icon, type , slug} = item;
           )}
         </Link>
         {Array.isArray(item?.subcategories) ? (
+
           <>
             {type != 'mega' ? (
               <div
@@ -63,6 +67,7 @@ const { name,image, children: subcategories, icon, type , slug} = item;
               >
                 <ul key="content" className="text-xs px-1.5 py-3">
                   {item?.subcategories.map((currentItem) => {
+
                     const childDepth = depth + 1;
                     return (
                       <SidebarMenuItem

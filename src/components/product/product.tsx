@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState } from 'react';
@@ -29,6 +28,7 @@ import { useTranslation } from 'src/app/i18n/client';
 import axios from "axios";
 
 const ProductSingleDetails = ({ data, lang}) => {
+
   const { t } = useTranslation(lang, 'common');
   const pathname = useParams();
   const token = localStorage.getItem("token");
@@ -99,7 +99,9 @@ const ProductSingleDetails = ({ data, lang}) => {
 
 
     if (!token) {
+
       router.push('/signin');
+
       return; // Stop further execution if no token is found
     }
 

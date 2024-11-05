@@ -65,7 +65,9 @@ const ThumbnailCarousel: React.FC<Props> = ({
   // Ensure Swiper is properly instantiated by using useEffect
   useEffect(() => {
     if (thumbsSwiper && !thumbsSwiper.destroyed) {
+
       mainSwiper?.update();
+
     }
   }, [thumbsSwiper, mainSwiper]);
 

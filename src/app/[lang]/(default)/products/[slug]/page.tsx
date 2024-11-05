@@ -4,6 +4,7 @@ import ElectronicProductFeed from '@components/product/feeds/electronic-product-
 import RelatedProductFeedOld from '@components/product/feeds/related-product-feed-old';
 import Breadcrumb from '@components/ui/breadcrumb';
 
+
 // Fetch data server-side
 export default async function Page({
   params: { lang, slug },
