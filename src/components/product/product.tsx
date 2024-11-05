@@ -27,13 +27,14 @@ const ProductSingleDetails = ({ data, lang }) => {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [favorite, setFavorite] = useState(false);
   const [selectedColor, setSelectedColor] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null); // State to store the selected image
   const [sizes, setSizes] = useState([]);
   const [selectedSize, setSelectedSize] = useState("");
   const [stock, setStock] = useState(0);
   const [addToCartLoader, setAddToCartLoader] = useState(false);
   const [addToWishlistLoader, setAddToWishlistLoader] = useState(false);
 
-  // Automatically set initial color and size with stock
+  // Automatically set initial color, size, and image with stock
   useEffect(() => {
     if (data?.product?.type === 'variant' && data?.images?.length > 0) {
       const firstAvailableColor = data.images.find(
@@ -41,6 +42,7 @@ const ProductSingleDetails = ({ data, lang }) => {
       );
       if (firstAvailableColor) {
         setSelectedColor(firstAvailableColor.color);
+        setSelectedImage(firstAvailableColor); // Set the initial image for the selected color
         setSizes(firstAvailableColor.stock_info);
         const firstAvailableSize = firstAvailableColor.stock_info.find((sizeInfo) => sizeInfo.stock > 0);
         if (firstAvailableSize) {
@@ -49,12 +51,14 @@ const ProductSingleDetails = ({ data, lang }) => {
         }
       }
     } else if (data?.product?.type === 'single' && data?.images?.[0]) {
+      setSelectedImage(data.images[0]); // Set the initial image for single product
       setStock(data.images[0].stock || 0);
     }
   }, [data]);
 
   const handleColorChange = (colorOption) => {
     setSelectedColor(colorOption.color);
+    setSelectedImage(colorOption); // Update the displayed image based on selected color
     setSelectedSize(""); // Reset size selection when color changes
 
     if (colorOption.stock_info) {
@@ -76,69 +80,127 @@ const ProductSingleDetails = ({ data, lang }) => {
     }
   };
 
-  const addToCart = () => {
+  const addToCart = async () => {
     if (stock === 0) return;
     setAddToCartLoader(true);
-
-    const item = generateCartItem(data, null);
-    addItemToCart(item, selectedQuantity);
-    setAddToCartLoader(false);
-
-    toast('Added to the bag', {
-      progressClassName: 'fancy-progress-bar',
-      position: width > 768 ? 'bottom-right' : 'top-right',
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  };
-
-  const addToWishlist = () => {
-    if (!token) {
-      router.push('/signin');
-      return;
-    }
-
-    axios.post(
-      `https://bepocart.in/add-wishlist/${data?.product?.id}/`,
-      {},
-      {
-        headers: {
-          'Authorization': `${token}`,
-        },
+  
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
+      if (!token) {
+        router.push('/signin');
+        return;
       }
-    )
-    .then((response) => {
+  
+      const response = await axios.post(
+        `https://bepocart.in/cart/${data?.product?.id}/`,
+        {
+          quantity: selectedQuantity,
+          size: selectedSize,
+          color: selectedColor,
+        },
+        {
+          headers: { Authorization: `${token}` },
+        }
+      );
+  
       if (response.status === 201) {
-        setAddToWishlistLoader(true);
-        setFavorite(!favorite);
-        toast(favorite ? t('text-remove-favorite') : t('text-added-favorite'), {
+        toast.success('Added to the bag', {
           progressClassName: 'fancy-progress-bar',
-          position: window.innerWidth > 768 ? 'bottom-right' : 'top-right',
+          position: width > 768 ? 'bottom-right' : 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
         });
-        setAddToWishlistLoader(false);
       }
-    })
-    .catch((error) => console.log("Error adding to wishlist:", error));
+    } catch (error) {
+      toast.error("Error adding to cart. Please try again.", {
+        position: width > 768 ? 'bottom-right' : 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } finally {
+      setAddToCartLoader(false);
+    }
   };
+  
+
+  const addToWishlist = () => {
+    if (!token) {
+      router.push('/signin');
+      return;
+    }
+  
+    axios
+      .post(
+        `https://bepocart.in/add-wishlist/${data?.product?.id}/`,
+        {},
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status === 201) {
+          setAddToWishlistLoader(true);
+          setFavorite(!favorite);
+          toast(favorite ? t('text-remove-favorite') : t('text-added-favorite'), {
+            progressClassName: 'fancy-progress-bar',
+            position: window.innerWidth > 768 ? 'bottom-right' : 'top-right',
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          setAddToWishlistLoader(false);
+        }
+      })
+      .catch((error) => {
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          router.push("/signin");
+        } else {
+          const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+          toast(errorMessage, {
+            progressClassName: 'fancy-progress-bar',
+            position: window.innerWidth > 768 ? 'bottom-right' : 'top-right',
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
+      });
+  };
+  ;
 
   return (
     <div className="pt-6 pb-2 md:pt-7">
       <div className="grid-cols-10 lg:grid gap-7 2xl:gap-7 mb-8 lg:mb-12 bg-white p-5 rounded">
         <div className="col-span-5 mb-6 overflow-hidden md:mb-8 lg:mb-0 xl:flex justify-center">
           {!!data?.images?.length ? (
-            <ThumbnailCarousel
-              gallery={data?.images}
-              galleryClassName="xl:w-[100px]"
-              lang={lang}
-            />
+            selectedImage ? (
+              <ThumbnailCarousel
+                gallery={[selectedImage, ...data.images.filter(img => img.color !== selectedImage.color)]}
+                galleryClassName="xl:w-[100px]"
+                lang={lang}
+              />
+            ) : (
+              <div className="flex items-center justify-center w-auto">
+                <Image
+                  src={data?.product?.image ?? '/product-placeholder.svg'}
+                  alt={data?.product?.name}
+                  width="full"
+                  height={680}
+                />
+              </div>
+            )
           ) : (
             <div className="flex items-center justify-center w-auto">
               <Image
@@ -203,7 +265,7 @@ const ProductSingleDetails = ({ data, lang }) => {
                     onClick={() => handleSizeChange(sizeInfo.size, sizeInfo.stock)}
                     disabled={sizeInfo.stock === 0}
                   >
-                    {sizeInfo.size} {sizeInfo.stock === 0}
+                    {sizeInfo.size}
                   </button>
                 ))}
               </div>
@@ -223,40 +285,42 @@ const ProductSingleDetails = ({ data, lang }) => {
             )
           )}
 
-          <Counter
-            variant="single"
-            value={selectedQuantity}
-            onIncrement={() => setSelectedQuantity((prev) => prev + 1)}
-            onDecrement={() =>
-              setSelectedQuantity((prev) => (prev !== 1 ? prev - 1 : 1))
-            }
-            disabled={stock === 0 || selectedQuantity >= stock}
-            lang={lang}
-          />
+<div className="space-y-4"> {/* Use space-x-4 for horizontal gaps */}
+  <Counter
+    variant="single"
+    value={selectedQuantity}
+    onIncrement={() => setSelectedQuantity((prev) => prev + 1)}
+    onDecrement={() => setSelectedQuantity((prev) => (prev !== 1 ? prev - 1 : 1))}
+    disabled={stock === 0 || selectedQuantity >= stock}
+    lang={lang}
+  />
 
-          <Button
-            onClick={addToCart}
-            className="w-full px-1.5"
-            disabled={stock === 0}
-            loading={addToCartLoader}
-          >
-            <CartIcon color="#ffffff" className="ltr:mr-3 rtl:ml-3" />
-            {t('text-add-to-cart')}
-          </Button>
+  <Button
+    onClick={addToCart}
+    className="w-full px-1.5"
+    disabled={stock === 0}
+    loading={addToCartLoader}
+  >
+    <CartIcon color="#ffffff" className="ltr:mr-3 rtl:ml-3" />
+    {t('text-add-to-cart')}
+  </Button>
 
-          <Button
-            variant="border"
-            onClick={addToWishlist}
-            loading={addToWishlistLoader}
-            className={`group hover:text-brand ${favorite && 'text-brand'}`}
-          >
-            {favorite ? (
-              <IoIosHeart className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all" />
-            ) : (
-              <IoIosHeartEmpty className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all group-hover:text-brand" />
-            )}
-            {t('text-wishlist')}
-          </Button>
+  <Button
+    variant="border"
+    onClick={addToWishlist}
+    loading={addToWishlistLoader}
+    className={`group hover:text-brand ${favorite && 'text-brand'}`}
+  >
+    {favorite ? (
+      <IoIosHeart className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all" />
+    ) : (
+      <IoIosHeartEmpty className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all group-hover:text-brand" />
+    )}
+    {t('text-wishlist')}
+  </Button>
+</div>
+
+    
           
         </div>
       </div>
