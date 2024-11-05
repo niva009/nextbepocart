@@ -11,11 +11,13 @@ export default async function Page({
 }) {
   const res = await fetch(`https://bepocart.in/product/${slug}/`, { cache: "no-store" });
   const data = await res.json();
-  console.log("data single product page...:", data);
+  console.log("data single product page...:", slug);
 
   if (!data) {
     return <div>Product not found</div>;
   }
+
+  console.log("product slug....", data?.product);
 
   return (
     <div className="pt-6 lg:pt-7 pb-10">
@@ -27,6 +29,7 @@ export default async function Page({
           uniqueKey="related-products"
           lang={lang}
           className="mb-8 lg:mb-12"
+          slug={slug}
         />
         <ElectronicProductFeed lang={lang} className="mb-8 lg:mb-12" />
       </Container>

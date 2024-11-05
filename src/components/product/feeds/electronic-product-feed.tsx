@@ -21,7 +21,7 @@ const ElectronicProductFeed: FC<Props> = ({
   });
   return (
     <ProductsCarousel
-      sectionHeading="text-popcorn-jerky"
+      sectionHeading="similar products"
       categorySlug={ROUTES.PRODUCTS}
       products={data}
       loading={isLoading}

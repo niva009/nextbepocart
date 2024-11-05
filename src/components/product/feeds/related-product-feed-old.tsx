@@ -15,11 +15,15 @@ const RelatedProductFeedOld: React.FC<RelatedProductsProps> = ({
   lang,
   carouselBreakpoint,
   className,
+  slug,
   uniqueKey = 'related-product-popup',
 }) => {
   const { data, isLoading, error } = useRelatedProductsQuery({
     limit: LIMITS.RELATED_PRODUCTS_LIMITS,
+    slug,
   });
+
+  console.log("releted product detilssss:", data);
   return (
     <ProductsCarousel
       sectionHeading="text-related-products"
