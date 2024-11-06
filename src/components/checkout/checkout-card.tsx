@@ -14,41 +14,62 @@ import { useTranslation } from 'src/app/i18n/client';
 import { useIsMounted } from '@utils/use-is-mounted';
 import { useEffect, useState } from 'react';
 import SearchResultLoader from '@components/ui/loaders/search-result-loader';
+import { useCartQuery } from '@framework/product/get-cart-product';
 
 const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
   const { t } = useTranslation(lang, 'common');
   const router = useRouter();
   const [isLoading, setLoading] = useState(true);
+  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [subTotal, setSubTotal] = useState(0);
+  const { data } = useCartQuery({});
+
+  useEffect(() => {
+    if (data) {
+      setCartItems(data.data || []);
+      setSubTotal(data.subTotal);
+    }
+  }, [data]);
 
   useEffect(() => {
     setLoading(false);
   }, []);
+
   const { items, total, isEmpty } = useCart();
   const { price: subtotal } = usePrice({
     amount: total,
-    currencyCode: 'USD',
+    currencyCode: 'INR',
   });
+
   function orderHeader() {
-    !isEmpty && router.push(`/${lang}${ROUTES.ORDER}`);
+    if (!isEmpty) {
+      router.push(`/${lang}${ROUTES.ORDER}`);
+    }
   }
+
   const checkoutFooter = [
     {
       id: 1,
       name: t('text-sub-total'),
-      price: subtotal,
+      price: `₹${subTotal.toString()}`, // Correctly formatted subtotal with currency symbol
     },
     {
       id: 2,
       name: t('text-shipping'),
-      price: '$0',
+      price: '₹0',
     },
     {
       id: 3,
       name: t('text-total'),
-      price: subtotal,
+      price: `₹${subTotal.toString()}`, // Correctly formatted total with currency symbol
     },
   ];
+  
+
+
+  console.log("cart in check out ..:", cartItems);
   const mounted = useIsMounted();
+
   return (
     <>
       <div className="px-4 pt-4 border rounded-md border-border-base text-brand-light xl:py-6 xl:px-7 bg-white rounded">
@@ -64,22 +85,22 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
           <div className="w-full">
             <SearchResultLoader uniqueKey={`product-key`} />
           </div>
-        ) : !isEmpty && mounted ? (
-          items.map((item) => <CheckoutItem item={item} key={item.id} />)
+        ) : cartItems? (
+          cartItems.map((item) => <CheckoutItem item={item} key={item.id} />)
         ) : (
           <p className="py-4 text-brand-danger text-opacity-70">
             {t('text-empty-cart')}
           </p>
         )}
         {mounted &&
-          checkoutFooter.map((item: any) => (
+          checkoutFooter.map((item) => (
             <CheckoutCardFooterItem item={item} key={item.id} />
           ))}
         <Button
           variant="formButton"
           className={cn(
             'w-full mt-8 mb-5 rounded font-semibold px-4 py-3 transition-all',
-            mounted && isEmpty
+            !cartItems
               ? 'opacity-40 cursor-not-allowed'
               : '!bg-brand !text-brand-light'
           )}
@@ -103,7 +124,6 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
         </Link>
         . {t('text-credit-debit')}
       </Text>
-      <Text className="mt-4">{t('text-bag-fee')}</Text>
     </>
   );
 };

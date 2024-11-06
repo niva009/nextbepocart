@@ -21,7 +21,7 @@ const router = useRouter();
     onSuccess: (data) => {
       console.log("login data",data);
       localStorage.setItem("token",data.token);
-      toast.success("Login success welcome to bepocart family!")
+      toast.success("Login success welcome to bepocart !")
       router.push('/home');
     },
     onError: (data) => {

@@ -21,31 +21,6 @@ const CheckoutDetails: React.FC<{ lang: string }> = ({ lang }) => {
       title: 'text-delivery-address',
       component: <Address lang={lang} />,
     },
-    {
-      id: 2,
-      title: 'text-delivery-schedule',
-      component: <DeliverySchedule lang={lang} />,
-    },
-    {
-      id: 3,
-      title: 'text-contact-number',
-      component: <Contact lang={lang} />,
-    },
-    {
-      id: 4,
-      title: 'text-payment-option',
-      component: <StripeCheckoutInlineForm lang={lang} />,
-    },
-    {
-      id: 5,
-      title: 'text-delivery-instructions',
-      component: <DeliveryNotes lang={lang} />,
-    },
-    {
-      id: 6,
-      title: 'text-delivery-tip',
-      component: <DeliveryTips lang={lang} />,
-    },
   ];
   const changeItem = (itemIndex: any) => {
     if (itemIndex !== bindIndex) {

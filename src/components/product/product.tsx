@@ -42,7 +42,7 @@ const ProductSingleDetails = ({ data, lang }) => {
       );
       if (firstAvailableColor) {
         setSelectedColor(firstAvailableColor.color);
-        setSelectedImage(firstAvailableColor); // Set the initial image for the selected color
+        setSelectedImage(firstAvailableColor);
         setSizes(firstAvailableColor.stock_info);
         const firstAvailableSize = firstAvailableColor.stock_info.find((sizeInfo) => sizeInfo.stock > 0);
         if (firstAvailableSize) {
@@ -51,14 +51,14 @@ const ProductSingleDetails = ({ data, lang }) => {
         }
       }
     } else if (data?.product?.type === 'single' && data?.images?.[0]) {
-      setSelectedImage(data.images[0]); // Set the initial image for single product
+      setSelectedImage(data.images[0]);
       setStock(data.images[0].stock || 0);
     }
   }, [data]);
 
   const handleColorChange = (colorOption) => {
     setSelectedColor(colorOption.color);
-    setSelectedImage(colorOption); // Update the displayed image based on selected color
+    setSelectedImage(colorOption);
     setSelectedSize(""); // Reset size selection when color changes
 
     if (colorOption.stock_info) {
@@ -70,6 +70,8 @@ const ProductSingleDetails = ({ data, lang }) => {
       } else {
         setStock(0);
       }
+    } else {
+      setStock(colorOption.stock || 0);
     }
   };
 
@@ -115,6 +117,7 @@ const ProductSingleDetails = ({ data, lang }) => {
         });
       }
     } catch (error) {
+      console.log("error adding to cart ...:", error);
       toast.error("Error adding to cart. Please try again.", {
         position: width > 768 ? 'bottom-right' : 'top-right',
         autoClose: 1500,
@@ -178,7 +181,6 @@ const ProductSingleDetails = ({ data, lang }) => {
         }
       });
   };
-  ;
 
   return (
     <div className="pt-6 pb-2 md:pt-7">
@@ -187,10 +189,11 @@ const ProductSingleDetails = ({ data, lang }) => {
           {!!data?.images?.length ? (
             selectedImage ? (
               <ThumbnailCarousel
-                gallery={[selectedImage, ...data.images.filter(img => img.color !== selectedImage.color)]}
-                galleryClassName="xl:w-[100px]"
-                lang={lang}
-              />
+              gallery={[selectedImage, ...data.images.filter(img => img.color !== selectedImage.color)]}
+              galleryClassName="xl:w-[100px] w-full h-full object-cover"
+              lang={lang}
+            />
+            
             ) : (
               <div className="flex items-center justify-center w-auto">
                 <Image
@@ -229,12 +232,12 @@ const ProductSingleDetails = ({ data, lang }) => {
           </div>
           <p>{data?.product?.short_description}</p>
 
-          {/* Color selection */}
-          {data?.product?.type === 'variant' && data?.images.length > 0 && (
+          {/* Color selection - available for both single and variant products */}
+          {data?.images.length > 0 && (
             <div>
               <h4 className="text-base font-bold text-qblack mb-2 mt-4">Color</h4>
               <div className="flex flex-wrap gap-2">
-                {data?.images.map((image) => (
+                {data.images.map((image) => (
                   <button
                     key={image.id}
                     className={`px-4 py-2 rounded border ${selectedColor === image.color
@@ -242,6 +245,7 @@ const ProductSingleDetails = ({ data, lang }) => {
                         : 'border-qgray text-qblack'
                       }`}
                     onClick={() => handleColorChange(image)}
+                    disabled={image.stock === 0} // Disable if out of stock
                   >
                     {image.color}
                   </button>
@@ -250,7 +254,7 @@ const ProductSingleDetails = ({ data, lang }) => {
             </div>
           )}
 
-          {/* Size selection */}
+          {/* Size selection - only for variant products */}
           {data?.product?.type === 'variant' && selectedColor && sizes.length > 0 && (
             <div>
               <h4 className="text-base font-bold text-qblack mb-2 mt-4">Size</h4>
@@ -285,43 +289,40 @@ const ProductSingleDetails = ({ data, lang }) => {
             )
           )}
 
-<div className="space-y-4"> {/* Use space-x-4 for horizontal gaps */}
-  <Counter
-    variant="single"
-    value={selectedQuantity}
-    onIncrement={() => setSelectedQuantity((prev) => prev + 1)}
-    onDecrement={() => setSelectedQuantity((prev) => (prev !== 1 ? prev - 1 : 1))}
-    disabled={stock === 0 || selectedQuantity >= stock}
-    lang={lang}
-  />
+          <div className="space-y-4 mt-4"> 
+            <Counter
+              variant="single"
+              value={selectedQuantity}
+              onIncrement={() => setSelectedQuantity((prev) => prev + 1)}
+              onDecrement={() => setSelectedQuantity((prev) => (prev !== 1 ? prev - 1 : 1))}
+              disabled={stock === 0 || selectedQuantity >= stock}
+              lang={lang}
+            />
 
-  <Button
-    onClick={addToCart}
-    className="w-full px-1.5"
-    disabled={stock === 0}
-    loading={addToCartLoader}
-  >
-    <CartIcon color="#ffffff" className="ltr:mr-3 rtl:ml-3" />
-    {t('text-add-to-cart')}
-  </Button>
+            <Button
+              onClick={addToCart}
+              className="w-full px-1.5"
+              disabled={stock === 0}
+              loading={addToCartLoader}
+            >
+              <CartIcon color="#ffffff" className="ltr:mr-3 rtl:ml-3" />
+              {t('text-add-to-cart')}
+            </Button>
 
-  <Button
-    variant="border"
-    onClick={addToWishlist}
-    loading={addToWishlistLoader}
-    className={`group hover:text-brand ${favorite && 'text-brand'}`}
-  >
-    {favorite ? (
-      <IoIosHeart className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all" />
-    ) : (
-      <IoIosHeartEmpty className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all group-hover:text-brand" />
-    )}
-    {t('text-wishlist')}
-  </Button>
-</div>
-
-    
-          
+            <Button
+              variant="border"
+              onClick={addToWishlist}
+              loading={addToWishlistLoader}
+              className={`group hover:text-brand ${favorite && 'text-brand'}`}
+            >
+              {favorite ? (
+                <IoIosHeart className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all" />
+              ) : (
+                <IoIosHeartEmpty className="text-2xl md:text-[26px] ltr:mr-2 rtl:ml-2 transition-all group-hover:text-brand" />
+              )}
+              {t('text-wishlist')}
+            </Button>
+          </div>
         </div>
       </div>
       <ProductDetailsTab product={data?.product} lang={lang} />

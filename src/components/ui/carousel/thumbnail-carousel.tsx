@@ -90,7 +90,7 @@ const ThumbnailCarousel: React.FC<Props> = ({
           }}
           onSwiper={setMainSwiper} // Set the instance of the main swiper
           {...swiperParams}
-        >
+        >w
           {imageUrls?.map((url: string, index: number) => (
             <SwiperSlide
               key={`product-gallery-${index}`}

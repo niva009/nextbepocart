@@ -4,6 +4,7 @@ import CheckoutDetails from '@components/checkout/checkout-details';
 import Divider from '@components/ui/divider';
 import { Metadata } from 'next';
 
+
 export const metadata: Metadata = {
   title: 'Checkout',
 };
