@@ -23,6 +23,7 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [subTotal, setSubTotal] = useState(0);
   const { data } = useCartQuery({});
+  const [isAddressAvailable, setIsAddressAvailable] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -33,6 +34,9 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
 
   useEffect(() => {
     setLoading(false);
+    // Check if address ID is stored in localStorage
+    const addressId = localStorage.getItem('addressid');
+    setIsAddressAvailable(!!addressId);
   }, []);
 
   const { items, total, isEmpty } = useCart();
@@ -42,8 +46,8 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
   });
 
   function orderHeader() {
-    if (!isEmpty) {
-      router.push(`/${lang}${ROUTES.ORDER}`);
+    if (cartItems && isAddressAvailable) {
+      router.push(`/${lang}${ROUTES.PAYMENT}`);
     }
   }
 
@@ -65,8 +69,6 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
     },
   ];
   
-
-
   console.log("cart in check out ..:", cartItems);
   const mounted = useIsMounted();
 
@@ -85,7 +87,7 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
           <div className="w-full">
             <SearchResultLoader uniqueKey={`product-key`} />
           </div>
-        ) : cartItems? (
+        ) : cartItems ? (
           cartItems.map((item) => <CheckoutItem item={item} key={item.id} />)
         ) : (
           <p className="py-4 text-brand-danger text-opacity-70">
@@ -100,11 +102,12 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
           variant="formButton"
           className={cn(
             'w-full mt-8 mb-5 rounded font-semibold px-4 py-3 transition-all',
-            !cartItems
+            !cartItems || !isAddressAvailable
               ? 'opacity-40 cursor-not-allowed'
               : '!bg-brand !text-brand-light'
           )}
           onClick={orderHeader}
+          disabled={!isAddressAvailable}
         >
           {t('button-order-now')}
         </Button>

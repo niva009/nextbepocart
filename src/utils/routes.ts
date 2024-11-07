@@ -27,4 +27,5 @@ export const ROUTES = {
   WISHLIST: '/my-account/wishlist',
   BLOG: `/blog`,
   BECOIN : '/my-account/becoin',
+  PAYMENT : '/payment',
 };

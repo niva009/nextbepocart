@@ -3,12 +3,7 @@
 import { useState } from 'react';
 import Button from '@components/ui/button';
 import Heading from '@components/ui/heading';
-import Contact from '@components/contact/contact';
 import Address from './address';
-import DeliveryNotes from './delivery-instruction';
-import DeliverySchedule from './schedule';
-import DeliveryTips from './delivery-tips';
-import StripeCheckoutInlineForm from './stripe-checkout-inline-form';
 import { useTranslation } from 'src/app/i18n/client';
 import { useIsMounted } from '@utils/use-is-mounted';
 
@@ -65,7 +60,6 @@ const CheckoutDetails: React.FC<{ lang: string }> = ({ lang }) => {
                       variant="formButton"
                       className="px-4 py-3 text-sm font-semibold rounded bg-brand text-brand-light"
                     >
-                      {t('button-next-steps')}
                     </Button>
                   </div>
                 ) : (

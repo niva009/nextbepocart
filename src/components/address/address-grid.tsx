@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MdDeleteForever } from "react-icons/md";
 import { AiOutlinePlus } from 'react-icons/ai';
 import { RadioGroup } from '@headlessui/react';
@@ -40,11 +40,22 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
   address = address || [];
   const [selected, setSelected] = useState(address[0]);
 
+  useEffect(() => {
+    // Store the selected address ID in localStorage when the component mounts or selected changes
+    if (selected?.id) {
+      localStorage.setItem("addressid", selected.id);
+    }
+  }, [selected]);
+
   return (
     <div className="flex flex-col justify-between h-full -mt-4 text-15px md:mt-0">
       <RadioGroup
         value={selected}
-        onChange={setSelected}
+        onChange={(value) => {
+          setSelected(value);
+          // Store the selected address ID in localStorage
+          localStorage.setItem("addressid", value.id);
+        }}
         className="space-y-4 md:grid md:grid-cols-2 md:gap-5 auto-rows-auto md:space-y-0"
       >
         <RadioGroup.Label className="sr-only">{t('address')}</RadioGroup.Label>
