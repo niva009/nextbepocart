@@ -74,7 +74,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
         await axios.post(
           `https://bepocart.in/order/create/${addressId}/`,
           { payment_method: paymentMethod, coupon_code: couponCode },
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `${token}` } }
         );
         router.push('/en/complete-order');
       } catch (error) {
