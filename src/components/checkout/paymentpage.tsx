@@ -52,7 +52,8 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
     { id: 1, name: t('text-sub-total'), price: `₹${subTotal.toFixed(2)}` },
     { id: 2, name: t('text-shipping'), price: `₹${shipping.toFixed(2)}` },
     paymentMethod === 'COD' ? { id: 3, name: 'COD Charge', price: `₹${COD_CHARGE}` } : null,
-    { id: 4, name: t('text-total'), price: `₹${totalAmount.toFixed(2)}` },
+    couponDiscount > 0 ? { id: 4, name: 'Discount Price', price: `-₹${couponDiscount.toFixed(2)}`, style: { color: 'green' } } : null,
+    { id: 5, name: t('text-total'), price: `₹${totalAmount.toFixed(2)}` },
   ].filter(Boolean);
 
   const calculateShipping = (subTotal: number) => {
@@ -113,7 +114,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
 
     try {
       const initialResponse = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/order/create/${addressId}/`,
+        `https://bepocart.in/order/create/${addressId}/`,
         { coupon_code: couponCode, payment_method: paymentMethod },
         { headers: { Authorization: `${token}` } }
       );
@@ -135,7 +136,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
 
           try {
             const result = await axios.post(
-              `${process.env.NEXT_PUBLIC_API_URL}/verify-razorpay-payment/`,
+              'https://bepocart.in/verify-razorpay-payment/',
               {
                 order_id: razorpay_order_id,
                 coupon_code: couponCode,
