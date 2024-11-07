@@ -40,7 +40,6 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
   }, [data]);
 
   useEffect(() => {
-    // Fetch address ID from localStorage when the component mounts
     const storedAddressId = localStorage.getItem('addressid');
     setAddressId(storedAddressId);
   }, []);
@@ -72,17 +71,10 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
 
     if (paymentMethod === 'COD') {
       try {
-        const res = await axios.post(
+        await axios.post(
           `https://bepocart.in/order/create/${addressId}/`,
-          {
-            payment_method: paymentMethod,
-            coupon_code: couponCode,
-          },
-          {
-            headers: {
-              Authorization: `${token}`,
-            }
-          }
+          { payment_method: paymentMethod, coupon_code: couponCode },
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         router.push('/en/complete-order');
       } catch (error) {
@@ -90,82 +82,130 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
         alert('Order creation failed.');
       }
     } else {
-      console.log('User selected Razorpay');
+      displayRazorpay();
     }
   };
+
+  async function loadScript(src: string) {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  }
+
+  async function displayRazorpay() {
+    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+
+    if (!res) {
+      alert('Razorpay SDK failed to load. Are you online?');
+      return;
+    }
+
+    if (totalAmount <= 0) {
+      alert('Invalid subtotal amount.');
+      return;
+    }
+
+    try {
+      const initialResponse = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/order/create/${addressId}/`,
+        { coupon_code: couponCode, payment_method: paymentMethod },
+        { headers: { Authorization: `${token}` } }
+      );
+      const { razorpay_order_id } = initialResponse.data;
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+        amount: (totalAmount * 100).toString(),
+        currency: 'INR',
+        order_id: razorpay_order_id,
+        name: 'Bepocart Pvt Limited',
+        description: 'Thank you for your order',
+        handler: async function (response: any) {
+          const data = {
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+            razorpaySignature: response.razorpay_signature,
+          };
+
+          try {
+            const result = await axios.post(
+              `${process.env.NEXT_PUBLIC_API_URL}/verify-razorpay-payment/`,
+              {
+                order_id: razorpay_order_id,
+                coupon_code: couponCode,
+                payment_id: data.razorpayPaymentId,
+                razorpay_signature: data.razorpaySignature,
+                total_amount: totalAmount,
+                address_id: addressId,
+                shipping_charge: shipping,
+              },
+              { headers: { Authorization: ` ${token}` } }
+            );
+
+            if (result.status === 200) {
+              alert('Payment successful and order created!');
+              router.push('/en/complete-order');
+            } else {
+              alert('Failed to create order. Please try again.');
+            }
+          } catch (error) {
+            console.log('Error processing payment:', error);
+            alert('Payment was successful, but there was an issue creating the order. Please try again.');
+          }
+        },
+        prefill: {
+          name: 'name',
+          email: 'email@example.com',
+          contact: '1234567890',
+        },
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error) {
+      console.error('Error creating Razorpay order:', error);
+      alert('Server error. Are you online?');
+    }
+  }
 
   return (
     <>
       <div className="px-4 pt-4 border rounded-md border-border-base text-brand-light xl:py-6 xl:px-7 bg-white rounded">
-        <div className="flex pb-2 text-sm font-semibold rounded-md text-heading">
-          <span className="font-medium text-15px text-brand-dark">
-            {t('text-product')}
-          </span>
-          <span className="font-medium ltr:ml-auto rtl:mr-auto shrink-0 text-15px text-brand-dark">
-            {t('text-sub-total')}
-          </span>
-        </div>
-        
+        {/* Cart Items and Footer */}
         {cartItems.length > 0 ? (
           cartItems.map((item) => <CheckoutItem item={item} key={item.id} />)
         ) : (
-          <p className="py-4 text-brand-danger text-opacity-70">
-            {t('text-empty-cart')}
-          </p>
+          <p className="py-4 text-brand-danger text-opacity-70">{t('text-empty-cart')}</p>
         )}
+        {checkoutFooter.map((item) => <CheckoutCardFooterItem item={item} key={item.id} />)}
 
-        {checkoutFooter.map((item) => (
-          <CheckoutCardFooterItem item={item} key={item.id} />
-        ))}
-
+        {/* Payment Method */}
         <div className="mt-6">
           <p className="text-lg font-medium text-qblack mb-3">Payment Method</p>
           <div className="flex space-x-3 items-center">
-            <input
-              type="radio"
-              id="cashOnDelivery"
-              name="paymentMethod"
-              className="text-accent-pink-500"
-              onChange={() => handlePaymentMethodChange('COD')}
-            />
-            <label htmlFor="cashOnDelivery" style={{ color: 'black' }}>
-              Cash on Delivery
-            </label>
+            <input type="radio" id="cashOnDelivery" name="paymentMethod" onChange={() => handlePaymentMethodChange('COD')} />
+            <label htmlFor="cashOnDelivery" style={{ color: 'black' }}>Cash on Delivery</label>
           </div>
           <div className="flex space-x-3 items-center mt-2">
-            <input
-              type="radio"
-              id="creditCard"
-              name="paymentMethod"
-              className="text-accent-pink-500"
-              onChange={() => handlePaymentMethodChange('NetBanking')}
-            />
-            <label htmlFor="creditCard" style={{ color: 'black' }}>
-              Net Banking
-            </label>
+            <input type="radio" id="razorpay" name="paymentMethod" onChange={() => handlePaymentMethodChange('razorpay')} />
+            <label htmlFor="razorpay" style={{ color: 'black' }}>Razorpay</label>
           </div>
         </div>
 
-        <Button
-          variant="formButton"
-          className="w-full mt-8 mb-5 rounded font-semibold px-4 py-3 bg-brand text-brand-light"
-          onClick={handlePlaceOrder}
-          disabled={!addressId} // Disable button if addressId is not available
-        >
+        <Button variant="formButton" className="w-full mt-8 mb-5 rounded font-semibold px-4 py-3 bg-brand text-brand-light" onClick={handlePlaceOrder} disabled={!addressId}>
           Place Order Now
         </Button>
       </div>
 
       <Text className="mt-8">
         {t('text-by-placing-your-order')}{' '}
-        <Link href={`/${lang}${ROUTES.TERMS}`} className="font-medium underline text-brand">
-          {t('text-terms-of-service')}
-        </Link>{' '}
+        <Link href={`/${lang}${ROUTES.TERMS}`} className="font-medium underline text-brand">{t('text-terms-of-service')}</Link>{' '}
         {t('text-and')}{' '}
-        <Link href={`/${lang}${ROUTES.PRIVACY}`} className="font-medium underline text-brand">
-          {t('text-privacy')}
-        </Link>
-        . {t('text-credit-debit')}
+        <Link href={`/${lang}${ROUTES.PRIVACY}`} className="font-medium underline text-brand">{t('text-privacy')}</Link>.
       </Text>
     </>
   );
