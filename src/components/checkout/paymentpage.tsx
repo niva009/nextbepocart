@@ -29,7 +29,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
   const [addressId, setAddressId] = useState<string | null>(null);
   const COD_CHARGE = 40;
   const { data } = useCartQuery({});
-  const token = localStorage.getItem('token');
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
   useEffect(() => {
     if (data) {
@@ -40,8 +40,10 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
   }, [data]);
 
   useEffect(() => {
-    const storedAddressId = localStorage.getItem('addressid');
-    setAddressId(storedAddressId);
+    if (typeof window !== 'undefined') {
+      const storedAddressId = localStorage.getItem('addressid');
+      setAddressId(storedAddressId);
+    }
   }, []);
 
   const totalAmount = subTotal - couponDiscount + shipping + codCharge;
