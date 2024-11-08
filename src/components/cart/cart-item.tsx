@@ -20,7 +20,7 @@ const CartItem: React.FC<CartItemProps> = ({ lang, item, onRemove, onQuantityCha
       if (!token) return console.error("User is not authenticated");
       
       await axios.delete(`https://bepocart.in/cart-delete/${id}/`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: ` ${token}` },
       });
       onRemove(id);
       console.log("Item deleted successfully.");

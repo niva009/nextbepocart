@@ -11,6 +11,9 @@ import { useTranslation } from 'src/app/i18n/client';
 import axios from 'axios';
 import Link from 'next/link';
 import { WishlistModal } from './modal-wishlist';
+import { useQueryClient } from 'react-query';
+import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
+
 
 interface ProductProps {
   product: Product;
@@ -23,6 +26,8 @@ const WishlistProductCard: FC<ProductProps> = ({ product, lang }) => {
   const { id, slug, productImage, productPrice } = product ?? {};
   const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
   const placeholderImage = `/assets/placeholder/product.svg`;
+  const queryClient = useQueryClient(); // Initialize the query client
+
 
   const [favorite, setFavorite] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -33,6 +38,7 @@ const WishlistProductCard: FC<ProductProps> = ({ product, lang }) => {
         headers: { Authorization: `${token}` },
       });
       setFavorite(true);
+      queryClient.invalidateQueries(API_ENDPOINTS.WISHLIST); // Refetch address data
     } catch (error) {
       console.error("Wishlist delete error:", error);
       setFavorite(false);
@@ -62,7 +68,7 @@ const WishlistProductCard: FC<ProductProps> = ({ product, lang }) => {
       <div className="flex">
         <div className="relative mt-1 shrink-0">
           <div className="flex overflow-hidden max-w-[80px] transition duration-200 ease-in-out transform group-hover:scale-105">
-            <Link href={`/home/products/${slug}`}>
+            <Link href={`/en/products/${slug}`}>
               <Image
                 src={productImage || placeholderImage}
                 alt={slug || 'Product Image'}
@@ -75,7 +81,7 @@ const WishlistProductCard: FC<ProductProps> = ({ product, lang }) => {
           </div>
         </div>
         <div className="flex flex-col ltr:ml-2 rtl:mr-2 h-full">
-          <Link href={`/home/products/${slug}`}>
+          <Link href={`/en/products/${slug}`}>
             <h2 className="text-brand-dark text-20px sm:text-30px lg:text-35px leading-5 sm:leading-6 mb-1.5">
               {slug}
             </h2>

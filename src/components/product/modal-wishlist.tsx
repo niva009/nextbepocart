@@ -1,5 +1,4 @@
-// WishlistModal.tsx
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -7,7 +6,7 @@ import { toast } from 'react-toastify';
 interface ModalProps {
   slug: string;
   onClose: () => void;
-  deleteItem: () => void; // Corrected type
+  deleteItem: () => void;
 }
 
 export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => {
@@ -22,25 +21,18 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
       setProductDetails(productData);
 
       if (productData.product.type === 'single') {
-        setSelectedColor(productData.images[0]?.color || '');
-        setSelectedSize(productData.images[0]?.stock || '');
+        setSelectedColor(productData.images?.[0]?.color || '');
+        setSelectedSize(productData.images?.[0]?.stock || '');
       } else {
-        setSelectedColor(productData.images[0]?.color || '');
-        setSelectedSize(productData.images[0]?.stock_info[0]?.size || '');
+        setSelectedColor(productData.images?.[0]?.color || '');
+        setSelectedSize(productData.images?.[0]?.stock_info?.[0]?.size || '');
       }
     } catch (error) {
       console.error("Error fetching product details:", error);
     }
   };
 
-  const availableSizes = () => {
-    if (!productDetails || !selectedColor || productDetails.product?.type === 'single') return [];
-    const colorImage = productDetails.images?.find((image) => image.color === selectedColor);
-    return colorImage ? colorImage.stock_info.filter((stock) => stock.stock > 0) : [];
-  };
-
-  // Fetch product details when modal opens
-  React.useEffect(() => {
+  useEffect(() => {
     fetchProductDetails();
   }, []);
 
@@ -58,61 +50,21 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
           },
         }
       );
-      deleteItem(); // Removed productId as deleteItem does not take any arguments
+      deleteItem();
       onClose();
-
-      const toastStatus = "product add to cart successfull"
-
-    setTimeout(() => {
-    }, 1500);
-
-    toast(toastStatus, {
-      progressClassName: 'fancy-progress-bar',
-      position: window.innerWidth > 768 ? 'top-right' : 'top-right',
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    })
+      toast.success("Product added to cart successfully!", { position: "top-right" });
     } catch (error: any) {
-      console.log("Error adding product to cart:", error);
-
-      const toastStatus = "error adding to cart .!"+`${error.response?.data?.message || error.message}`
-
-      setTimeout(() => {
-      }, 2500);
-  
-      toast.error(toastStatus, {
-        className: 'toast-error',
-        progressClassName: 'fancy-progress-bar',
-        position: window.innerWidth > 768 ? 'top-right' : 'top-right',
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      })
+      console.error("Error adding product to cart:", error);
+      toast.error(`Error adding to cart: ${error.response?.data?.message || error.message}`, { position: "top-right" });
     }
   };
 
   const availableStock = () => {
     if (!productDetails) return false;
-
-    if (productDetails.product.type === 'single') {
-      const colorImage = productDetails.images.find(image => image.color === selectedColor);
-      const productStock = colorImage?.stock ?? 0;
-      return productStock === 0;
-    }
-
-    if (productDetails.product.type === 'variant') {
-      if (!selectedColor) return false;
-
-      const colorImage = productDetails.images.find(image => image.color === selectedColor);
-
-      return !colorImage || !colorImage.stock_info || colorImage.stock_info.every(stock => stock.stock === 0);
-    }
-    return false;
+    const colorImage = productDetails.images?.find(image => image.color === selectedColor);
+    return productDetails.product.type === 'single'
+      ? colorImage?.stock === 0
+      : colorImage?.stock_info?.every(stock => stock.stock === 0);
   };
 
   return (
@@ -120,17 +72,35 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
       isOpen={true}
       onRequestClose={onClose}
       contentLabel="Select Size and Color"
-      className="modal"
       ariaHideApp={false}
+      style={{
+        overlay: {
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          zIndex: 1000,
+        },
+        content: {
+          top: '50%',
+          left: '50%',
+          right: 'auto',
+          bottom: 'auto',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)',
+          width: '90%',
+          maxWidth: '400px',
+          padding: '20px',
+          borderRadius: '8px',
+          zIndex: 1001,
+        },
+      }}
     >
       <div className="p-4">
-        <h2 className="text-lg md:text-xl font-semibold mb-4">Select Size and Color</h2>
+        <h2 className="text-lg font-semibold mb-4">Select Size and Color</h2>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Color:</label>
+          <label className="block text-sm font-medium mb-1">Color:</label>
           <select
             value={selectedColor}
             onChange={(e) => setSelectedColor(e.target.value)}
-            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           >
             {productDetails?.images?.map((image) => (
               <option key={image.id} value={image.color}>
@@ -141,16 +111,18 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
         </div>
         {productDetails?.product?.type !== 'single' && (
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Size:</label>
+            <label className="block text-sm font-medium mb-1">Size:</label>
             <select
               value={selectedSize}
               onChange={(e) => setSelectedSize(e.target.value)}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             >
-              {availableSizes().map((stock) => (
-                <option key={stock.size} value={stock.size}>
-                  {stock.size}
-                </option>
+              {productDetails?.images
+                ?.find((img) => img.color === selectedColor)
+                ?.stock_info?.map((stock) => (
+                  <option key={stock.size} value={stock.size}>
+                    {stock.size}
+                  </option>
               ))}
             </select>
           </div>

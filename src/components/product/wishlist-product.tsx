@@ -17,6 +17,7 @@ export default function ProductWishlistGrid({
   const { data, isLoading, error } = useWishlistProductsQuery({
     limit: limit,
   });
+
   return (
     <div className={cn(className)}>
       {error ? (
@@ -30,13 +31,17 @@ export default function ProductWishlistGrid({
                   uniqueKey={`product--key-${idx}`}
                 />
               ))
-            : data?.map((product: any) => (
+            : Array.isArray(data) && data.length > 0 // Ensure `data` is an array with items
+            ? data.map((product: any) => (
                 <WishlistProductCard
                   key={`product--key${product.id}`}
                   product={product}
                   lang={lang}
                 />
-              ))}
+              ))
+            : (
+              <div>No wishlist products found.</div> // Fallback if `data` is empty or not an array
+            )}
         </div>
       )}
     </div>

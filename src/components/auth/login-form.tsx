@@ -85,6 +85,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
               <Input
                 label="email"
                 type="email"
+                style={{color:"black"}}
                 {...register('email', {
                   required: `${t('forms:email-required')}`,
                   pattern: {
