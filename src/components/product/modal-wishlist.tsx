@@ -2,6 +2,8 @@ import React, { FC, useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
+import { useQueryClient } from 'react-query';
 
 interface ModalProps {
   slug: string;
@@ -13,6 +15,8 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
   const [productDetails, setProductDetails] = useState<any>();
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
+  const queryClient = useQueryClient(); // Initialize the query client
+
 
   const fetchProductDetails = async () => {
     try {
@@ -50,6 +54,7 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
           },
         }
       );
+      queryClient.invalidateQueries(API_ENDPOINTS.CART); 
       deleteItem();
       onClose();
       toast.success("Product added to cart successfully!", { position: "top-right" });

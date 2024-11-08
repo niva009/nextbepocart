@@ -15,6 +15,8 @@ import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
 import ProductDetailsTab from '@components/product/product-details/product-tab';
 import { useTranslation } from 'src/app/i18n/client';
 import axios from "axios";
+import { useQueryClient } from 'react-query';
+import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
 
 const ProductSingleDetails = ({ data, lang }) => {
   const { t } = useTranslation(lang, 'common');
@@ -33,6 +35,7 @@ const ProductSingleDetails = ({ data, lang }) => {
   const [stock, setStock] = useState(0);
   const [addToCartLoader, setAddToCartLoader] = useState(false);
   const [addToWishlistLoader, setAddToWishlistLoader] = useState(false);
+  const queryClient = useQueryClient(); // Initialize the query client
 
   // Automatically set initial color, size, and image with stock
   useEffect(() => {
@@ -104,6 +107,7 @@ const ProductSingleDetails = ({ data, lang }) => {
           headers: { Authorization: `${token}` },
         }
       );
+      queryClient.invalidateQueries(API_ENDPOINTS.CART); 
   
       if (response.status === 201) {
         toast.success('Added to the bag', {

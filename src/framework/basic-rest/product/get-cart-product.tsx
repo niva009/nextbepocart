@@ -18,7 +18,7 @@ export const fetchCartProducts = async ({ queryKey }: any) => {
 
 export const useCartQuery = (options: QueryOptionsType) => {
   return useQuery<{ data: Product[], subTotal: number }, Error>(
-    [API_ENDPOINTS.WISHLIST, options],
+    [API_ENDPOINTS.CART, options],
     fetchCartProducts
   );
 };

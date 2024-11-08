@@ -33,18 +33,36 @@ export default function Cart({ lang }: { lang: string }) {
     await refetch();
   };
 
-  const handleQuantityChange = async (id: string, newQuantity: number) => {
+  const handleQuantityIncrement = async (id: string, newQuantity: number) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item))
+    );
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`https://bepocart.in/cart/update/${id}/`, { quantity: newQuantity }, {
-        headers: { Authorization: `Bearer ${token}` },
+      await axios.put(`https://bepocart.in/cart/increment/${id}/`, { quantity: newQuantity }, {
+        headers: { Authorization: `${token}` },
       });
-      setCartItems((prevItems) =>
-        prevItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item))
-      );
-      refetch();
+      refetch(); // Refresh cart data
     } catch (error) {
-      console.error("Error updating quantity:", error);
+      console.error("Error incrementing quantity:", error);
+    }
+  };
+
+  const handleQuantityDecrement = async (id: string, currentQuantity: number) => {
+    const newQuantity = currentQuantity > 1 ? currentQuantity - 1 : 1;
+
+    setCartItems((prevItems) =>
+      prevItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item))
+    );
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(`https://bepocart.in/cart/decrement/${id}/`, { quantity: newQuantity }, {
+        headers: { Authorization: `${token}` },
+      });
+      refetch(); // Refresh cart data
+    } catch (error) {
+      console.error('Error decrementing quantity:', error);
     }
   };
 
@@ -65,7 +83,8 @@ export default function Cart({ lang }: { lang: string }) {
                 key={item.id}
                 lang={lang}
                 onRemove={handleRemoveItem}
-                onQuantityChange={handleQuantityChange}
+                onQuantityIncrement={handleQuantityIncrement}
+                onQuantityDecrement={handleQuantityDecrement}
               />
             ))}
           </div>

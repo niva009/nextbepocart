@@ -34,4 +34,5 @@ export const API_ENDPOINTS = {
   BLOGDETAILS: '/blogDetails.json',
   THIS_WEEK_PRODUCTS: '/furniture_products_this_week.json',
   TOPSELL_PRODUCTS: '/furniture_products_topsell.json',
+  CART : '/cart.json',
 };
