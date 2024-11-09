@@ -39,11 +39,13 @@ export async function generateStaticParams() {
 
 export default function RootLayout({
   children,
-  params: { lang },
+  params,
 }: {
   children: React.ReactNode;
-  params: any;
+  params: { lang: string };
 }) {
+  const { lang } = params; // Destructure `lang` inside the function body
+
   return (
     <html lang={lang} dir={dir(lang)}>
       <body className={fontBai.variable}>

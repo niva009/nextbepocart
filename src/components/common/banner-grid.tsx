@@ -2,8 +2,7 @@
 
 import BannerCard from '@components/cards/banner-card';
 import useWindowSize from '@utils/use-window-size';
-import Carousel from '@components/ui/carousel/carousel';
-import { SwiperSlide } from '@components/ui/carousel/slider';
+
 
 interface BannerProps {
   data: any;

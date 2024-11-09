@@ -2,10 +2,6 @@
 
 module.exports = {
   reactStrictMode: true,
-  swcMinify: true,
-  // experimental: {
-  //   appDir: true,
-  // },
 
   ...(process.env.NODE_ENV === 'production' && {
     typescript: {

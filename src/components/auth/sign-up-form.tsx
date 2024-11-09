@@ -5,7 +5,6 @@ import Input from '@components/ui/form/input';
 import PasswordInput from '@components/ui/form/password-input';
 import Button from '@components/ui/button';
 import { useForm } from 'react-hook-form';
-import Logo from '@components/ui/logo';
 import { useSignUpMutation, SignUpInputType } from '@framework/auth/use-signup';
 import Link from '@components/ui/link';
 import Image from '@components/ui/image';
@@ -60,7 +59,7 @@ export default function SignUpForm({
       <div className="flex w-full mx-auto overflow-hidden rounded-lg bg-brand-light">
         <div className="md:w-1/2 lg:w-[55%] xl:w-[60%] registration hidden md:block relative">
           <Image
-            src="/assets/images/login.jpg"
+            src="/assets/images/login.png"
             alt="sign up"
             width={718} height={600}
           />

@@ -1,13 +1,19 @@
+import React, { useState } from 'react';
 import { Item } from '@contexts/cart/cart.utils';
 import Image from '@components/ui/image';
 import { generateCartItemName } from '@utils/generate-cart-item-name';
-import usePrice from '@framework/product/use-price';
 
 export const CheckoutItem: React.FC<{ item: Item }> = ({ item }) => {
-  const { price } = usePrice({
-    amount: item.itemTotal,
-    currencyCode: 'INR',
-  });
+  const [showFullName, setShowFullName] = useState(false);
+  const maxNameLength = 20; 
+  // Function to toggle full name view
+  const toggleFullName = () => setShowFullName(!showFullName);
+
+  const displayName = showFullName
+    ? generateCartItemName(item.name, item.attributes)
+    : `${generateCartItemName(item.name, item.attributes).slice(0, maxNameLength)}${
+        item.name.length > maxNameLength ? '...' : ''
+      }`;
 
   return (
     <div className="flex items-center py-4 border-b border-border-base">
@@ -23,27 +29,26 @@ export const CheckoutItem: React.FC<{ item: Item }> = ({ item }) => {
       </div>
       <div className="flex flex-col ltr:pl-3 rtl:pr-3">
         <h6 className="font-normal text-15px text-brand-dark">
-          {generateCartItemName(item.name, item.attributes)}
+          {displayName}
+          {item.name.length > maxNameLength && (
+            <button
+              onClick={toggleFullName}
+              className="text-blue-500 ml-2 text-sm hover:underline"
+            >
+              {showFullName ? 'less' : 'more'}
+            </button>
+          )}
         </h6>
         {/* Display Quantity, Color, and Size in a user-friendly way */}
         <div className="text-sm text-gray-500 mt-1">
           <p>
             <span className="font-medium">Quantity:</span> {item.quantity}
           </p>
-          {/* {item.color && (
-            <p>
-              <span className="font-medium">Color:</span> {item.color}
-            </p>
-          )} */}
-          {/* {item.size && (
-            <p>
-              <span className="font-medium">Size:</span> {item.size}
-            </p>
-          )} */}
+          <span className="font-medium mt-2">Sale Price:</span> ₹{item.salePrice}
         </div>
       </div>
       <div className="flex font-normal ltr:ml-auto rtl:mr-auto text-15px text-brand-dark ltr:pl-2 rtl:pr-2 shrink-0">
-        ₹ {item?.salePrice}
+        ₹ {item?.salePrice * item?.quantity}
       </div>
     </div>
   );

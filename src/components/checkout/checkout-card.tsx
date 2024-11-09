@@ -39,11 +39,8 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
     setIsAddressAvailable(!!addressId);
   }, []);
 
-  const { items, total, isEmpty } = useCart();
-  const { price: subtotal } = usePrice({
-    amount: total,
-    currencyCode: 'INR',
-  });
+
+  
 
   function orderHeader() {
     if (cartItems && isAddressAvailable) {
@@ -69,7 +66,6 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
     },
   ];
   
-  console.log("cart in check out ..:", cartItems);
   const mounted = useIsMounted();
 
   return (

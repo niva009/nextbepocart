@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Input from '@components/ui/form/input';
 import PasswordInput from '@components/ui/form/password-input';
 import Button from '@components/ui/button';
@@ -13,7 +13,9 @@ import Switch from '@components/ui/switch';
 import CloseButton from '@components/ui/close-button';
 import { FaGoogle } from 'react-icons/fa';
 import cn from 'classnames';
-import Link from 'next/link'
+import Link from 'next/link';
+import { signIn, getSession } from 'next-auth/react'; 
+import axios from 'axios';
 
 interface LoginFormProps {
   lang: string;
@@ -54,15 +56,56 @@ const LoginForm: React.FC<LoginFormProps> = ({
   function handleForgetPassword() {
     return openModal('FORGET_PASSWORD');
   }
-  
 
+  async function handleGoogleLogin() {
+    try {
+      const result = await signIn('google', { redirect: false });
+  
+      if (result?.error) {
+        setMessage(result.error);
+        setMessageType('error');
+      }
+    } catch (error) {
+      console.error("Error during Google login:", error);
+      setMessage("Google login failed");
+      setMessageType('error');
+    }
+  }
+
+  useEffect(() => {
+    async function checkSessionAndSendToken() {
+      const session = await getSession();
+      if (session?.user) {
+        const { name, email } = session.user;
+  
+        try {
+          const response = await axios.post('https://bepocart.in/google-login/', { name, email });
+          const token = response.data?.token;
+  
+          if (token) {
+            localStorage.setItem("token", token);
+            setMessageType("success");
+          } else {
+            setMessage("Failed to retrieve token from backend.");
+            setMessageType('error');
+          }
+        } catch (backendError) {
+          setMessage("Failed to communicate with backend.");
+          setMessageType('error');
+        }
+      }
+    }
+  
+    checkSessionAndSendToken();
+  }, []);
+  
   return (
     <div className={cn('w-full relative', className)}>
       {isPopup && <CloseButton onClick={closeModal} />}
 
       <div className="flex mx-auto overflow-hidden rounded-lg bg-brand-light">
         <div className="md:w-1/2 registration hidden md:block relative">
-          <Image src="/assets/images/login.jpg" alt="signin" width={718} height={600} />
+          <Image src="/assets/images/login.png" alt="signin" width={718} height={600} />
         </div>
         <div className="w-full md:w-1/2 py-6 px-4 rounded-md flex flex-col justify-center">
           <div className="mb-6 text-center">
@@ -85,7 +128,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
               <Input
                 label="email"
                 type="email"
-                style={{color:"black"}}
+                style={{ color: "black" }}
                 {...register('email', {
                   required: `${t('forms:email-required')}`,
                   pattern: {
@@ -126,20 +169,22 @@ const LoginForm: React.FC<LoginFormProps> = ({
             <span className="text-sm text-brand-dark opacity-70">
               {t('common:text-or')}
             </span>
+            {/* Enhanced Google Login Button */}
             <button
-              className="flex items-center justify-center w-full mt-4 border rounded-md bg-white text-brand-dark hover:bg-gray-100"
-              // onClick={handleGoogleLogin}
+              className="flex items-center justify-center w-full mt-4 px-4 py-3 border border-gray-300 rounded-lg bg-white text-brand-dark shadow-md hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
+              onClick={handleGoogleLogin}
             >
-              <FaGoogle className="w-5 h-5 mr-2" />
-              Sign in with Google
+              <FaGoogle className="w-6 h-6 mr-2" />
+              <span className="text-base font-medium">Sign in with Google</span>
             </button>
 
-         <Link href="/en/mobilelogin">
-            <button
-              className="flex items-center justify-center w-full mt-4 border rounded-md bg-white text-brand-dark hover:bg-gray-100"
-            >
-              Login with Otp
-            </button>
+            {/* Enhanced Login with OTP Button */}
+            <Link href="/en/mobilelogin">
+              <button
+                className="flex items-center justify-center w-full mt-4 px-4 py-3 border border-gray-300 rounded-lg bg-white text-brand-dark shadow-md hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
+              >
+                <span className="text-base font-medium">Login with OTP</span>
+              </button>
             </Link>
           </div>
 

@@ -12,6 +12,9 @@ import {SwiperSlide} from "@components/ui/carousel/slider";
 import React from "react";
 import Countdown, {zeroPad} from 'react-countdown';
 import ClockIcon from '@components/icons/clock-icon';
+import Link from 'next/link';
+import {ROUTES} from '@utils/routes';
+
 
 interface ProductFeedProps {
     lang: string;
@@ -60,14 +63,17 @@ const ProductWithBestDeals: React.FC<ProductFeedProps> = ({lang,className = '',u
                 <Alert message={error?.message} className="col-span-full"/>
             ) : (
                 <div className="xl:flex gap-1 relative heightFull">
-                        <div className={`xl:max-w-[466px] relative overflow-hidden flex items-center`} >
-                            <Image
-                                src={backgroundThumbnail}
-                                alt={'Product Image'}
-                                width={465}
-                                height={395}
-                            />
-                        </div>
+                        <div className={`xl:max-w-[466px] relative overflow-hidden flex items-center`}>
+                  <Link href={`/${lang}${ROUTES.SEARCH}?category=bicycle-water-bottle`}>
+    <Image
+      src={backgroundThumbnail}
+      alt="Product Image"
+      width={465}
+      height={395}
+    />
+  </Link>
+</div>
+
                         <div className="trendy-main-content">
                             <Carousel
                                 breakpoints={breakpoints}
