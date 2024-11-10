@@ -2,7 +2,6 @@
 import { USFlag } from '@components/icons/language/USFlag';
 import siteLogo from 'public/assets/images/logo.png';
 import siteLogoBlack from 'public/assets/images/logo.png';
-import bepoCoin from 'public/assets/images/bepocoin.png';
 
 
 export const siteSettings = {
@@ -38,337 +37,255 @@ export const siteSettings = {
       },
     ],
     menu: [
+
       {
         id: 2,
         path: '/search',
-        label: 'menu-categories',
+        label: 'categories',
         type: 'mega',
         mega_categoryCol: 5,
-        mega_bannerMode: 'none',
-        mega_bannerImg: '/assets/images/mega/banner-menu.jpg',
-        mega_bannerUrl: '/search',
-        mega_contentBottom:
-          '<strong>30% Off</strong> the shipping of your first order with the code: <strong>-SALE30</strong>',
-        subMenu: [
-          {
-            id: 1,
-            path: '/search',
-            label: 'menu-fresh-vegetables',
-            image: {
-              id: 1,
-              thumbnail: '/assets/images/category/collection_1.jpg',
-              original: '/assets/images/category/collection_1.jpg',
-            },
-            subMenu: [
-              {
-                id: 1,
-                path: '/search',
-                label: 'menu-home-audio',
-              },
-              {
-                id: 2,
-                path: '/search',
-                label: 'menu-helicopters',
-              },
-              {
-                id: 3,
-                path: '/search',
-                label: 'menu-toys',
-              },
-              {
-                id: 4,
-                path: '/search',
-                label: 'menu-outdoor',
-              },
-              {
-                id: 5,
-                path: '/search',
-                label: 'menu-organic',
-              },
-            ],
-          },
-          {
-            id: 3,
-            path: '/search',
-            label: 'menu-healthy-foods',
-            image: {
-              id: 1,
-              thumbnail: '/assets/images/category/collection_3.jpg',
-              original: '/assets/images/category/collection_3.jpg',
-            },
-            subMenu: [
-              {
-                id: 1,
-                path: '/search',
-                label: 'menu-vegetarian',
-              },
-              {
-                id: 2,
-                path: '/search',
-                label: 'menu-kakogenic',
-              },
-              {
-                id: 3,
-                path: '/search',
-                label: 'menu-mediterranean',
-              },
-              {
-                id: 4,
-                path: '/search',
-                label: 'menu-organic',
-              },
-              {
-                id: 5,
-                path: '/search',
-                label: 'menu-organic',
-              },
-            ],
-          },
-          {
-            id: 4,
-            path: '/search',
-            label: 'About',
-            image: {
-              id: 1,
-              thumbnail: '/assets/images/category/collection_4.jpg',
-              original: '/assets/images/category/collection_4.jpg',
-            },
-            subMenu: [
-              {
-                id: 1,
-                path: '/search',
-                label: 'menu-battereries',
-              },
-              {
-                id: 2,
-                path: '/search',
-                label: 'menu-beadphones',
-              },
-              {
-                id: 3,
-                path: '/search',
-                label: 'menu-accessories',
-              },
-              {
-                id: 4,
-                path: '/search',
-                label: 'menu-jewelry',
-              },
-              {
-                id: 5,
-                path: '/search',
-                label: 'menu-wedding',
-              },
-            ],
-          },
-          {
-            id: 5,
-            path: '/search',
-            label: 'menu-beaf-steak',
-            image: {
-              id: 1,
-              thumbnail: '/assets/images/category/collection_5.jpg',
-              original: '/assets/images/category/collection_5.jpg',
-            },
-            subMenu: [
-              {
-                id: 1,
-                path: '/search',
-                label: 'menu-menwatch',
-              },
-              {
-                id: 2,
-                path: '/search',
-                label: 'menu-womanwatch',
-              },
-              {
-                id: 3,
-                path: '/search',
-                label: 'menu-gift',
-              },
-              {
-                id: 4,
-                path: '/search',
-                label: 'menu-giftman',
-              },
-              {
-                id: 5,
-                path: '/search',
-                label: 'menu-giftwoman',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: 3,
-        path: '/search',
-        label: 'menu-dietary',
-        type: 'mega',
-        mega_categoryCol: 5,
+
         mega_bannerMode: 'right',
-        mega_bannerImg: '/assets/images/mega/banner-menu.jpg',
+        // mega_bannerImg: '/assets/images/mega/banner-menu.jpg',
         mega_bannerUrl: '/search',
         mega_contentBottom:
           '<strong>30% Off</strong> the shipping of your first order with the code: <strong>UMINEX-SALE30</strong>',
         subMenu: [
           {
             id: 1,
-            path: '/search',
-            label: 'menu-vegetarian',
+            path: 'en/search',
+            label: 'APPARLES',
             subMenu: [
               {
                 id: 1,
-                path: '/search',
-                label: 'menu-home-audio',
+                path: '/search?category=sports-t-shirt',
+                label: 't-shirt',
               },
               {
                 id: 2,
-                path: '/search',
-                label: 'menu-helicopters',
+                path: '/search?category=sports-jacket',
+                label: 'jacket',
               },
               {
                 id: 3,
-                path: '/search',
-                label: 'menu-toys',
-              },
-              {
+                path: '/search?category=cycling-sunglasses',
+                label: 'sunglasses'
+              },  {
                 id: 4,
-                path: '/search',
-                label: 'menu-outdoor',
-              },
-              {
+                path: '/search?category=multifunctional-mask&sort_by=lowest',
+                label: 'bandana',
+              },  {
                 id: 5,
-                path: '/search',
-                label: 'menu-organic',
+                path: '/search?category=cycling-shorts&sort_by=lowest',
+                label: 'shorts',
               },
             ],
           },
           {
             id: 2,
             path: '/search',
-            label: 'menu-automotive',
+            label: 'SKATING',
             subMenu: [
               {
                 id: 1,
-                path: '/search',
-                label: 'menu-automotive',
+                path: '/search?category=skating-helmet&sort_by=lowest',
+                label: 'skating helmet',
               },
               {
                 id: 2,
-                path: '/search',
-                label: 'menu-autocar',
+                path: '/search?category=inline-skates&sort_by=lowest',
+                label: 'inline skates',
               },
               {
                 id: 3,
-                path: '/search',
-                label: 'menu-morecar',
+                path: '/search?category=skating-bag&sort_by=lowest',
+                label: 'skating bags',
               },
               {
                 id: 4,
-                path: '/search',
-                label: 'menu-autosecurity',
-              },
-              {
-                id: 5,
-                path: '/search',
-                label: 'menu-battereries',
+                path: '/search?category=Slide-Board&sort_by=lowest',
+                label: 'slide board',
               },
             ],
           },
           {
             id: 3,
             path: '/search',
-            label: 'menu-mediterranean',
+            label: 'COMPONENTS',
             subMenu: [
               {
                 id: 1,
-                path: '/search',
-                label: 'menu-vegetarian',
+                path: '/search?category=bicycle-bottom-bracket&sort_by=lowest',
+                label: 'bottom bracket',
               },
               {
                 id: 2,
-                path: '/search',
-                label: 'menu-kakogenic',
+                path: '/search?category=bicycle-cleats-pedals&sort_by=lowest',
+                label: 'chains',
               },
               {
                 id: 3,
-                path: '/search',
-                label: 'menu-mediterranean',
+                path: '/search?category=bicycle-cleats-pedals&sort_by=lowest',
+                label: 'cleats & pedalas',
               },
               {
                 id: 4,
-                path: '/search',
-                label: 'menu-organic',
+                path: '/search?category=cycle-shifter-brakes&sort_by=lowest',
+                label: 'gear shifter & shiftr brakes',
               },
               {
                 id: 5,
-                path: '/search',
-                label: 'menu-organic',
+                path: '/search?category=bicycle-stem&sort_by=lowest',
+                label: 'headset & stems',
+              },  {
+                id: 6,
+                path: '/search?category=bicycle-stem&sort_by=lowest',
+                label: 'holders & mounts',
+              },  {
+                id: 7,
+                path: '/search?category=bicycle-stem&sort_by=lowest',
+                label: 'rack,hanger,stands',
+              },  {
+                id: 8,
+                path: '/search?category=cycle-seat-cover&sort_by=lowest',
+                label: 'seat cover',
+              },  {
+                id: 9,
+                path: '/search?category=bicycle-wheels-parts&sort_by=lowest',
+                label: 'wheels & parts',
+              },  {
+                id: 10,
+                path: '/search?category=bicycle-derailleur-Pulley&sort_by=lowest',
+                label: 'derailleur pulley',
+              },  {
+                id: 11,
+                path: '/search?category=cycle-brake-pads&sort_by=lowest',
+                label: 'break pad',
+              },  {
+                id: 12,
+                path: '/search?category=bicycle-seat-post&sort_by=lowest',
+                label: 'seat post & parts',
+              },  {
+                id: 13,
+                path: '/search?category=bicycle-saddle',
+                label: 'bycyle saddle',
+              },  {
+                id: 14,
+                path: '/search?category=bicycle-cassette-freewheel',
+                label: 'cassette & free wheel',
+              }, {
+                id: 15,
+                path: '/search?category=bicycle-chain-ring',
+                label: 'chain ring ',
+              }, {
+                id: 16,
+                path: '/search?category=bicycle-handlebar-parts',
+                label: 'handlebar & parts',
+              }, {
+                id: 17,
+                path: '/search?category=bicycle-tyre',
+                label: 'tyre',
               },
             ],
           },
           {
             id: 4,
             path: '/search',
-            label: 'menu-organic',
+            label: 'BIKES',
             subMenu: [
               {
                 id: 1,
-                path: '/search',
-                label: 'menu-battereries',
+                path: '/search?category=road-bike',
+                label: 'road-bikes',
               },
               {
                 id: 2,
-                path: '/search',
-                label: 'menu-beadphones',
-              },
-              {
-                id: 3,
-                path: '/search',
-                label: 'menu-accessories',
-              },
-              {
-                id: 4,
-                path: '/search',
-                label: 'menu-jewelry',
-              },
-              {
-                id: 5,
-                path: '/search',
-                label: 'menu-wedding',
+                path: '/search?categoary=track-bike',
+                label: 'track-bikes',
               },
             ],
           },
           {
             id: 5,
             path: '/search',
-            label: 'menu-publications',
+            label: 'FURNITURES',
             subMenu: [
               {
                 id: 1,
-                path: '/search',
-                label: 'menu-menwatch',
+                path: '/search?category=dust-bin',
+                label: 'dust-bin',
+              },
+            ],
+          },
+          {
+            id: 6,
+            path: '/search',
+            label: 'TRAINING',
+            subMenu: [
+              {
+                id: 1,
+                path: '/search?categort=Trainers-rollers',
+                label: 'rollers',
+              },
+            ],
+          },
+          {
+            id: 7,
+            path: '/search',
+            label: 'MAINTENANCE',
+            subMenu: [
+              {
+                id: 1,
+                path: '/search?category=bicycle-tool-kit',
+                label: 'tool kit ',
               },
               {
                 id: 2,
-                path: '/search',
-                label: 'menu-womanwatch',
+                path: '/search?category=cleaning-accessories',
+                label: 'cleening & accessories',
+              },
+            ],
+          }, {
+            id: 7,
+            path: '/search',
+            label: 'ACCESSORIES',
+            subMenu: [
+              {
+                id: 1,
+                path: '/search?category=bicycle-bell',
+                label: 'bell',
+              },
+              {
+                id: 2,
+                path: '/search?category=bicycle-saddle-bag',
+                label: 'bicycle-bags',
               },
               {
                 id: 3,
-                path: '/search',
-                label: 'menu-gift',
+                path: '/search?category=sports-visor-caps',
+                label: 'caps visor',
               },
               {
                 id: 4,
-                path: '/search',
-                label: 'menu-giftman',
+                path: '/search?category=cycling-pump',
+                label: 'pump',
               },
               {
                 id: 5,
-                path: '/search',
-                label: 'menu-giftwoman',
+                path: '/search?category=bicycle-water-bottle',
+                label: 'bottle',
+              }, {
+                id: 5,
+                path: '/search?category=protective-gear',
+                label: 'protective gear',
+              }, {
+                id: 5,
+                path: '/search?category=bicycle-light',
+                label: 'bike lights',
+              }, {
+                id: 5,
+                path: '/search?category=bicycle-bottle-cage',
+                label: 'bottle cage',
               },
             ],
           },

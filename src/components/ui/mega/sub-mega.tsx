@@ -27,25 +27,30 @@ const SubMega = ({ item, lang }: any) => {
           <div
             className={`cateArea ${isBannerMode ? 'basis-3/4' : 'basis-full'} `}
           >
-            <ul
-              className={`text-body text-sm grid grid-cols-${mega_categoryCol} gap-4 `}
-            >
-              {item.subMenu.map((menu: any, index: number) => {
-                const dept: number = 1;
-                const menuName: string = `sidebar-menu-${dept}-${index}`;
-                return (
-                  <ListMenu
-                    dept={dept}
-                    data={menu}
-                    hasSubMenu={menu.subMenu}
-                    menuName={menuName}
-                    key={menuName}
-                    menuIndex={index}
-                    lang={lang}
-                  />
-                );
-              })}
-            </ul>
+              <ul
+  className={`text-body text-sm grid grid-cols-${mega_categoryCol} gap-4`}
+  style={{
+    maxHeight: 'calc(2.5rem * 8)', // Adjust 2.5rem to the approximate height of each item to get 8 rows.
+    overflowY: 'auto',
+  }}
+>
+  {item.subMenu.map((menu: any, index: number) => {
+    const dept: number = 1;
+    const menuName: string = `sidebar-menu-${dept}-${index}`;
+    return (
+      <ListMenu
+        dept={dept}
+        data={menu}
+        hasSubMenu={menu.subMenu}
+        menuName={menuName}
+        key={menuName}
+        menuIndex={index}
+        lang={lang}
+      />
+    );
+  })}
+</ul>
+
           </div>
           {isBannerMode && (
             <div
@@ -71,7 +76,7 @@ const SubMega = ({ item, lang }: any) => {
           )}
         </div>
       </Container>
-      {mega_contentBottom.trim().length != 0 && (
+      {/* {mega_contentBottom.trim().length != 0 && (
         <div className="navPages-contentbottom bg-brand">
           <Container>
             <div
@@ -80,7 +85,7 @@ const SubMega = ({ item, lang }: any) => {
             />
           </Container>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

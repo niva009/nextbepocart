@@ -1,5 +1,4 @@
 import Link from '@components/ui/link';
-import { FaChevronDown } from 'react-icons/fa';
 import {BsChevronDown} from 'react-icons/bs';
 import ListMenu from '@components/ui/list-menu';
 import SubMega from '@components/ui/mega/sub-mega';
@@ -17,9 +16,13 @@ interface MenuProps {
 const HeaderMenu: React.FC<MenuProps> = ({ lang, data, className, bgPrimary }) => {
   const { t } = useTranslation(lang, 'menu');
   const [hoverMenu, setHoverMenu] = useState(Boolean(false));
+
+  // Remove the 0th element from the data array
+  const menuData = data.slice(1);
+
   return (
     <nav className={cn('headerMenu flex w-full', className)}>
-      {data?.map((item: any) => (
+      {menuData?.map((item: any) => (
         <div
           className={`menuItem group py-3 mx-4 xl:mx-4 2xl:mx-5 ${
             item.type != 'mega' ? 'relative' : ''
@@ -78,5 +81,6 @@ const HeaderMenu: React.FC<MenuProps> = ({ lang, data, className, bgPrimary }) =
     </nav>
   );
 };
+
 
 export default HeaderMenu;
