@@ -65,7 +65,7 @@ const { name,image, children: subcategories, icon, type , slug} = item;
               <div
                 className={`dropdownMenu absolute top-0 z-10 invisible hidden w-full border opacity-0 md:block left-full bg-brand-light border-border-base subMenu--level${depth} shadow-navigation`}
               >
-                <ul key="content" className="text-xs px-1.5 py-3">p
+                <ul key="content" className="text-xs px-1.5 py-3">
                   {item?.subcategories.map((currentItem) => {
 
                     const childDepth = depth + 1;

@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import Input from '@components/ui/form/input';
 import PasswordInput from '@components/ui/form/password-input';
@@ -178,9 +176,10 @@ const LoginForm: React.FC<LoginFormProps> = ({
               <span className="text-base font-medium">Sign in with Google</span>
             </button>
 
-            {/* Enhanced Login with OTP Button */}
+            {/* Login with OTP Button */}
             <Link href="/en/mobilelogin">
               <button
+                onClick={() => closeModal()} // Close the modal when the button is clicked
                 className="flex items-center justify-center w-full mt-4 px-4 py-3 border border-gray-300 rounded-lg bg-white text-brand-dark shadow-md hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
               >
                 <span className="text-base font-medium">Login with OTP</span>

@@ -99,7 +99,7 @@ export default function CategoryWithProducts({
               <CategoryListCard
                 key={`category--key-${category.id}`}
                 category={category}
-                href={`${ROUTES.SEARCH}?category=${category.slug}`}
+                href={`${ROUTES.SEARCH}?category${category.slug}`}
                 className="transition border-b border-border-base last:border-b-0"
                 variant="small"
                 lang={lang}
