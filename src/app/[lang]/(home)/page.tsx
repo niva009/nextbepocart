@@ -18,7 +18,7 @@ import LatestblogCarousel from '@components/common/latestblog-carousel';
 
 export const metadata: Metadata = {
     title: 'Bepocart',
-    description: 'Fastest E-commerce template built with React, NextJS, TypeScript, React-Query and Tailwind CSS.',
+    description: 'bepocart',
 };
 
 

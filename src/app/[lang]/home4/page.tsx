@@ -15,7 +15,7 @@ import SuppercategoryPopular from "@components/product/feeds/suppercategory-popu
 
 export const metadata: Metadata = {
     title: 'Home4',
-    description: 'Fastest E-commerce template built with React, NextJS, TypeScript, React-Query and Tailwind CSS.',
+    description: 'bepocart',
 };
 
 export default async function Page({params: {lang},}: { params: { lang: string; }; }) {

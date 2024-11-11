@@ -64,7 +64,7 @@ export const ProductWishlist: React.FC<ProductWishlistProps> = ({ id }) => {
                     fontSize: '17px',
                     padding: '10px 30px', 
                     background:  '#93ff05', 
-                    color:  'white' ,
+                    color:  'black' ,
                     display: 'flex',
                     alignItems: 'center',
                 }}
