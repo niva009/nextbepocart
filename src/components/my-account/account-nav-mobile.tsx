@@ -41,7 +41,10 @@ export default function AccountNavMobile({
     setSelectedItem(slugs);
     router.push(`/${lang}${slugs.slug}`);
   }
-  const { mutate: logout } = useLogoutMutation(lang);
+  const logout = () =>{
+     localStorage.removeItem('token');
+     router.push('/')
+  }
 
   return (
     <Listbox value={selectedItem} onChange={handleItemClick}>

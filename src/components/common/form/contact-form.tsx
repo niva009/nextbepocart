@@ -69,9 +69,14 @@ const ContactForm: React.FC<{ lang: string }> = ({ lang }) => {
         placeholder="forms:placeholder-briefly-describe"
         lang={lang}
       />
-      <Button variant="formButton" className="w-full" type="submit">
-        {mounted && <>{t('common:button-send-message')}</>}
-      </Button>
+     <Button
+  variant="formButton"
+  type="submit"
+  style={{ background: '#93ff05' ,  color:'black'}}
+>
+  {mounted && <>{t('common:button-send-message')}</>}
+</Button>
+
     </form>
   );
 };

@@ -46,7 +46,6 @@ const PageHeroSection: React.FC<HeaderProps> = ({
             {t(heroTitle)}
           </span>
         </h2>
-        <Breadcrumb lang={lang} />
       </div>
     </div>
   );

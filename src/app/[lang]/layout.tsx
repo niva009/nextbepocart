@@ -28,8 +28,8 @@ const fontBai = FontBai({
 
 export const metadata: Metadata = {
   title: {
-    template: 'Uminex | %s',
-    default: 'Uminex',
+    template: 'bepocart | %s',
+    default: 'Umibepocartnex',
   },
 };
 

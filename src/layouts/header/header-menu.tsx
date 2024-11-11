@@ -81,6 +81,6 @@ const HeaderMenu: React.FC<MenuProps> = ({ lang, data, className, bgPrimary }) =
     </nav>
   );
 };
-
+   
 
 export default HeaderMenu;

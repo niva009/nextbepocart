@@ -32,6 +32,11 @@ export const siteSettings = {
       },
       {
         id: 2,
+        path: '/my-account/account-settings',
+        label: 'my-profile',
+      },
+      {
+        id: 3,
         path: '/my-account/becoin',
         label: 'bepo-Coin',
       },
@@ -299,59 +304,22 @@ export const siteSettings = {
       {
         id: 5,
         path: '/',
-        label: 'menu-pages',
+        label: 'policy',
         subMenu: [
           {
             id: 1,
-            path: '/',
-            label: 'menu-users',
-            subMenu: [
-              {
-                id: 1,
-                path: '/my-account/account-settings',
-                label: 'menu-my-account',
-              },
-              {
-                id: 2,
-                path: '/signin',
-                label: 'menu-sign-in',
-              },
-              {
-                id: 3,
-                path: '/signup',
-                label: 'menu-sign-up',
-              },
-            ],
+            path: '/privacy',
+            label: 'privacy-policy',
           },
           {
             id: 2,
-            path: '/faq',
-            label: 'menu-faq',
+            path: '/returnpolicy',
+            label: 'return-policy',
           },
           {
             id: 3,
-            path: '/contact-us',
-            label: 'menu-contact-us',
-          },
-          {
-            id: 4,
-            path: '/privacy',
-            label: 'menu-privacy-policy',
-          },
-          {
-            id: 5,
-            path: '/terms',
-            label: 'menu-terms-condition',
-          },
-          {
-            id: 6,
-            path: '/checkout',
-            label: 'menu-checkout',
-          },
-          {
-            id: 7,
-            path: '/404',
-            label: 'menu-404',
+            path: '/shipping',
+            label: 'shipping-policy',
           },
         ],
       },

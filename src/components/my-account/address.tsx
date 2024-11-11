@@ -1,15 +1,13 @@
-import AddressGrid from '@components/address/address-grid';
 import { useAddressQuery } from '@framework/address/address';
+import AddressGrid from '@components/address/address-grid';
 
-export default function AccountDetailsPage({ lang }: { lang: string }) {
+const AcoountDetailsPage: React.FC<{ lang: string }> = ({ lang }) => {
   let { data, isLoading } = useAddressQuery();
-  return (
-    <div className="pt-4">
-      {!isLoading ? (
-        <AddressGrid address={data?.data} lang={lang} />
-      ) : (
-        <div>Loading...</div>
-      )}
-    </div>
+  return !isLoading ? (
+    <AddressGrid address={data} lang={lang} />
+  ) : (
+    <div>Loading...</div>
   );
-}
+};
+
+export default AcoountDetailsPage;

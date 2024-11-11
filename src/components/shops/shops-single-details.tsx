@@ -32,18 +32,18 @@ export default function ShopsSingleDetails({ lang }: { lang: string }) {
 
             <div className="flex items-center px-4 py-4 border-b lg:hidden md:px-6 border-border-base mb-7 bg-white">
                 <div className="flex shrink-0">
-                    <Image
+                    {/* <Image
                         src={data?.logo?.original as string}
                         alt={`${data?.name}`}
                         width={66}
                         height={66}
                         className="rounded-md"
                         style={{ width: 'auto' }}
-                    />
+                    /> */}
                 </div>
                 <div className="ltr:pl-4 rtl:pr-4">
                     <h2 className="font-semibold text-brand-dark text-15px">
-                        {data?.name}
+                       About Us
                     </h2>
                     <button
                         className="block text-sm font-medium transition-all text-brand hover:text-brand-muted"

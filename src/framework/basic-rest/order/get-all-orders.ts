@@ -1,18 +1,32 @@
-import { QueryOptionsType, Order } from '@framework/types';
-import http from '@framework/utils/http';
+import { QueryOptionsType } from '@framework/types';
 import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
 import { useQuery } from 'react-query';
+import axios from 'axios';
 
 const fetchOrders = async ({ queryKey }: any) => {
+  // Ensure the code only runs in the client environment
+  if (typeof window === 'undefined') return { data: null };
+
+  const token = localStorage.getItem('token');
   const [_key, _params] = queryKey;
-  const { data } = await http.get(API_ENDPOINTS.ORDERS);
-  return {
-    data: data,
-  };
+
+  try {
+    const response = await axios.get('https://bepocart.in/order-items/', {
+      headers: { Authorization: token ? `${token}` : '' }, // Ensure Bearer prefix is added if token exists
+    });
+
+    console.log('Order details:', response.data.data); // Log the nested data
+    return response?.data?.data; // Access data.data if the API returns data within data
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    throw new Error('Failed to fetch orders');
+  }
 };
 
 const useOrdersQuery = (options: QueryOptionsType) => {
-  return useQuery([API_ENDPOINTS.ORDERS, options], fetchOrders);
+  return useQuery([API_ENDPOINTS.ORDERS, options], fetchOrders, {
+    enabled: typeof window !== 'undefined' && !!localStorage.getItem('token'), // Enable query only if token exists in localStorage
+  });
 };
 
 export { useOrdersQuery, fetchOrders };

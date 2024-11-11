@@ -9,8 +9,8 @@ module.exports = {
        {
         'custom-green': '#93ff05',
         skin: {
-          DEFAULT: '#2b38d1',
-          primary: '#2b38d1',
+          DEFAULT: '#93ff05',
+          primary: '#93ff05',
           inverted: '#ffffff',
           base: '#333333',
           fill: '#ffffff',

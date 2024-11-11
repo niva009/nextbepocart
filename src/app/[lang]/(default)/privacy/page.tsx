@@ -15,7 +15,11 @@ export default async function Page({
 }) {
   return (
     <>
-      <PageHeroSection heroTitle="text-page-privacy-policy" lang={lang} />
+           <section className="text-center py-20 bg-gradient-to-r from-[#93ff05] to-blue-600 text-white">
+  <div className="max-w-3xl mx-auto px-4">
+    <h1 className="text-5xl font-extrabold mb-6"> Privacy Policy</h1>
+  </div>
+</section>
       <PrivacyPageContent lang={lang} />
     </>
   );

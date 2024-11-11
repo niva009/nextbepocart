@@ -1,34 +1,30 @@
-'use client';
+import Image from 'next/image';
 
-import VendorCard from '@components/cards/vendor-card';
-import { useShopsQuery } from '@framework/shop/get-shops';
-import Alert from '@components/ui/alert';
-import { useTranslation } from 'src/app/i18n/client';
-import Heading from '@components/ui/heading';
-import Container from '@components/ui/container';
-
-const ShopsPageContent: React.FC<{ lang: string }> = ({ lang }) => {
-  const { t } = useTranslation(lang, 'common');
-  const { data, error } = useShopsQuery({
-    limit: 9,
-  });
-
-  if (error) return <Alert message={error?.message} />;
-
+const About = () => {
   return (
-    <div className=" pb-14 lg:pb-16 xl:pb-20 pt-14">
-        <Container>
-        <Heading variant="titleLarge" className="mb-4 lg:mb-6">
-          {t('text-all-shops')}
-        </Heading>
-        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-4 lg:gap-5 xl:gap-6">
-          {data?.shop?.data?.map((item) => (
-            <VendorCard key={item.id} shop={item} lang={lang} />
-          ))}
-        </div>
-      </Container>
+    <div className="container mx-auto px-6 py-12">
+      
+
+      {/* Company Story */}
+      <section className="py-12 text-center">
+        <h2 className="text-3xl font-semibold mb-6">Our Story</h2>
+        <p className="text-lg max-w-xl mx-auto leading-relaxed">
+        Bepocart, an ecommerce website for a wide range of cycles, accessories, and apparel in India, offers some of the best prices and a completely hassle-free experience with options of paying through Cash on Delivery, Debit Card, Credit card, and Net Banking processed through secure and trusted gateways. Browse through our accessories and apparel featured on our site with expert descriptions to help you arrive at the right buying decision. Bepocart also offers free shipping. Join our community of cycling enthusiasts, and let's ride together towards greatness. Subscribe now for the latest updates and cycling adventures!
+        </p>
+      </section>
+
+      {/* Contact/CTA */}
+      <section className="text-center bg-gray-100 py-12 mt-12">
+        <h2 className="text-3xl font-semibold mb-4">Get in Touch</h2>
+        <p className="text-lg max-w-md mx-auto mb-6">
+          have any question reach out today
+        </p>
+        <a href="/en/contact" className="inline-block bg-custom-green text-black py-3 px-6 rounded-md hover:bg-blue-700 transition duration-200 mt-8">
+          Contact Us
+        </a>
+      </section>
     </div>
   );
 };
 
-export default ShopsPageContent;
+export default About;

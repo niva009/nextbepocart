@@ -1,67 +1,82 @@
-'use client';
+import { FC } from 'react';
 
-import Container from '@components/ui/container';
-import Heading from '@components/ui/heading';
-import { privacyPolicy } from '@settings/privacy-settings';
-import { Link, Element } from 'react-scroll';
-import { useTranslation } from 'src/app/i18n/client';
-
-function makeTitleToDOMId(title: string) {
-  return title.toLowerCase().split(' ').join('_');
-}
-
-export default function PrivacyPageContent({ lang }: { lang: string }) {
-  const { t } = useTranslation(lang, 'privacy');
+const PrivacyPolicy: FC = () => {
   return (
-    <div className="py-12 lg:py-16 xl:px-16 2xl:px-24 3xl:px-36">
-      <Container>
-        <div className="flex flex-col md:flex-row bg-white rounded p-5 xl:p-8">
-          <nav className="hidden mb-8 sm:block md:w-72 xl:w-3/12 2xl:mb-0 lg:-mt-2">
-            <ol className="sticky z-10 md:top-16 lg:top-20">
-              {privacyPolicy?.map((item, index) => (
-                <li key={index}>
-                  {/* @ts-ignore */}
-                  <Link
-                    spy={true}
-                    offset={-120}
-                    smooth={true}
-                    duration={200}
-                    to={makeTitleToDOMId(t(item.title))}
-                    activeClass="text-brand font-medium borderColor relative ltr:pl-3 rtl:pr-3"
-                    className="block py-3 text-sm font-medium transition-all cursor-pointer lg:text-15px text-brand-dark"
-                  >
-                    {t(item.title)}
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </nav>
-          {/* End of section scroll spy menu */}
+    <div className="container mx-auto px-6 py-12 text-gray-800 leading-relaxed">
+      <p className="text-sm text-center italic mb-12">
+        Note: This policy is subject to change without notice. Please review this policy periodically to stay informed of any updates.
+      </p>
 
-          <div className="md:w-9/12 md:ltr:pl-8 md:rtl:pr-8 ">
-            {privacyPolicy?.map((item) => (
-              // @ts-ignore
-              <Element
-                key={item.title}
-                id={makeTitleToDOMId(t(item.title))}
-                className="mb-8 lg:mb-12 last:mb-0 order-list-enable"
-              >
-                <Heading className="mb-4 lg:mb-6 font-body" variant="title">
-                  {t(item.title)}
-                </Heading>
-                <div
-                  className="space-y-5 text-sm leading-7 text-brand-muted lg:text-15px"
-                  dangerouslySetInnerHTML={{
-                    // @ts-ignore
-                    __html: t(item.description),
-                  }}
-                />
-              </Element>
-            ))}
-          </div>
-          {/* End of content */}
-        </div>
-      </Container>
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">1. Collection of Personal Information</h2>
+        <p>
+          We may collect personal information from Users when they visit our Site, register, place an order, subscribe to our newsletter, and engage in other activities. This information may include name, email, mailing address, phone number, etc. Users may visit our Site anonymously and choose not to provide personally identifiable information, though this may limit certain activities.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">2. Non-Personal Identification Information</h2>
+        <p>
+          We may collect non-personal information about Users when they interact with our Site. This includes browser type, computer type, and technical details about connection methods, such as operating system and internet service provider.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">3. Web Browser Cookies</h2>
+        <p>
+          Our Site may use "cookies" to enhance the User experience. Users can set their browsers to refuse cookies, though some parts of the Site may not function properly without cookies.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">4. How We Use Collected Information</h2>
+        <ul className="list-disc list-inside">
+          <li>To improve customer service and personalize user experience.</li>
+          <li>To process payments and fulfill orders, using provided information only to complete the transaction.</li>
+          <li>To send periodic emails and updates, which Users can unsubscribe from at any time.</li>
+        </ul>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">5. How We Protect Your Information</h2>
+        <p>
+          We implement security measures to protect against unauthorized access, alteration, disclosure, or destruction of your personal information. Data exchange on our Site is SSL-secured and encrypted.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">6. Sharing Your Personal Information</h2>
+        <p>
+          We do not sell or trade personal information. We may share general aggregated information with business partners for outlined purposes and use third-party providers for services with your permission.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">7. Third-Party Websites</h2>
+        <p>
+          Our Site may contain links to external websites with independent privacy policies. Interacting with these websites is subject to their policies.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">8. Advertising</h2>
+        <p>
+          Advertisers may set cookies to deliver targeted ads based on non-personally identifiable information. This policy does not cover advertisers’ use of cookies.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">9. Google AdSense</h2>
+        <p>
+          Some ads may be served by Google, which uses the DART cookie to deliver ads based on your visits to our Site and others. You can opt out of the DART cookie by visiting Google’s ad and content network privacy policy.
+        </p>
+      </section>
+
+      <footer className="mt-12 text-center text-sm text-gray-500">
+        Thank you for trusting us with your information. For any questions about this policy, please contact us.
+      </footer>
     </div>
   );
-}
+};
+
+export default PrivacyPolicy;

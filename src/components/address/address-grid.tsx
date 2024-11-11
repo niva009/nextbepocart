@@ -18,7 +18,7 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
   const { t } = useTranslation(lang, 'common');
   const { openModal } = useModalAction();
   const token = localStorage.getItem("token");
-  const queryClient = useQueryClient(); // Initialize the query client
+  const queryClient = useQueryClient();
 
   function handlePopupView(item: any) {
     openModal('ADDRESS_VIEW_AND_EDIT', item);

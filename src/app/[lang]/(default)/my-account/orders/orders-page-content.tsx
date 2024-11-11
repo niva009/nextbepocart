@@ -8,7 +8,7 @@ export default function OrdersPageContent({ lang }: { lang: string }) {
   return (
     <>
       {!isLoading ? (
-        <OrderTable orders={data?.data} lang={lang} />
+        <OrderTable orders={data} lang={lang} />
       ) : (
         <div>Loading...</div>
       )}
