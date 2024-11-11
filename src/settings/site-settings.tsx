@@ -32,8 +32,8 @@ export const siteSettings = {
       },
       {
         id: 2,
-        path: '/my-account/account-settings',
-        label: 'my-profile',
+        path: '/my-account/orders',
+        label: 'orders',
       },
       {
         id: 3,

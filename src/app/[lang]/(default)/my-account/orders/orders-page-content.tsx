@@ -1,10 +1,12 @@
 'use client';
 
-import OrderTable from '@components/order/order-table';
+import dynamic from 'next/dynamic';
 import { useOrdersQuery } from '@framework/order/get-all-orders';
+import OrderTable from '@components/order/order-table';
 
-export default function OrdersPageContent({ lang }: { lang: string }) {
+const OrdersPageContent = ({ lang }: { lang: string }) => {
   const { data, isLoading } = useOrdersQuery({});
+
   return (
     <>
       {!isLoading ? (
@@ -14,4 +16,7 @@ export default function OrdersPageContent({ lang }: { lang: string }) {
       )}
     </>
   );
-}
+};
+
+// Export OrdersPageContent using dynamic import with SSR disabled
+export default dynamic(() => Promise.resolve(OrdersPageContent), { ssr: false });

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
-const OrderTable: React.FC<{ orders: any[] }> = ({ orders }) => {
+const OrderTable: React.FC<{ orders?: any[] }> = ({ orders = [] }) => {
   const [expandedRows, setExpandedRows] = useState<{ [key: string]: boolean }>({});
 
   // Toggle expanded state for the row
@@ -58,6 +58,7 @@ const OrderTable: React.FC<{ orders: any[] }> = ({ orders }) => {
           ))}
         </tbody>
       </table>
+      {orders.length === 0 && <p className="text-center py-4">No orders found.</p>}
     </div>
   );
 };
