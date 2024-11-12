@@ -62,6 +62,9 @@ const ThumbnailCarousel: React.FC<Props> = ({
     item.image5,
   ]);
 
+
+  console.log("image url..:", imageUrls)
+
   // Ensure Swiper is properly instantiated by using useEffect
   useEffect(() => {
     if (thumbsSwiper && !thumbsSwiper.destroyed) {
@@ -90,7 +93,7 @@ const ThumbnailCarousel: React.FC<Props> = ({
           }}
           onSwiper={setMainSwiper} // Set the instance of the main swiper
           {...swiperParams}
-        >w
+        >
           {imageUrls?.map((url: string, index: number) => (
             <SwiperSlide
               key={`product-gallery-${index}`}
@@ -99,8 +102,8 @@ const ThumbnailCarousel: React.FC<Props> = ({
               <Image
                 src={url}
                 alt={`Product gallery ${index}`}
-                width={650}
-                height={650}
+                width={500}
+                height={500}
                 className="mx-auto rounded-lg"
                 priority
               />

@@ -1,9 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import usePrice from '@framework/product/use-price';
 import cn from 'classnames';
-import { useCart } from '@contexts/cart/cart.context';
 import Text from '@components/ui/text';
 import Button from '@components/ui/button';
 import { CheckoutItem } from '@components/checkout/checkout-card-item';

@@ -186,6 +186,8 @@ const ProductSingleDetails = ({ data, lang }) => {
       });
   };
 
+  console.log("selected iamgee..:", selectedImage);
+
   return (
     <div className="pt-6 pb-2 md:pt-7">
       <div className="grid-cols-10 lg:grid gap-7 2xl:gap-7 mb-8 lg:mb-12 bg-white p-5 rounded">
@@ -193,7 +195,7 @@ const ProductSingleDetails = ({ data, lang }) => {
           {!!data?.images?.length ? (
             selectedImage ? (
               <ThumbnailCarousel
-              gallery={[selectedImage, ...data.images.filter(img => img.color !== selectedImage.color)]}
+              gallery={[selectedImage, ...data.images.filter(img => img.color == selectedImage.color)]}
               galleryClassName="xl:w-[100px] w-full h-full object-cover"
               lang={lang}
             />
@@ -210,12 +212,12 @@ const ProductSingleDetails = ({ data, lang }) => {
             )
           ) : (
             <div className="flex items-center justify-center w-auto">
-              <Image
+              {/* <Image
                 src={data?.product?.image ?? '/product-placeholder.svg'}
                 alt={data?.product?.name}
                 width="full"
                 height={680}
-              />
+              /> */}
             </div>
           )}
         </div>
