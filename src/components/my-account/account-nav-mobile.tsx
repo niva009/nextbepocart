@@ -42,7 +42,7 @@ export default function AccountNavMobile({
     router.push(`/${lang}${slugs.slug}`);
   }
   const logout = () =>{
-     localStorage.removeItem('token');
+     localStorage.clear();
      router.push('/')
   }
 

@@ -106,7 +106,7 @@ export const homeGridHero2 = [
     {
         id: 1,
         title: 'Banner Home 1',
-        slug: '/search',
+        slug: '/search?category=sports-socks',
         type: 'medium',
         image: {
             mobile: {
@@ -124,7 +124,7 @@ export const homeGridHero2 = [
     {
         id: 2,
         title: 'Banner Home 2',
-        slug: '/search',
+        slug: '/search?category=bicycle-stem',
         type: 'medium',
         image: {
             mobile: {
@@ -142,7 +142,7 @@ export const homeGridHero2 = [
     {
         id: 3,
         title: 'Banner Home 3',
-        slug: '/search',
+        slug: '/search?category=cycling-helmet',
         type: 'medium',
         image: {
             mobile: {

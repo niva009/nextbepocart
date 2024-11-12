@@ -323,55 +323,55 @@ export const siteSettings = {
           },
         ],
       },
-      {
-        id: 6,
-        path: '/blog/blog-category-grid',
-        label: 'menu-blog',
-        subMenu: [
-          {
-            id: 1,
-            path: '/blog/blog-category-grid',
-            label: 'menu-blog-grid',
-          },
-          {
-            id: 2,
-            path: '/blog/blog-category-list',
-            label: 'menu-blog-list',
-          },
-          {
-            id: 3,
-            path: '/blog/blog-category-big',
-            label: 'menu-blog-big',
-          },
-          {
-            id: 4,
-            path: '/blog',
-            label: 'menu-blog-wide',
-          },
-          {
-            id: 6,
-            path: '/blog/blog-category-wide',
-            label: 'menu-single-post',
-            subMenu: [
-              {
-                id: 1,
-                path: '/blog/blog-post-left',
-                label: 'menu-left-sidebar',
-              },
-              {
-                id: 2,
-                path: '/blog/blog-post-right',
-                label: 'menu-right-sidebar',
-              },
-              {
-                id: 3,
-                path: '/blog/the-litigants-on-the-screen-are-not-actors',
-                label: 'menu-no-sidebar',
-              },
-            ],
-          },
-        ],
-      },
+      // {
+      //   id: 6,
+      //   path: '/blog/blog-category-grid',
+      //   label: 'menu-blog',
+      //   subMenu: [
+      //     {
+      //       id: 1,
+      //       path: '/blog/blog-category-grid',
+      //       label: 'menu-blog-grid',
+      //     },
+      //     {
+      //       id: 2,
+      //       path: '/blog/blog-category-list',
+      //       label: 'menu-blog-list',
+      //     },
+      //     {
+      //       id: 3,
+      //       path: '/blog/blog-category-big',
+      //       label: 'menu-blog-big',
+      //     },
+      //     {
+      //       id: 4,
+      //       path: '/blog',
+      //       label: 'menu-blog-wide',
+      //     },
+      //     {
+      //       id: 6,
+      //       path: '/blog/blog-category-wide',
+      //       label: 'menu-single-post',
+      //       subMenu: [
+      //         {
+      //           id: 1,
+      //           path: '/blog/blog-post-left',
+      //           label: 'menu-left-sidebar',
+      //         },
+      //         {
+      //           id: 2,
+      //           path: '/blog/blog-post-right',
+      //           label: 'menu-right-sidebar',
+      //         },
+      //         {
+      //           id: 3,
+      //           path: '/blog/the-litigants-on-the-screen-are-not-actors',
+      //           label: 'menu-no-sidebar',
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
       {
         id: 7,
         path: '/contact-us',

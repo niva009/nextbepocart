@@ -19,7 +19,7 @@ export const ProductWishlist: React.FC<ProductWishlistProps> = ({ id }) => {
     const handleWishlistToggle = () => {
         const token = localStorage.getItem("token");
         if (!token) {
-            router.push("/signin");
+            router.push("/en/signin");
             return;
         }
 
@@ -34,7 +34,7 @@ export const ProductWishlist: React.FC<ProductWishlistProps> = ({ id }) => {
         })
         .catch((error) => {
             if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-                router.push("/signin");
+                router.push("/en/signin");
             }
             const toastStatus = "product already exist in cart ..!"
 

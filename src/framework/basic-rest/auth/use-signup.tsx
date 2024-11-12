@@ -29,7 +29,7 @@ export const useSignUpMutation = () => {
     onSuccess: (data) => {
       toast.success("registraion successfull..please login!")
       console.log("data after signup",data);
-      router.push('/home/signin');
+      router.push('/en/signin');
     },
     onError: (error) => {
       toast.error("registraion failed..please try again!")

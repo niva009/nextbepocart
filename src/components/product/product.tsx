@@ -92,7 +92,7 @@ const ProductSingleDetails = ({ data, lang }) => {
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
       if (!token) {
-        router.push('/signin');
+        router.push('/en/signin');
         return;
       }
   
@@ -138,7 +138,7 @@ const ProductSingleDetails = ({ data, lang }) => {
 
   const addToWishlist = () => {
     if (!token) {
-      router.push('/signin');
+      router.push('/en/signin');
       return;
     }
   
@@ -170,7 +170,7 @@ const ProductSingleDetails = ({ data, lang }) => {
       })
       .catch((error) => {
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-          router.push("/signin");
+          router.push("/en/signin");
         } else {
           const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
           toast(errorMessage, {

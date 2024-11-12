@@ -10,7 +10,6 @@ import useWindowSize from '@utils/use-window-size';
 import {LIMITS} from '@framework/utils/limits';
 import {useCategoriesQuery} from "@framework/category/get-all-categories";
 import CategoryListCardLoader from "@components/ui/loaders/category-list-card-loader";
-import CategoryListCard from "@components/cards/category-list-card";
 import CategoryCard from '@components/cards/category-card';
 const Carousel = dynamic(() => import('@components/ui/carousel/carousel'), {
     ssr: false,
@@ -37,7 +36,7 @@ const CategoryGridBlock: React.FC<CategoriesProps> = ({
     });
     const breakpoints = {
         '1480': {
-            slidesPerView: limit,
+            slidesPerView: 6,
             spaceBetween: 10
         },
         '1280': {

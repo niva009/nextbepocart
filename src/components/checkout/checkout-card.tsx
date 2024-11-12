@@ -34,10 +34,10 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
 
   useEffect(() => {
     setLoading(false);
-    // Check if address ID is stored in localStorage
     const addressId = localStorage.getItem('addressid');
-    setIsAddressAvailable(!!addressId);
-  }, []);
+    setIsAddressAvailable(!!addressId); // Convert to boolean
+  }, [data]);
+  
 
 
   
@@ -65,6 +65,10 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
       price: `₹${subTotal.toString()}`, // Correctly formatted total with currency symbol
     },
   ];
+
+
+  console.log("cartitem..:", cartItems);
+  console.log('address available..:', isAddressAvailable);
   
   const mounted = useIsMounted();
 
