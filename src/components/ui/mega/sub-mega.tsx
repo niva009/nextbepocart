@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'src/app/i18n/client';
 import ListMenu from '@components/ui/mega/mega-menu';
 import Container from '@components/ui/container';

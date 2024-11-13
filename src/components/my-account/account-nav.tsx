@@ -5,7 +5,7 @@ import { useLogoutMutation } from '@framework/auth/use-logout';
 import { useTranslation } from 'src/app/i18n/client';
 import LogoutIcon from '@components/icons/account-logout';
 import Link from '@components/ui/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 type Option = {
   name: string;
@@ -27,7 +27,7 @@ export default function AccountNav({
   const router = useRouter();
 
 
-  const p = () =>{
+  const logout = () =>{
     localStorage.clear();
     router.push('/')
  }

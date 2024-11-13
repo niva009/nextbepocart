@@ -1,10 +1,9 @@
-// pages/privacy-policy.js
+
 
 "use client"; // This marks the component as a Client Component
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Image from 'next/image';
 // import Becoin from '@public/assets/images/bepocoin.png';
 
 export default function PrivacyPolicy() {

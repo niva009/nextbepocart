@@ -1,5 +1,5 @@
 import { useTranslation } from 'src/app/i18n/client';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import ListMenu from '@components/ui/mega/mega-menu';
 import Container from '@components/ui/container';
 import Image from '@components/ui/image';

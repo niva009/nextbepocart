@@ -11,7 +11,6 @@ import {
   Pagination,
   Grid,
 } from '@components/ui/carousel/slider';
-import { useRouter } from 'next/navigation';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { getDirection } from '@utils/get-direction';
 import cn from 'classnames';
