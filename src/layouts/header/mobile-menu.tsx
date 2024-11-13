@@ -48,21 +48,15 @@ const social = [
 ];
 
 export default function MobileMenu({ lang }: { lang: string }) {
-  const [activeMenus, setActiveMenus] = useState<any>([]);
+  const [activeMenus, setActiveMenus] = useState<string[]>([]);
   const { site_header } = siteSettings;
   const { closeSidebar } = useUI();
   const { t } = useTranslation(lang, 'menu');
+
   const handleArrowClick = (menuName: string) => {
-    let newActiveMenus = [...activeMenus];
-    if (newActiveMenus.includes(menuName)) {
-      var index = newActiveMenus.indexOf(menuName);
-      if (index > -1) {
-        newActiveMenus.splice(index, 1);
-      }
-    } else {
-      newActiveMenus.push(menuName);
-    }
-    setActiveMenus(newActiveMenus);
+    setActiveMenus((prev) =>
+      prev.includes(menuName) ? prev.filter((name) => name !== menuName) : [...prev, menuName]
+    );
   };
 
   const ListMenu = ({
@@ -86,11 +80,11 @@ export default function MobileMenu({ lang }: { lang: string }) {
           </Link>
           {hasSubMenu && (
             <div
-              className="cursor-pointer w-full h-8 text-[17px] px-5 shrink-0 flex items-center justify-end text-brand-dark text-opacity-80 absolute ltr:right-0 rtl:left-0 top-1/2 transform -translate-y-1/2"
+              className="cursor-pointer w-8 h-8 flex items-center justify-center text-brand-dark text-opacity-80"
               onClick={() => handleArrowClick(menuName)}
             >
               <IoIosArrowDown
-                className={`transition duration-200 ease-in-out transform ${
+                className={`transition duration-200 transform ${
                   activeMenus.includes(menuName) ? '-rotate-180' : 'rotate-0'
                 }`}
               />
@@ -152,12 +146,12 @@ export default function MobileMenu({ lang }: { lang: string }) {
             onClick={closeSidebar}
             aria-label="close"
           >
-            <IoClose  />
+            <IoClose />
           </button>
         </div>
 
         <Scrollbar className="flex-grow mb-auto menu-scrollbar">
-          <div className="flex flex-col px-0  text-brand-dark h-[calc(100vh_-_150px)]">
+          <div className="flex flex-col px-0 text-brand-dark h-[calc(100vh_-_150px)]">
             <ul className="mobile-menu">
               {site_header.menu.map((menu, index) => {
                 const dept: number = 1;

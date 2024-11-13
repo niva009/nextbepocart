@@ -34,6 +34,7 @@ const ProductSingleDetails = ({ data, lang }) => {
   const [selectedSize, setSelectedSize] = useState("");
   const [stock, setStock] = useState(0);
   const [addToCartLoader, setAddToCartLoader] = useState(false);
+  const [errorMessage , setErrorMessage] = useState('');
   const [addToWishlistLoader, setAddToWishlistLoader] = useState(false);
   const queryClient = useQueryClient(); // Initialize the query client
 
@@ -60,6 +61,7 @@ const ProductSingleDetails = ({ data, lang }) => {
   }, [data]);
 
   const handleColorChange = (colorOption) => {
+    setErrorMessage("");
     setSelectedColor(colorOption.color);
     setSelectedImage(colorOption);
     setSelectedSize(""); // Reset size selection when color changes
@@ -89,10 +91,17 @@ const ProductSingleDetails = ({ data, lang }) => {
     if (stock === 0) return;
     setAddToCartLoader(true);
   
+    if (!selectedColor) {
+      setErrorMessage("Please choose a color or size.");
+      setAddToCartLoader(false); // Stop loading if color is not selected
+      return;
+    }
+  
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
       if (!token) {
         router.push('/en/signin');
+        setAddToCartLoader(false); // Stop loading if not authenticated
         return;
       }
   
@@ -107,7 +116,7 @@ const ProductSingleDetails = ({ data, lang }) => {
           headers: { Authorization: `${token}` },
         }
       );
-      queryClient.invalidateQueries(API_ENDPOINTS.CART); 
+      queryClient.invalidateQueries(API_ENDPOINTS.CART);
   
       if (response.status === 201) {
         toast.success('Added to the bag', {
@@ -121,19 +130,32 @@ const ProductSingleDetails = ({ data, lang }) => {
         });
       }
     } catch (error) {
-      console.log("error adding to cart ...:", error);
-      toast.error("Error adding to cart. Please try again.", {
-        position: width > 768 ? 'bottom-right' : 'top-right',
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      if (error.response && error.response.status === 400) {
+        // Show specific error message if status is 400
+        toast.error('product aleady exist in cart', {
+          position: width > 768 ? 'bottom-right' : 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      } else {
+        // Generic error message for other cases
+        toast.error("Error adding to cart. Please try again.", {
+          position: width > 768 ? 'bottom-right' : 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
     } finally {
       setAddToCartLoader(false);
     }
   };
+  
   
 
   const addToWishlist = () => {
@@ -245,18 +267,21 @@ const ProductSingleDetails = ({ data, lang }) => {
               <div className="flex flex-wrap gap-2">
                 {data.images.map((image) => (
                   <button
-                    key={image.id}
-                    className={`px-4 py-2 rounded border ${selectedColor === image.color
-                        ? 'border-qblack text-qblack font-semibold'
-                        : 'border-qgray text-qblack'
-                      }`}
-                    onClick={() => handleColorChange(image)}
-                    disabled={image.stock === 0} // Disable if out of stock
-                  >
-                    {image.color}
-                  </button>
+                  key={image.id}
+                  className={`px-4 py-2 rounded border ${selectedColor === image.color
+                      ? ' text-red-400 font-bold '
+                      : 'border-qgray text-qblack'
+                    }`}
+                  onClick={() => handleColorChange(image)}
+                  disabled={image.stock === 0} // Disable if out of stock
+                >
+                  {image.color}
+                </button>
                 ))}
               </div>
+              {errorMessage && (
+      <p className="text-red-500 font-semibold mt-2">{errorMessage}</p>
+    )}
             </div>
           )}
 
@@ -290,7 +315,7 @@ const ProductSingleDetails = ({ data, lang }) => {
           ) : (
             stock > 0 && stock < 10 && (
               <p style={{ color: "green", fontWeight: "500", fontSize: "18px", padding: "10px 0px" }}>
-                {`${stock} items left`}
+                {`${stock} items left`}   
               </p>
             )
           )}
@@ -309,7 +334,6 @@ const ProductSingleDetails = ({ data, lang }) => {
               onClick={addToCart}
               className="w-full px-1.5"
               disabled={stock === 0}
-              loading={addToCartLoader}
             >
               <CartIcon color="#ffffff" className="ltr:mr-3 rtl:ml-3" />
               {t('text-add-to-cart')}

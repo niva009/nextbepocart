@@ -95,6 +95,8 @@ const ProductCard: React.FC<ProductProps> = ({product, className, lang, variant 
     const outOfStock = isInCart(id) && !isInStock(id);
     const iconSize = width! > 1024 ? '20' : '17';
 
+    console.log("product from popular product..:", product);
+
 
     return (
         <article
@@ -122,6 +124,12 @@ const ProductCard: React.FC<ProductProps> = ({product, className, lang, variant 
                     />
 </Link>
                 </div>
+                <div className="w-full h-full absolute top-0 z-10 -mx-0.5 md:-mx-1">
+  <span className="text-[15px] font-large text-skin-inverted uppercase inline-block bg-green-600 rounded-sm font-bold px-2.5 pt-1 pb-[3px] mx-0.5 sm:mx-1">
+    {Math.floor(discount)}%  off {/* Removes decimal places */}
+  </span>
+</div>
+
             </div>
 
             <div className="flex flex-col h-full overflow-hidden relative product-cart-content">

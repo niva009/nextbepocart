@@ -5,6 +5,7 @@ import { useLogoutMutation } from '@framework/auth/use-logout';
 import { useTranslation } from 'src/app/i18n/client';
 import LogoutIcon from '@components/icons/account-logout';
 import Link from '@components/ui/link';
+import { useRouter } from 'next/router';
 
 type Option = {
   name: string;
@@ -20,10 +21,16 @@ export default function AccountNav({
   lang: string;
 }) {
   const { t } = useTranslation(lang, 'common');
-  const { mutate: logout } = useLogoutMutation(lang);
   const pathname = usePathname();
   const newPathname = pathname.split('/').slice(3, 4);
   const mainPath = `/${newPathname[0]}`;
+  const router = useRouter();
+
+
+  const p = () =>{
+    localStorage.clear();
+    router.push('/')
+ }
   return (
     <nav className="flex flex-col pb-2 overflow-hidden border rounded-md md:pb-6 border-border-base bg-white">
       {options.map((item) => {

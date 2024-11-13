@@ -36,7 +36,7 @@ export const ProductWishlist: React.FC<ProductWishlistProps> = ({ id }) => {
             if (error.response && (error.response.status === 401 || error.response.status === 403)) {
                 router.push("/en/signin");
             }
-            const toastStatus = "product already exist in cart ..!"
+            const toastStatus = "product already exist in wishlist ..!"
 
             setTimeout(() => {
             }, 1500);

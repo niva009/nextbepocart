@@ -45,7 +45,7 @@ export const siteSettings = {
 
       {
         id: 2,
-        path: '/search',
+        path: '/',
         label: 'categories',
         type: 'mega',
         mega_categoryCol: 5,
@@ -58,7 +58,7 @@ export const siteSettings = {
         subMenu: [
           {
             id: 1,
-            path: 'en/search',
+            path: '/search?category=cycling-apparel&sort_by=lowest',
             label: 'APPARLES',
             subMenu: [
               {
@@ -88,7 +88,7 @@ export const siteSettings = {
           },
           {
             id: 2,
-            path: '/search',
+            path: '/search?category=skating&sort_by=lowest',
             label: 'SKATING',
             subMenu: [
               {
@@ -115,7 +115,7 @@ export const siteSettings = {
           },
           {
             id: 3,
-            path: '/search',
+            path: '/search?category=bicycle-component',
             label: 'COMPONENTS',
             subMenu: [
               {
@@ -195,7 +195,7 @@ export const siteSettings = {
           },
           {
             id: 4,
-            path: '/search',
+            path: '/search?category=bikes',
             label: 'BIKES',
             subMenu: [
               {
@@ -212,7 +212,7 @@ export const siteSettings = {
           },
           {
             id: 5,
-            path: '/search',
+            path: '/search?category=furniture&sort_by=lowest',
             label: 'FURNITURES',
             subMenu: [
               {
@@ -224,7 +224,7 @@ export const siteSettings = {
           },
           {
             id: 6,
-            path: '/search',
+            path: '/search?category=training',
             label: 'TRAINING',
             subMenu: [
               {
@@ -236,7 +236,7 @@ export const siteSettings = {
           },
           {
             id: 7,
-            path: '/search',
+            path: '/search?category=bicycle-maintenance',
             label: 'MAINTENANCE',
             subMenu: [
               {
@@ -252,7 +252,7 @@ export const siteSettings = {
             ],
           }, {
             id: 7,
-            path: '/search',
+            path: '/search?category=bicycle-accessories',
             label: 'ACCESSORIES',
             subMenu: [
               {

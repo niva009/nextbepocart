@@ -112,7 +112,7 @@ const ProductCardV2: React.FC<ProductProps> = ({product, className, lang,variant
                 <div className="w-full h-full absolute top-0  z-10">
                     {discount && (
                         <span className="font-semibold text-[11px]  border border-[#ff6128] text-brand-sale uppercase inline-block bg-white rounded-sm px-2.5 p-1 pb-[3px]  m-4">
-                        {t('text-on-sale')}
+                        {/* {t('text-on-sale')} */}
                       </span>
                     )}
                     <button
