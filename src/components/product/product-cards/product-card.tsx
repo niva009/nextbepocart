@@ -95,7 +95,6 @@ const ProductCard: React.FC<ProductProps> = ({product, className, lang, variant 
     const outOfStock = isInCart(id) && !isInStock(id);
     const iconSize = width! > 1024 ? '20' : '17';
 
-    console.log("product from popular product..:", product);
 
 
     return (
