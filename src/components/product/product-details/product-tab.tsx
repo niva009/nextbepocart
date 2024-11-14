@@ -42,7 +42,7 @@ export default function ProductDetailsTab({ product, lang }: { product: any, lan
             </div>
           </Tab.Panel>
           <Tab.Panel>
-            <ProductReviewRating lang={lang} />
+            <ProductReviewRating  productId={product?.id} lang={lang} />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>

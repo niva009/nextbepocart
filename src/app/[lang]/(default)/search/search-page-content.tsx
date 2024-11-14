@@ -18,7 +18,7 @@ export default function SearchPageContent({ lang }: { lang: string }) {
           </div>
         <Element name="grid" className="flex pt-7 lg:pt-7 pb-10 lg:pb-16 products-category">
           <div className="sticky hidden h-full shrink-0 ltr:pr-7 rtl:pl-7  lg:block w-[300px] top-16 ">
-            <ShopFilters lang={lang} />
+            {/* <ShopFilters lang={lang} /> */}
           </div>
           <div className="w-full">
             <SearchTopBar lang={lang}  viewAs={viewAs} onNavClick={setViewAs}/>

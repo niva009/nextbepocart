@@ -10,7 +10,7 @@ export const siteSettings = {
     'Bepocart, an ecommerce website for a wide range of cycles, accessories, and apparel in India,',
   author: {
     name: 'Bepocart',
-    websiteUrl: '#',
+    websiteUrl: '/',
     address: '',
   },
   logo: {
@@ -32,11 +32,6 @@ export const siteSettings = {
       },
       {
         id: 2,
-        path: '/my-account/orders',
-        label: 'orders',
-      },
-      {
-        id: 3,
         path: '/my-account/becoin',
         label: 'bepo-Coin',
       },

@@ -26,11 +26,11 @@ const ReviewCard: FC<ReviewProps> = ({ lang, item, className = '' }) => {
         ))}
       </div>
       <Heading className="mb-1.5">{item.title}</Heading>
-      <Text className="xl:leading-[2em]">{item.description}</Text>
+      <Text className="xl:leading-[2em]">{item.review_text}</Text>
       <div className="pt-2 text-sm text-brand-dark text-opacity-80">
         {t('text-by')}
         <span className="inline-block ltr:ml-[3px] rtl:mr-[3px] font-semibold">
-          {item.author}
+          {item?.first_name}   
         </span>
       </div>
     </div>

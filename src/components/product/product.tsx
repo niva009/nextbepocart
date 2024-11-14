@@ -62,6 +62,7 @@ const ProductSingleDetails = ({ data, lang }) => {
 
   const handleColorChange = (colorOption) => {
     setErrorMessage("");
+    setSelectedQuantity(1);
     setSelectedColor(colorOption.color);
     setSelectedImage(colorOption);
     setSelectedSize(""); // Reset size selection when color changes
