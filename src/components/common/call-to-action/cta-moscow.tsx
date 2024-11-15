@@ -46,7 +46,7 @@ const CallToActionMoscow: React.FC<Props> = ({
         <figure className="flex -mt-14 md:mt-0 lg:absolute ltr:lg:right-0 rtl:lg:left-0 rtl:2xl:left-20 ltr:2xl:right-20 lg:bottom-0 lg:max-w-lg 3xl:max-w-none">
           <Image
             src={appImage}
-            alt={t('text-app-thumbnail')}
+            alt={t('bepocart-thumbnail')}
             width={620}
             height={565}
             style={{ width: 'auto' }}

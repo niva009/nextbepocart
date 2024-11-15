@@ -29,7 +29,7 @@ const fontBai = FontBai({
 export const metadata: Metadata = {
   title: {
     template: 'bepocart | %s',
-    default: 'Umibepocartnex',
+    default: 'Bepocart, an ecommerce website for a wide range of cycles, accessories, and apparel in India',
   },
 };
 

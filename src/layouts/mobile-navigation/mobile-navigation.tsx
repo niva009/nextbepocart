@@ -1,5 +1,5 @@
 'use client';
-
+import { useState, useEffect } from 'react';
 import Link from '@components/ui/link';
 import SearchIcon from '@components/icons/search-icon';
 import UserIcon from '@components/icons/user-icon';
@@ -13,6 +13,8 @@ import { getDirection } from '@utils/get-direction';
 import { useModalAction } from '@components/common/modal/modal.context';
 import motionProps from '@components/common/drawer/motion';
 import { useTranslation } from 'src/app/i18n/client';
+import { useRouter } from 'next/navigation';
+
 const CartButton = dynamic(() => import('@components/cart/cart-button'), {
   ssr: false,
 });
@@ -23,19 +25,34 @@ const MobileMenu = dynamic(() => import('@layouts/header/mobile-menu'));
 
 export default function BottomNavigation({ lang }: { lang: string }) {
   const { t } = useTranslation(lang, 'common');
-  const {
-    openSidebar,
-    closeSidebar,
-    displaySidebar,
-    toggleMobileSearch,
-    isAuthorized,
-  } = useUI();
+  const router = useRouter();
+
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  // Get modal actions and UI context
+  const { openSidebar, closeSidebar, displaySidebar, toggleMobileSearch } = useUI();
   const { openModal } = useModalAction();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthorized(!!token);  // Set isAuthorized based on token presence
+  }, []);
+
+  function handleLogin() {
+    openModal('LOGIN_VIEW');  // Open login modal
+  }
+
+  function handleAccountClick() {
+    if (isAuthorized) {
+      router.push(`/${lang}${ROUTES.ORDERS}`);  // Redirect to Orders if authorized
+    } else {
+      handleLogin();  // Otherwise, open the login modal
+    }
+  }
+
   const dir = getDirection(lang);
   const contentWrapperCSS = dir === 'ltr' ? { left: 0 } : { right: 0 };
-  function handleLogin() {
-    openModal('LOGIN_VIEW');
-  }
+
   function handleMobileMenu() {
     return openSidebar();
   }
@@ -66,24 +83,19 @@ export default function BottomNavigation({ lang }: { lang: string }) {
           iconClassName="text-opacity-100"
           lang={lang}
         />
-        <AuthMenu
-          isAuthorized={isAuthorized}
-          href={`/${lang}${ROUTES.ACCOUNT}`}
-          btnProps={{
-            className: 'shrink-0 focus:outline-none',
-            children: <UserIcon />,
-            onClick: handleLogin,
-          }}
+        <button
+          onClick={handleAccountClick}  // Call handleAccountClick on click
+          aria-label="Account"
+          className="flex items-center justify-center"
         >
-          <UserIcon />
-        </AuthMenu>
+          <UserIcon />  {/* Display UserIcon regardless of authorization */}
+        </button>
       </div>
       <Drawer
         className="w-[375px]"
         placement={dir === 'rtl' ? 'right' : 'left'}
         open={displaySidebar}
         onClose={closeSidebar}
-        // @ts-ignore
         level={null}
         contentWrapperStyle={contentWrapperCSS}
         {...motionProps}

@@ -59,6 +59,7 @@ const Header: React.FC<HeaderProps> = ({className, lang}) => {
 
     function handleAccountClick() {
         if (isAuthorized) {
+            
             router.push(`/${lang}${ROUTES.ORDERS}`);  // Redirect to Orders if authorized
         } else {
             handleLogin();  // Otherwise, open the login modal

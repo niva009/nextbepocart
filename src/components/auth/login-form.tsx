@@ -160,7 +160,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 </button>
               </div>
               <Button type="submit" loading={isLoading} disabled={isLoading} className="w-full">
-                {t('common:text-sign-in')}
+                Login Now
               </Button>
             </div>
           </form>
