@@ -2,7 +2,6 @@ import WidgetLink from './widget-link';
 import WidgetAbout from './widget-about-us';
 import Container from '@components/ui/container';
 import {footer} from '../data';
-import cn from 'classnames';
 import FeatureCarousel from "@components/common/featured-carousel";
 
 interface WidgetsProps {

@@ -4,7 +4,6 @@ import { Disclosure } from '@headlessui/react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io';
 import React, { useState, useEffect } from 'react';
-import Heading from '@components/ui/heading';
 import { useTranslation } from 'src/app/i18n/client';
 import useQueryParam from '@utils/use-query-params';
 
@@ -46,7 +45,7 @@ export const BrandFilter = ({ lang }: { lang: string }) => {
 
   return (
     <div className="block">
-      <Heading className="uppercase mb-5 block-title">{t('text-brands')}</Heading>
+      {/* <Heading className="uppercase mb-5 block-title">{t('text-brands')}</Heading> */}
       <div className="flex flex-col">
         {items?.slice(0, 3)?.map((item: any) => (
           <CheckBox

@@ -13,15 +13,14 @@ module.exports = {
   }),
 
   images: {
-    domains: ['bepocart-bkt-1.s3.amazonaws.com'], // Add your external hostname here
+    domains: ['bepocart-bkt-1.s3.amazonaws.com'],
   },
 
-  async redirects() {
+  async rewrites() {
     return [
       {
         source: '/',
         destination: '/en',
-        permanent: true, // Set to true for a 308 permanent redirect; false for a 307 temporary redirect
       },
     ];
   },
