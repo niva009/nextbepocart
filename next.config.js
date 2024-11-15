@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-
 module.exports = {
   reactStrictMode: true,
 
@@ -16,11 +15,12 @@ module.exports = {
     domains: ['bepocart-bkt-1.s3.amazonaws.com'],
   },
 
-  async rewrites() {
+  async redirects() {
     return [
       {
         source: '/',
         destination: '/en',
+        permanent: true, // Set to true for a 308 permanent redirect
       },
     ];
   },
