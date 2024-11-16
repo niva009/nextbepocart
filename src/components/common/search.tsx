@@ -38,7 +38,6 @@ const Search = React.forwardRef<HTMLDivElement, Props>(
     });
 
 
-    console.log("search data..:", data);
 
     useFreezeBodyScroll(
       inputFocus === true || displaySearch || displayMobileSearch

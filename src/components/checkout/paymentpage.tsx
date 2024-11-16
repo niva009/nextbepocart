@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { ROUTES } from '@utils/routes';
 import Link from 'next/link';
 import axios from 'axios';
+import Script from "next/script";
 
 interface CheckoutCardProps {
   lang: string;
@@ -46,7 +47,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
     }
   }, []);
 
-  const totalAmount = subTotal - couponDiscount + shipping + codCharge;
+  const totalAmount =Math.round(subTotal - couponDiscount + shipping + codCharge)
 
   const checkoutFooter = [
     { id: 1, name: t('text-sub-total'), price: `₹${subTotal.toFixed(2)}` },

@@ -1,6 +1,6 @@
 {
-  "name": "Uminex React E-Commerce Template",
-  "short_name": "Uminex",
+  "name": "bepocart ",
+  "short_name": "bepocart",
   "theme_color": "#ffffff",
   "background_color": "#004740",
   "display": "fullscreen",
@@ -21,5 +21,10 @@
       "purpose": "maskable any"
     }
   ],
-  "splash_pages": null
+  "splash_pages": null,
+  "serviceworker": {
+    "src": "/service-worker.js",
+    "scope": "/",
+    "type": "classic"
+  }
 }
