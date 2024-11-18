@@ -12,6 +12,8 @@ import { ROUTES } from '@utils/routes';
 import Link from 'next/link';
 import axios from 'axios';
 import Script from "next/script";
+import { useQueryClient } from 'react-query';
+import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
 
 interface CheckoutCardProps {
   lang: string;
@@ -31,6 +33,8 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
   const COD_CHARGE = 40;
   const { data } = useCartQuery({});
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const queryClient = useQueryClient(); // Initialize the query client
+
 
   useEffect(() => {
     if (data) {
@@ -80,7 +84,8 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
           { payment_method: paymentMethod, coupon_code: couponCode },
           { headers: { Authorization: `${token}` } }
         );
-        router.push('/en/complete-order');
+        
+        queryClient.invalidateQueries(API_ENDPOINTS.CART);
       } catch (error) {
         console.error('Error creating COD order:', error);
         alert('Order creation failed.');
@@ -153,6 +158,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
             if (result.status === 200) {
               alert('Payment successful and order created!');
               router.push('/en/complete-order');
+              queryClient.invalidateQueries(API_ENDPOINTS.CART);
             } else {
               alert('Failed to create order. Please try again.');
             }

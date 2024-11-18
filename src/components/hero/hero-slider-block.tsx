@@ -28,13 +28,15 @@ const HeroSliderBlock: React.FC<Props> = ({
                     clickable: true,
                 }}
                 navigation={true}
-                autoplay={false}
+                autoplay={true}
                 prevActivateId={`prevActivateId`}
                 nextActivateId={`nextActivateId`}
                 lang={lang}
             >
                 {heroBanner?.map((banner: any) => (
                     <SwiperSlide key={`banner--key${banner.id}`}>
+
+                        
                         <HeroBannerCard
                             banner={banner}
                             variant={variant}

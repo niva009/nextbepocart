@@ -30,17 +30,14 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
     }
   }, [data]);
 
-
-  function addaddress(){
+  useEffect(() => {
+    setLoading(false);
     const addressId = localStorage.getItem('addressid');
-    setIsAddressAvailable(!!addressId);
-  }
+    setIsAddressAvailable(!!addressId); // Convert to boolean
+  }, [data]);
   
 
-  useEffect(() => {
-    addaddress();
-      
-  }, [data]);
+
   
 
   function orderHeader() {

@@ -38,10 +38,10 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
   }
 
   address = address || [];
-  const [selected, setSelected] = useState(address[0]);
+  const [selected, setSelected] = useState(null); // Default to null, requiring user selection
 
   useEffect(() => {
-    // Store the selected address ID in localStorage when the component mounts or selected changes
+    // Store the selected address ID in localStorage when the user makes a selection
     if (selected?.id) {
       localStorage.setItem("addressid", selected.id);
     }
@@ -55,6 +55,7 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
           setSelected(value);
           // Store the selected address ID in localStorage
           localStorage.setItem("addressid", value.id);
+          // Refresh the page
         }}
         className="space-y-4 md:grid md:grid-cols-2 md:gap-5 auto-rows-auto md:space-y-0"
       >
@@ -104,7 +105,12 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
       </RadioGroup>
 
       <div className="flex mt-5 sm:justify-end md:mt-10 lg:mt-20 save-change-button">
-        <Button className="w-full sm:w-auto">{t('button-save-changes')}</Button>
+        <Button
+          className="w-full sm:w-auto"
+          disabled={!selected} // Disable save button until an address is selected
+        >
+          {t('button-save-changes')}
+        </Button>
       </div>
     </div>
   );
