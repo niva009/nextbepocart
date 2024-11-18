@@ -2,12 +2,15 @@
 
 import { useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+
 
 export default function MobileLogin() {
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [otpRequested, setOtpRequested] = useState(false);
   const [error, setError] = useState('');
+
 
   const handleRequestOtp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,8 +45,19 @@ export default function MobileLogin() {
 
       if (response.status === 200) {
         localStorage.setItem('token', response.data.token);
+        toast.success('login succes !', {
+          progressClassName: 'fancy-progress-bar',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
         // Navigate to the home page after successful OTP verification
-        window.location.href = '/';
+setTimeout(() =>{
+  window.location.href = '/'
+},1500);
+
       } else {
         setError('OTP verification was not successful.');
       }
