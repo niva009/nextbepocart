@@ -1,5 +1,6 @@
 import { Bai_Jamjuree as FontBai } from 'next/font/google';
 import { Metadata } from 'next';
+import { Analytics } from "@vercel/analytics/react"
 
 import './[lang]/globals.css';
 import '@assets/css/google-font.css';
@@ -30,6 +31,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
