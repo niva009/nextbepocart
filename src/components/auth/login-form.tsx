@@ -23,7 +23,7 @@ interface LoginFormProps {
   className?: string;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({  
+const LoginForm: React.FC<LoginFormProps> = ({
   lang,
   isPopup = true,
   className,
