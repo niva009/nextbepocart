@@ -47,6 +47,45 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
     }
   }, []);
 
+
+
+  //////for addd pixel code sssss////////
+
+  const content = cartItems?.map(product => ({
+    id:product.id,
+    name: product.name,
+    currency:"INR",
+    price: product.salePrice,
+    quantity:product.quantity,
+
+  }))
+
+ const totalQuantity = cartItems?.reduce((sum, product) => sum + product?.quantity, 0)
+ const contentIds = cartItems?.map(product => product.id.toString());
+
+
+ const handleTrackCheckout = () => {
+
+  fbq('track', 'AddPaymentInfo', {
+    value: parseFloat(totalAmount).toFixed(2), // Ensure it's a number
+    currency: 'INR',
+    content_ids: contentIds,
+    contents: content,
+    content_type: 'product',
+    num_items: contentIds?.length || 0, 
+    quantity: totalQuantity,
+    payment_method: paymentMethod,
+    coupon_code:couponCode,
+  });
+};
+
+const paymentButton = () =>{
+  handleTrackCheckout();
+  handlePlaceOrder()
+}
+
+  ////////pixel end ! ......////////////
+
   const totalAmount =Math.round(subTotal - couponDiscount + shipping + codCharge)
 
   const checkoutFooter = [
@@ -75,12 +114,13 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
 
     if (paymentMethod === 'COD') {
       try {
-        await axios.post(
+        const res = await axios.post(
           `https://bepocart.in/order/create/${addressId}/`,
           { payment_method: paymentMethod, coupon_code: couponCode },
           { headers: { Authorization: `${token}` } }
         );
-        router.push('/en/complete-order');
+        router.push('/en/complete-order', );
+        localStorage.setItem('orderData', JSON.stringify(res?.data?.data));
       } catch (error) {
         console.error('Error creating COD order:', error);
         alert('Order creation failed.');
@@ -200,7 +240,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
           </div>
         </div>
 
-        <Button variant="formButton" className="w-full mt-8 mb-5 rounded font-semibold px-4 py-3 bg-brand text-brand-light" onClick={handlePlaceOrder} disabled={!addressId}>
+        <Button variant="formButton" className="w-full mt-8 mb-5 rounded font-semibold px-4 py-3 bg-brand text-brand-light" onClick={paymentButton} disabled={!addressId}>
           Place Order Now
         </Button>
       </div>

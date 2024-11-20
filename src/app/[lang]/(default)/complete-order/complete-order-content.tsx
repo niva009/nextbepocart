@@ -1,22 +1,43 @@
-// pages/order-success.js
-
 'use client';
+
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function OrderSuccess() {
   const router = useRouter();
-  const [isMounted, setIsMounted] = useState(false);
+  const [orderData, setOrderData] = useState(null);
 
+  // Load order data from localStorage
   useEffect(() => {
-    setIsMounted(true);
+    if (typeof window !== 'undefined') {
+      const savedData = localStorage.getItem('orderData');
+      if (savedData) {
+        setOrderData(JSON.parse(savedData));
+      }
+    }
   }, []);
+
+  // Facebook Pixel Tracking for Purchase
+  useEffect(() => {
+    if (orderData) {
+      fbq('track', 'Purchase', {
+        item_id: orderData?.content_ids,
+        contents: orderData?.contents,
+        affiliation: 'bepocart',
+        payment_method: orderData?.payment_method, // Ensure this exists in the data
+        coupon_code: orderData?.coupon_code,
+        currency: "INR",
+        transaction_id: orderData?.transaction_id,
+        item_brand: "bepocart",
+        customer_segment: orderData?.customer_segment,
+        value: orderData?.value,
+      });
+    }
+  }, [orderData]);
 
   const handleBackToHome = () => {
     router.push('/');
   };
-
-  if (!isMounted) return null; // Prevents rendering on the server side
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-green-500 p-6">
@@ -47,6 +68,7 @@ export default function OrderSuccess() {
           and an email confirmation is on its way.
         </p>
         <div className="text-sm text-gray-500 mb-4">
+          Transaction ID: <strong>{orderData?.transaction_id || "N/A"}</strong>
         </div>
         <button
           onClick={handleBackToHome}

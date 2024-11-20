@@ -13,6 +13,7 @@ import { useIsMounted } from '@utils/use-is-mounted';
 import { useEffect, useState } from 'react';
 import SearchResultLoader from '@components/ui/loaders/search-result-loader';
 import { useCartQuery } from '@framework/product/get-cart-product';
+import axios from 'axios';
 
 const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
   const { t } = useTranslation(lang, 'common');
@@ -22,6 +23,84 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
   const [subTotal, setSubTotal] = useState(0);
   const { data } = useCartQuery({});
   const [isAddressAvailable, setIsAddressAvailable] = useState(false);
+  const [token, setToken] = useState(null);
+  const [addressId, setAddressId] = useState("");
+
+  const [addressData, setAddressData] = useState({});
+
+
+  useEffect(() => {
+    // Ensure this runs only in the browser
+    if (typeof window !== 'undefined') {
+      const savedToken = localStorage.getItem('token');
+      const savedAddressId = localStorage.getItem('addressid');
+
+      setToken(savedToken);
+      setAddressId(savedAddressId);
+    }
+  }, []);
+
+  console.log("token info", token);
+  console.log('addressiddd', addressId);
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      try {
+        if (!addressId) {
+          setLoading(false);
+          setIsAddressAvailable(false);
+          return;
+        }
+
+        const { data } = await axios.get('https://bepocart.in/get-address/', {
+          headers: {
+            Authorization: `${token}`, // Add 'Bearer' if required, else just use token
+          },
+        });
+
+        console.log("sbdasd", data.address);
+
+
+        const foundAddress = data?.addres?.find(address => String(address.id) === String(addressId));
+
+        if (foundAddress) {
+          console.log("addres found..:", foundAddress);
+          setAddressData(foundAddress);
+        }
+
+        setIsAddressAvailable(true); // Convert to boolean
+      } catch (error) {
+        console.error('Error fetching address:', error);
+        setIsAddressAvailable(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAddress();
+  }, [token, addressId]);
+
+  const handleTrackCheckout = () => {
+    if (!addressData || !isAddressAvailable) return;
+
+    const { city, state, pincode } = addressData;
+
+    console.log("pincode and addresss.:", addressData);
+
+    fbq('track', 'AddShippingAddress', {
+      value: parseFloat(subTotal).toFixed(2), // Ensure it's a number
+      currency: 'INR',
+      content_ids: contentIds,
+      contents: content,
+      content_type: 'product',
+      num_items: contentIds?.length || 0, 
+      quantity: totalQuantity,
+      checkOut_step: "2",
+      city: city || "",
+      state: state || "",
+      pincode: pincode || "",
+    });
+  };
 
   useEffect(() => {
     if (data) {
@@ -30,15 +109,13 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
     }
   }, [data]);
 
-  useEffect(() => {
-    setLoading(false);
-    const addressId = localStorage.getItem('addressid');
-    setIsAddressAvailable(!!addressId); // Convert to boolean
-  }, [data]);
 
   
   
-
+const toPaymentPage = () =>{
+  orderHeader();
+  handleTrackCheckout();
+}
 
   
 
@@ -86,22 +163,8 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
  const contentIds = cartItems?.map(product => product.id.toString());
 
 
-  const handleTrackCheckout = () => {
 
-    fbq('track', 'AddShippingAddress', {
-      value: parseFloat(subTotal).toFixed(2), // Ensure it's a number
-      currency: 'INR',
-      content_ids: contentIds,
-      contents: content,
-      content_type: 'product',
-      num_items: contentIds?.length || 0, 
-      quantity:totalQuantity,
-      checkOut_step:"1",
-      city:"",
-      state:"",
-      pincode: "",
-    });
-  };
+
   
   const mounted = useIsMounted();
 
@@ -139,7 +202,7 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
               ? 'opacity-40 cursor-not-allowed'
               : '!bg-brand !text-brand-light'
           )}
-          onClick={orderHeader}
+          onClick={toPaymentPage}
           disabled={!isAddressAvailable}
         >
           {t('button-order-now')}
