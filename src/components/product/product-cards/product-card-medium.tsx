@@ -167,7 +167,7 @@ const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, va
                     <RenderLabelStock props={{ data: product, lang: lang }} />
                 </div>
                 <div className="block product-cart-button font-semibold">
-                    <ProductWishlist  id={id}/>
+                    <ProductWishlist product={product} id={id}/>
                 </div>
             </div>
         </article>

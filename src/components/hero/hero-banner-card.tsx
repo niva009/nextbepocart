@@ -27,14 +27,17 @@ export default function HeroBannerCard({
     const {t} = useTranslation(lang, 'common');
     const {width} = useWindowSize();
     const { name,image } = banner;
+
+
+    console.log("banner.0000", banner);
     const selectedImage = getImage(width!, image);
     return heroContentCard ? (
         <div
         className={cn(
           'w-full bg-no-repeat bg-cover bg-center flex items-center rounded',
           {
-            'min-h-[500px]': variant === 'slider', // Increase height for mobile view
-            'md:min-h-[367px]': variant === 'slider', // Height for larger screens (md and above)
+            'min-h-[600px]': variant === 'slider', // Increase height for mobile view
+            'md:min-h-[400px]': variant === 'slider', // Height for larger screens (md and above)
             'bg-fill-thumbnail': variant !== 'antique',
           },
           className
@@ -62,47 +65,13 @@ export default function HeroBannerCard({
                          }
                      )}
                 >
-                    <p
-                        className={cn(
-                            'text-[12px] leading-7 uppercase font-bold ',
-                            {
-                                'text-brand-light ': variant === 'default',
-                                'text-brand-light': variant === 'slider',
-                                '': variant === 'antique',
-                            }
-                        )}
-                    >
-                    </p>
-                    <h2
-                        className={cn('text-4xl md:text-4xl font-semibold mt-2 leading-8', {
-                            'xl:text-5xl 2xl:text-[36px] text-brand-light leading-snug md:leading-tight xl:leading-[1.3em] mb-3 md:mb-4 xl:mb-3 ':
-                                variant !== 'antique',
-                            'text-brand-light 2xl:text-[36px]':
-                                variant === 'default',
-                            'text-brand-dark 2xl:text-[36px] ':
-                                variant === 'antique',
-                        })}
-                    >
-                    </h2>
-                    
-                    
-                    {banner.btnText && (
-                        <Link
-                            href={`/${lang}${banner.btnUrl}`}
-                            
-                            className={cn(' h-[44px] mt-5 md:mt-12 text-base inline-flex items-center justify-center transition duration-300 rounded px-10 py-2 font-semibold ', {
-                                'text-fill-base bg-white hover:text-white hover:bg-brand ': variant !== 'antique',
-                                'text-brand-light bg-brand hover:text-white hover:bg-brand-dark ': variant === 'antique',
-                            })}
-                        >
-                            {t(banner.btnText)}
-                        </Link>
-                    )}
+      
+       
                 </div>
             </div>
         </div>
     ) : (
-        <Link href={`/${lang}${banner.btnUrl}`}>
+        <Link href={'/en'}>
             <div
                 className={cn(
                     'w-full bg-skin-thumbnail bg-no-repeat bg-cover flex items-center',

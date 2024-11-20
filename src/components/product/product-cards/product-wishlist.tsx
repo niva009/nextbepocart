@@ -10,11 +10,35 @@ import { toast } from 'react-toastify';
 
 interface ProductWishlistProps {
     id: string;
+    product: any;
 }
 
-export const ProductWishlist: React.FC<ProductWishlistProps> = ({ id }) => {
+export const ProductWishlist: React.FC<ProductWishlistProps> = ({ id, product }) => {
     const [isWished, setIsWished] = useState(false);
     const router = useRouter();
+
+
+
+
+    const handleTrackWishlist = () => {
+
+        if (product ) { // Track only when adding to wishlist
+          window.fbq('track', 'AddToWishlist', {
+            content_category: product.mainCategory,
+            content_ids: product.id,
+            content_name: product.name,
+            content_type: 'product_group',
+            currency: 'INR',
+            value: product.salePrice,
+          });
+        }
+      };
+
+
+      const wishlist = () =>{
+        handleTrackWishlist();
+        handleWishlistToggle()
+      }
 
     const handleWishlistToggle = () => {
         const token = localStorage.getItem("token");
@@ -58,7 +82,7 @@ export const ProductWishlist: React.FC<ProductWishlistProps> = ({ id }) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             <button 
-                onClick={handleWishlistToggle} 
+                onClick={wishlist} 
                 style={{
                     // border: '1px solid #000', 
                     borderRadius: '10px',

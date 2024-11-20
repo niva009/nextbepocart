@@ -28,11 +28,14 @@ const BannerCard: React.FC<BannerProps> = ({
                                            }) => {
     const {width} = useWindowSize();
     const {slug, title, image} = banner;
+
+
+    console.log("sider banner inmage..:", banner);
     const selectedImage = getImage(width!, image);
     return (
         <div className={cn('mx-auto', className)}>
             <Link
-                href={`/${lang}${slug}`}
+                href={`${slug}`}
                 className={cn(
                     'h-full w-full group flex justify-center relative overflow-hidden',
                     classNameInner

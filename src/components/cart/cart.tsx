@@ -12,6 +12,7 @@ import Text from '@components/ui/text';
 import { useTranslation } from 'src/app/i18n/client';
 import { useCartQuery } from '@framework/product/get-cart-product';
 import axios from 'axios';
+import { reduce } from 'lodash';
 
 export default function Cart({ lang }: { lang: string }) {
   const limit = 35;
@@ -20,6 +21,45 @@ export default function Cart({ lang }: { lang: string }) {
   const [subTotal, setSubTotal] = useState(0);
   const { t } = useTranslation(lang, 'common');
   const { closeDrawer } = useUI();
+
+
+  console.log("bsdvdvdsdvdd....:", data)
+
+
+
+  const content = cartItems?.map(product => ({
+    id:product.id,
+    name: product.name,
+    currency:"INR",
+    price: product.salePrice,
+    quantity:product.quantity,
+
+  }))
+
+ const totalQuantity = cartItems?.reduce((sum, product) => sum + product?.quantity, 0)
+ const contentIds = cartItems?.map(product => product.id.toString());
+
+
+  const handleTrackCheckout = () => {
+
+    fbq('track', 'InitiateCheckout', {
+      value: parseFloat(subTotal).toFixed(2), // Ensure it's a number
+      currency: 'INR',
+      content_ids: contentIds,
+      contents: content,
+      content_type: 'product',
+      num_items: contentIds?.length || 0, 
+      quantity:totalQuantity,
+      checkOut_step:"1"
+    });
+  };
+
+
+  const checkOut = () =>{
+    handleTrackCheckout()
+    closeDrawer()
+
+  }
 
   useEffect(() => {
     if (data) {
@@ -108,7 +148,7 @@ export default function Cart({ lang }: { lang: string }) {
             'w-full px-5 py-3 flex items-center justify-center bg-heading rounded font-semibold text-sm text-brand-light bg-brand hover:bg-opacity-90',
             { 'cursor-not-allowed bg-fill-four hover:bg-fill-four': cartItems.length === 0 }
           )}
-          onClick={closeDrawer}
+          onClick={checkOut}
         >
           <span>{t('text-proceed-to-checkout')}</span>
         </Link>

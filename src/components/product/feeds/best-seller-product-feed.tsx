@@ -23,7 +23,6 @@ const BestSellerProductFeed: FC<Props> = ({
 
 
 
-  console.log("best-seller-product...:", data);
 
   return (
     <ProductsCarousel

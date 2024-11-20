@@ -48,8 +48,8 @@ export const homeHeroSlider = [
 export const homeGridSlider = [
     {
         id: 1,
-        title: 'Free delivery from your store',
-        slug: '/search',
+        title: 'Upgrade your bike’s performance with the CERAMIC MEROCA-12T Rear Derailleur Pulley Wheel. Made with a 7075 aluminum alloy body ',
+        slug: '/en/products/meroca-mtb-road-bike-derailleur-pulley-ceramic-wheel-11-t',
         image: {
             mobile: {
                 url: '/assets/images/banner/home1/slider-1.png',
@@ -65,8 +65,8 @@ export const homeGridSlider = [
     },
     {
         id: 2,
-        title: 'Fresh Healthy Breakfast food',
-        slug: '/search',
+        title: 'The PASAK CP30 Alloy Disc Brake Thru Axle Wheel offers robust performance for road cycling',
+        slug: '/en/products/pasak-cp-30-alloy-disc-brake-thru-axle-wheel',
         image: {
             mobile: {
                 url: '/assets/images/banner/home1/slider-2.png',

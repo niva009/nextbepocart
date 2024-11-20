@@ -17,6 +17,7 @@ import { useTranslation } from 'src/app/i18n/client';
 import axios from "axios";
 import { useQueryClient } from 'react-query';
 import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
+import { useRef } from 'react';
 
 const ProductSingleDetails = ({ data, lang }) => {
   const { t } = useTranslation(lang, 'common');
@@ -37,6 +38,34 @@ const ProductSingleDetails = ({ data, lang }) => {
   const [errorMessage , setErrorMessage] = useState('');
   const [addToWishlistLoader, setAddToWishlistLoader] = useState(false);
   const queryClient = useQueryClient(); // Initialize the query client
+
+  const hasFired = useRef(false);
+
+
+
+
+  useEffect(() => {
+  
+    if (data?.product && !hasFired.current) {
+      try {
+        console.log("Product data:", data.product);
+        window.fbq('track', 'ViewContent', {
+          content_category: data.product.categoryName,
+          content_name: data.product.name,
+          content_ids: data.product.id,
+          content_type: 'product_Group',
+          value: data.product.salePrice,
+          currency: 'INR',
+        });
+        hasFired.current = true; // Prevent further triggers
+        console.log("ViewContent event triggered");
+      } catch (error) {
+        console.error("Facebook Pixel error:", error);
+      }
+    }
+  }, [data?.product]);
+  
+
 
   // Automatically set initial color, size, and image with stock
   useEffect(() => {
@@ -87,6 +116,50 @@ const ProductSingleDetails = ({ data, lang }) => {
       setStock(availableStock);
     }
   };
+
+
+
+  const handleTrackCart = () => {
+    fbq('track', 'AddToCart', {
+      content_name: data?.product?.name || "name",
+      content_ids: data?.product?.id || "product-id",
+      content_type: 'product_group',
+      content_category: data?.product?.categoryName || "category", // Add category
+      value: data?.product?.salePrice || "sale-price" ,
+      currency: 'INR',
+      quantity: selectedQuantity // Make sure to pass a valid quantity
+    });
+  };
+ 
+  const handleCart = () =>{
+    handleTrackCart();
+    addToCart()
+  }
+
+
+  const handleTrackWishlist = () => {
+
+    if (data && data?.product) { // Track only when adding to wishlist
+      window.fbq('track', 'AddToWishlist', {
+        content_category: data?.product.categoryName,
+        content_ids: data?.product.id,
+        content_name: data?.product.name,
+        content_type: 'product_group',
+        currency: 'INR',
+        value: data?.product.salePrice,
+      });
+    }
+  };
+
+  const wishlistAdd = () =>{
+    handleTrackWishlist();
+    addToWishlist()
+  }
+
+
+
+
+
 
   const addToCart = async () => {
     if (stock === 0) return;
@@ -332,7 +405,7 @@ const ProductSingleDetails = ({ data, lang }) => {
             />
 
             <Button
-              onClick={addToCart}
+              onClick={handleCart}
               className="w-full px-1.5"
               disabled={stock === 0}
             >
@@ -342,7 +415,7 @@ const ProductSingleDetails = ({ data, lang }) => {
 
             <Button
               variant="border"
-              onClick={addToWishlist}
+              onClick={wishlistAdd}
               loading={addToWishlistLoader}
               className={`group hover:text-brand ${favorite && 'text-brand'}`}
             >

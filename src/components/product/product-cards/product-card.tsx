@@ -97,6 +97,7 @@ const ProductCard: React.FC<ProductProps> = ({product, className, lang, variant 
 
 
 
+
     return (
         <article
             className={cn(
@@ -167,6 +168,7 @@ const ProductCard: React.FC<ProductProps> = ({product, className, lang, variant 
                 <div className="block product-cart-button font-semibold">
                     <ProductWishlist
                     id = {id}
+                    product= {product}
                     />
                 </div>
             </div>

@@ -35,6 +35,8 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
     const addressId = localStorage.getItem('addressid');
     setIsAddressAvailable(!!addressId); // Convert to boolean
   }, [data]);
+
+  
   
 
 
@@ -67,6 +69,39 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
 
   console.log("cartitem..:", cartItems);
   console.log('address available..:', isAddressAvailable);
+
+
+
+
+  const content = cartItems?.map(product => ({
+    id:product.id,
+    name: product.name,
+    currency:"INR",
+    price: product.salePrice,
+    quantity:product.quantity,
+
+  }))
+
+ const totalQuantity = cartItems?.reduce((sum, product) => sum + product?.quantity, 0)
+ const contentIds = cartItems?.map(product => product.id.toString());
+
+
+  const handleTrackCheckout = () => {
+
+    fbq('track', 'AddShippingAddress', {
+      value: parseFloat(subTotal).toFixed(2), // Ensure it's a number
+      currency: 'INR',
+      content_ids: contentIds,
+      contents: content,
+      content_type: 'product',
+      num_items: contentIds?.length || 0, 
+      quantity:totalQuantity,
+      checkOut_step:"1",
+      city:"",
+      state:"",
+      pincode: "",
+    });
+  };
   
   const mounted = useIsMounted();
 
