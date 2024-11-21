@@ -83,7 +83,7 @@ export default function RootLayout({
 
       window.fbq('track', 'PageView');
     }
-  }, [userData,addresData]); // Runs when userData is updated
+  }, [userData,addresData]); 
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -103,7 +103,6 @@ export default function RootLayout({
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
               fbq('init',1826070831209321 ); // Initialize base Pixel
-              fbq('track', 'PageView'); // Track page view
             `,
           }}
         />

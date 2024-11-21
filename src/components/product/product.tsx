@@ -18,6 +18,8 @@ import axios from "axios";
 import { useQueryClient } from 'react-query';
 import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
 import { useRef } from 'react';
+import { usePathname } from 'next/navigation'
+import Script from 'next/script';
 
 const ProductSingleDetails = ({ data, lang }) => {
   const { t } = useTranslation(lang, 'common');
@@ -26,6 +28,7 @@ const ProductSingleDetails = ({ data, lang }) => {
   const router = useRouter();
   const { width } = useWindowSize();
   const { addItemToCart } = useCart();
+  const url = usePathname()
 
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [favorite, setFavorite] = useState(false);
@@ -38,6 +41,8 @@ const ProductSingleDetails = ({ data, lang }) => {
   const [errorMessage , setErrorMessage] = useState('');
   const [addToWishlistLoader, setAddToWishlistLoader] = useState(false);
   const queryClient = useQueryClient(); // Initialize the query client
+  const [reviews, setReviews] = useState([]);
+
 
   const hasFired = useRef(false);
 
@@ -64,6 +69,115 @@ const ProductSingleDetails = ({ data, lang }) => {
       }
     }
   }, [data?.product]);
+
+
+  useEffect(() => {
+    // Fetch reviews using the fetch API
+    const fetchReviews = async () => {
+      try {
+        if (data?.product?.id) {
+          const response = await fetch(`https://bepocart.in/review/${data?.product?.id}/`);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const reviewsData = await response.json();
+          console.log("Reviews fetched:", reviewsData);
+          setReviews(reviewsData); // Assume the API response is an array of reviews
+        }
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, [data?.product?.id]);
+
+  useEffect(() => {
+    // Log reviews only after the reviews are fetched and set
+    if (reviews.length > 0) {
+      console.log("Reviews data:", reviews);
+    }
+  }, [reviews]);
+
+
+
+  console.log("review in product page...:", reviews)
+
+  const reviewsName = reviews.map(rev => rev.first_name)
+  const reviewContent = reviews.map( rev =>  rev.review_text)
+  const avgRating = reviews.reduce((total, rev) => total + rev.rating, 0) / reviews.length;
+
+  console.log(avgRating);
+  
+
+
+
+  // schema integration single page........../
+
+
+  const structuredData = {
+
+   "@context": "https://schema.org",
+  "@type": "Product",
+  "@id":url,
+  "name": data?.produt?.name,
+  "image": data?.product?.image,
+  "description": data?.product?.description,
+  // "sku": "SKU",
+  // "mpn": "MPN",
+  "brand": {
+    "@type": "Brand",
+    "name": "Brand Name"
+  },
+  "gtin": "4003318980251",
+  "review": {
+    "@type": "Review",
+    "reviewRating": {
+      "@type": "Rating",
+      "datePublished":"",
+      "reviewBody": reviewContent,
+      "ratingValue": "4",
+      "bestRating": "5"
+      
+    },
+    "author": {
+      "@type": "Person",
+      "name": reviewsName,
+      
+    }
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": avgRating,
+    "reviewCount": reviews.length
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://www.yourwebsite.com/product-page",
+    "priceCurrency": "INR",
+    "price": data?.product?.salePrice,
+    "priceValidUntil": "2024-12-31",
+    "itemCondition": "https://schema.org/NewCondition",
+    "availability": "https://schema.org/InStock",
+    "discountCode": "NC200",
+    "eligibleTransactionVolume": {
+    "@type": "PriceSpecification",
+    "priceCurrency": "INR"
+    },
+    "seller": {
+      "@type": "Organization",
+      "name": "bepoart"
+    },
+    "url": url,
+  }
+
+
+  }
+
+
+
+
+  // schema integration sigle end.........../
   
 
 
@@ -287,6 +401,15 @@ const ProductSingleDetails = ({ data, lang }) => {
   return (
     <div className="pt-6 pb-2 md:pt-7">
       <div className="grid-cols-10 lg:grid gap-7 2xl:gap-7 mb-8 lg:mb-12 bg-white p-5 rounded">
+
+
+      <Script
+        id="json-ld-schema-product"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+
         <div className="col-span-5 mb-6 overflow-hidden md:mb-8 lg:mb-0 xl:flex justify-center">
           {!!data?.images?.length ? (
             selectedImage ? (

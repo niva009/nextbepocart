@@ -33,7 +33,6 @@ const ProductReviewRating: FC<{ lang: string; productId: string }> = ({ lang, pr
     fetchReviews();
   }, [productId]); // Re-fetch reviews if productId changes
 
-  console.log('review..:', reviews);
 
   return (
     <div className="lg:flex">
