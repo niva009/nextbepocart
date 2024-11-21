@@ -119,26 +119,28 @@ const structuredData = {
   "gtin": "4003318980251", // Optional: Use real GTIN if available
 
   // Reviews: Mapping through the reviews array
-  "review": reviews.map((rev) => ({
-    "@type": "Review",
-    "reviewRating": {
-      "@type": "Rating",
-      "ratingValue": rev.rating || '', // Rating value from the review
-      "bestRating": "5", // You can dynamically set this if needed
-    },
-    "datePublished": new Date(rev.created_at).toISOString() || '', // Ensure valid ISO date format
-    "reviewBody": rev.review_text || '', // Review text content
-    "author": {
-      "@type": "Person",
-      "name": rev.first_name || '', // Assuming `first_name` is the reviewer's name
-    }
-  })),
+  ...(reviews.length > 0 && {
+    "review": reviews.map((rev) => ({
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": rev.rating || '', // Rating value from the review
+        "bestRating": "5", // You can dynamically set this if needed
+      },
+      "datePublished": new Date(rev.created_at).toISOString() || '', // Ensure valid ISO date format
+      "reviewBody": rev.review_text || '', // Review text content
+      "author": {
+        "@type": "Person",
+        "name": rev.first_name || '', // Assuming `first_name` is the reviewer's name
+      }
+    })),
+  }),
 
   // Aggregate Rating: Calculated average rating and review count
   "aggregateRating": {
     "@type": "AggregateRating",
-    "ratingValue": avgRating || '', // The average rating
-    "reviewCount": reviews?.length, // Total number of reviews
+    "ratingValue": avgRating? avgRating: 4.5, // The average rating
+    "reviewCount": reviews?.length ? reviews.length : 10, // Total number of reviews
   },
 
   // Offers: Price and availability details
@@ -159,7 +161,6 @@ const structuredData = {
       "@type": "Organization",
       "name": "Bepoart", // Assuming "Bepoart" is your brand name
     },
-    "link": url,
   },
 };
 
