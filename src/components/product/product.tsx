@@ -21,7 +21,7 @@ import { useRef } from 'react';
 import { usePathname } from 'next/navigation'
 import Script from 'next/script';
 
-const ProductSingleDetails = ({ data, lang }) => {
+const ProductSingleDetails = ({ data, lang ,reviews}) => {
   const { t } = useTranslation(lang, 'common');
   const pathname = useParams();
   const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
@@ -41,7 +41,6 @@ const ProductSingleDetails = ({ data, lang }) => {
   const [errorMessage , setErrorMessage] = useState('');
   const [addToWishlistLoader, setAddToWishlistLoader] = useState(false);
   const queryClient = useQueryClient(); // Initialize the query client
-  const [reviews, setReviews] = useState([]);
 
 
   const hasFired = useRef(false);
@@ -71,37 +70,11 @@ const ProductSingleDetails = ({ data, lang }) => {
   }, [data?.product]);
 
 
-  useEffect(() => {
-    // Fetch reviews using the fetch API
-    const fetchReviews = async () => {
-      try {
-        if (data?.product?.id) {
-          const response = await fetch(`https://bepocart.in/review/${data?.product?.id}/`);
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const reviewsData = await response.json();
-          console.log("Reviews fetched:", reviewsData);
-          setReviews(reviewsData); // Assume the API response is an array of reviews
-        }
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      }
-    };
-
-    fetchReviews();
-  }, [data?.product?.id]);
-
-  useEffect(() => {
-    // Log reviews only after the reviews are fetched and set
-    if (reviews.length > 0) {
-      console.log("Reviews data:", reviews);
-    }
-  }, [reviews]);
 
 
 
-  console.log("review in product page...:", reviews)
+
+  // console.log("review in product page...:", reviews)
 
  
   const avgRating = reviews.reduce((total, rev) => total + rev.rating, 0) / reviews.length;
