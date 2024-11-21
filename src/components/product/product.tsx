@@ -159,7 +159,7 @@ const structuredData = {
       "@type": "Organization",
       "name": "Bepoart", // Assuming "Bepoart" is your brand name
     },
-    "url": url,
+    "link": url,
   },
 };
 
