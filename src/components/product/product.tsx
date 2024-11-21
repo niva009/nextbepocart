@@ -146,7 +146,7 @@ const structuredData = {
   // Offers: Price and availability details
   "offers": {
     "@type": "Offer",
-    "url": url,
+    // "url": url,
     "priceCurrency": "INR",
     "price": data?.product?.salePrice,
     "priceValidUntil": "2024-12-31", // Example expiration date
