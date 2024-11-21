@@ -103,9 +103,24 @@ const ProductSingleDetails = ({ data, lang }) => {
 
   console.log("review in product page...:", reviews)
 
-  const reviewsName = reviews.map(rev => rev.first_name)
-  const reviewContent = reviews.map( rev =>  rev.review_text)
+ 
   const avgRating = reviews.reduce((total, rev) => total + rev.rating, 0) / reviews.length;
+  const reviewDate = reviews.map(rev => {
+
+    const date = new Date(rev.created_at); // Convert to Date object
+    const day = String(date.getDate()).padStart(2, '0'); // Get day and format to two digits
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month (0-based) and format
+    const year = date.getFullYear(); // Get year
+  
+    return `${day}/${month}/${year}`; // Return in 'day/month/year' format
+  });
+
+
+  const firstWord = data?.product?.name.split(' ')[0].trim();
+
+  console.log("first word....", firstWord);
+  
+  console.log(reviewDate);
 
   console.log(avgRating);
   
@@ -114,65 +129,67 @@ const ProductSingleDetails = ({ data, lang }) => {
 
   // schema integration single page........../
 
+// Assuming data, reviews, avgRating, etc. are already fetched and populated
 
-  const structuredData = {
-
-   "@context": "https://schema.org",
+const structuredData = {
+  "@context": "https://schema.org",
   "@type": "Product",
-  "@id":url,
-  "name": data?.produt?.name,
+  "@id": url,
+  "name": data?.product?.name,
   "image": data?.product?.image,
   "description": data?.product?.description,
-  // "sku": "SKU",
-  // "mpn": "MPN",
   "brand": {
     "@type": "Brand",
-    "name": "Brand Name"
+    "name": firstWord, // The first word of the product name
   },
-  "gtin": "4003318980251",
-  "review": {
+  "gtin": "4003318980251", // Optional: Use real GTIN if available
+
+  // Reviews: Mapping through the reviews array
+  "review": reviews.map((rev) => ({
     "@type": "Review",
     "reviewRating": {
       "@type": "Rating",
-      "datePublished":"",
-      "reviewBody": reviewContent,
-      "ratingValue": "4",
-      "bestRating": "5"
-      
+      "ratingValue": rev.rating, // Rating value from the review
+      "bestRating": "5", // You can dynamically set this if needed
     },
+    "datePublished": new Date(rev.created_at).toISOString(), // Ensure valid ISO date format
+    "reviewBody": rev.review_text, // Review text content
     "author": {
       "@type": "Person",
-      "name": reviewsName,
-      
+      "name": rev.first_name, // Assuming `first_name` is the reviewer's name
     }
-  },
+  })),
+
+  // Aggregate Rating: Calculated average rating and review count
   "aggregateRating": {
     "@type": "AggregateRating",
-    "ratingValue": avgRating,
-    "reviewCount": reviews.length
+    "ratingValue": avgRating, // The average rating
+    "reviewCount": reviews.length, // Total number of reviews
   },
+
+  // Offers: Price and availability details
   "offers": {
     "@type": "Offer",
-    "url": "https://www.yourwebsite.com/product-page",
+    "url": url,
     "priceCurrency": "INR",
     "price": data?.product?.salePrice,
-    "priceValidUntil": "2024-12-31",
+    "priceValidUntil": "2024-12-31", // Example expiration date
     "itemCondition": "https://schema.org/NewCondition",
     "availability": "https://schema.org/InStock",
-    "discountCode": "NC200",
+    "discountCode": "", // Can be added if available
     "eligibleTransactionVolume": {
-    "@type": "PriceSpecification",
-    "priceCurrency": "INR"
+      "@type": "PriceSpecification",
+      "priceCurrency": "INR",
     },
     "seller": {
       "@type": "Organization",
-      "name": "bepoart"
+      "name": "Bepoart", // Assuming "Bepoart" is your brand name
     },
     "url": url,
-  }
+  },
+};
 
-
-  }
+console.log("Structured Data:", structuredData);
 
 
 
