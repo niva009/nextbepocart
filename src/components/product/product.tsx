@@ -122,7 +122,8 @@ const ProductSingleDetails = ({ data, lang }) => {
   
   console.log(reviewDate);
 
-  console.log(avgRating);
+  console.log("avg rating",avgRating);
+  
   
 
 
@@ -149,22 +150,22 @@ const structuredData = {
     "@type": "Review",
     "reviewRating": {
       "@type": "Rating",
-      "ratingValue": rev.rating, // Rating value from the review
+      "ratingValue": rev.rating || '', // Rating value from the review
       "bestRating": "5", // You can dynamically set this if needed
     },
-    "datePublished": new Date(rev.created_at).toISOString(), // Ensure valid ISO date format
-    "reviewBody": rev.review_text, // Review text content
+    "datePublished": new Date(rev.created_at).toISOString() || '', // Ensure valid ISO date format
+    "reviewBody": rev.review_text || '', // Review text content
     "author": {
       "@type": "Person",
-      "name": rev.first_name, // Assuming `first_name` is the reviewer's name
+      "name": rev.first_name || '', // Assuming `first_name` is the reviewer's name
     }
   })),
 
   // Aggregate Rating: Calculated average rating and review count
   "aggregateRating": {
     "@type": "AggregateRating",
-    "ratingValue": avgRating, // The average rating
-    "reviewCount": reviews.length, // Total number of reviews
+    "ratingValue": avgRating || '', // The average rating
+    "reviewCount": reviews?.length, // Total number of reviews
   },
 
   // Offers: Price and availability details
