@@ -168,7 +168,7 @@ export const siteSettings = {
               },  {
                 id: 13,
                 path: '/search?category=bicycle-saddle',
-                label: 'bycyle saddle',
+                label: 'bicycle saddle',
               },  {
                 id: 14,
                 path: '/search?category=bicycle-cassette-freewheel',

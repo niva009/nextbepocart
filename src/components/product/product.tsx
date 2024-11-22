@@ -18,7 +18,6 @@ import axios from "axios";
 import { useQueryClient } from 'react-query';
 import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
 import { useRef } from 'react';
-import { usePathname } from 'next/navigation'
 import Script from 'next/script';
 
 const ProductSingleDetails = ({ data, lang ,reviews}) => {
@@ -28,7 +27,6 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
   const router = useRouter();
   const { width } = useWindowSize();
   const { addItemToCart } = useCart();
-  const url = usePathname()
 
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [favorite, setFavorite] = useState(false);
@@ -45,8 +43,8 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
 
   const hasFired = useRef(false);
 
-
-
+const fullUrl = window.location.href
+console.log("full url of an website",fullUrl)
 
   useEffect(() => {
   
@@ -91,11 +89,6 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
 
   const firstWord = data?.product?.name.split(' ')[0].trim();
 
-  console.log("first word....", firstWord);
-  
-  console.log(reviewDate);
-
-  console.log("avg rating",avgRating);
   
   
 
@@ -108,7 +101,8 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Product",
-  "@id": url,
+  "@id": fullUrl,
+  "link": fullUrl,
   "name": data?.product?.name,
   "image": data?.product?.image,
   "description": data?.product?.description,
@@ -146,7 +140,7 @@ const structuredData = {
   // Offers: Price and availability details
   "offers": {
     "@type": "Offer",
-    // "url": url,
+    "link": fullUrl,
     "priceCurrency": "INR",
     "price": data?.product?.salePrice,
     "priceValidUntil": "2024-12-31", // Example expiration date
