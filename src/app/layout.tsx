@@ -16,6 +16,7 @@ const fontBai = FontBai({
 });
 
 const FB_PIXEL_ID = '1826070831209321'; // Replace with your actual Facebook Pixel ID
+const GTM_ID = "GTM-T9NFNGB";
 
 export default function RootLayout({
   children,
@@ -69,7 +70,7 @@ export default function RootLayout({
 
   useEffect(() => {
     if (userData && window.fbq) {
-      window.fbq('init', 1826070831209321, {
+      window.fbq('init', `${FB_PIXEL_ID}`, {
         em: userData.email || '', // Email
         fn: userData.name?.split(' ')[0] || '', // First Name
         ln: userData.name?.split(' ')[1] || '', // Last Name
@@ -88,6 +89,23 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={fontBai.variable} suppressHydrationWarning>
+
+
+      <Script
+          id="gtm-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','${GTM_ID}');
+            `,  
+          }}
+        />
+
+
         {/* Base Facebook Pixel Script */}
         <Script
           id="fb-pixel-base"
@@ -109,6 +127,7 @@ export default function RootLayout({
 
         {/* Facebook Pixel NoScript Fallback */}
         <noscript>
+          
           <img
             height="1"
             width="1"
@@ -116,6 +135,14 @@ export default function RootLayout({
             src={`https://www.facebook.com/tr?id=${FB_PIXEL_ID}&ev=PageView&noscript=1`}
             alt="Facebook Pixel"
           />
+
+
+        <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          ></iframe>
         </noscript>
 
         {children}

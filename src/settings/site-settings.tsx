@@ -291,33 +291,33 @@ export const siteSettings = {
           },
         ],
       },
-      {
-        id: 4,
-        path: '/shops/',
-        label: 'About',
-      },
-      {
-        id: 5,
-        path: '/',
-        label: 'policy',
-        subMenu: [
-          {
-            id: 1,
-            path: '/privacy',
-            label: 'privacy-policy',
-          },
-          {
-            id: 2,
-            path: '/returnpolicy',
-            label: 'return-policy',
-          },
-          {
-            id: 3,
-            path: '/shipping',
-            label: 'shipping-policy',
-          },
-        ],
-      },
+      // {
+      //   id: 4,
+      //   path: '/shops/',
+      //   label: 'About',
+      // },
+      // {
+      //   id: 5,
+      //   path: '/',
+      //   label: 'policy',
+      //   subMenu: [
+      //     {
+      //       id: 1,
+      //       path: '/privacy',
+      //       label: 'privacy-policy',
+      //     },
+      //     {
+      //       id: 2,
+      //       path: '/returnpolicy',
+      //       label: 'return-policy',
+      //     },
+      //     {
+      //       id: 3,
+      //       path: '/shipping',
+      //       label: 'shipping-policy',
+      //     },
+      //   ],
+      // },
       // {
       //   id: 6,
       //   path: '/blog/blog-category-grid',
@@ -367,11 +367,11 @@ export const siteSettings = {
       //     },
       //   ],
       // },
-      {
-        id: 7,
-        path: '/contact-us',
-        label: 'menu-contact-us',
-      },
+      // {
+      //   id: 7,
+      //   path: '/contact-us',
+      //   label: 'menu-contact-us',
+      // },
     ],
     languageMenu: [
       {

@@ -28,7 +28,14 @@ export const useSignUpMutation = () => {
   return useMutation((input: SignUpInputType) => signUp(input), {
     onSuccess: (data) => {
       toast.success("registraion successfull..please login!")
-      console.log("data after signup",data);
+
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
+          event: 'sign_up',
+          sign_up_method: 'Email'
+        });
+      }
+      // console.log("data after signup",data);
       router.push('/en/signin');
     },
     onError: (error) => {

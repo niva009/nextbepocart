@@ -6,6 +6,7 @@ import FeatureCarousel from "@components/common/featured-carousel";
 import playstore from 'public/assets/images/playstore.png';
 import applestore from 'public/assets/images/applestore.png';
 import Image from 'next/image';
+import FooterLinks from './footerlink'
 
 interface WidgetsProps {
     lang: string;
@@ -53,6 +54,12 @@ const Widgets: React.FC<WidgetsProps> = ({
                 ))} */}
                 
                 {/* App Store Links Section */}
+                <div className='col-span-full sm:col-span-1 md:col-span-2 flex flex-col space-y-5 items-start md:items-center mt-6'>
+                <FooterLinks/>
+                </div>
+            
+               
+
                 <div className="col-span-full sm:col-span-1 md:col-span-2 flex flex-col space-y-5 items-start md:items-center mt-6">
                     <p className="text-lg text-#93ff05 font-semibold mb-2">Bepocart Now Available in </p>
                     <div className="flex space-x-4">

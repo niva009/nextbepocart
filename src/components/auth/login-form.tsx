@@ -16,7 +16,7 @@ import cn from 'classnames';
 import Link from 'next/link';
 import { signIn, getSession } from 'next-auth/react'; 
 import axios from 'axios';
-
+import { jwtDecode } from 'jwt-decode';
 interface LoginFormProps {
   lang: string;
   isPopup?: boolean;
@@ -41,13 +41,46 @@ const LoginForm: React.FC<LoginFormProps> = ({
     formState: { errors },
   } = useForm<LoginInputType>();
 
+ 
   function onSubmit({ email, password }: LoginInputType) {
     login({
       email,
       password,
     });
+  
+    axios
+      .post("https://bepocart.in/manual-login", { email, password })
+      .then((response) => {
+        const token = response.data?.token;
+  
+        if (token) {
+          localStorage.setItem("token", token);
+  
+          // Decode the token to extract the user ID
+          const decodedToken = jwtDecode(token);
+          const userId = decodedToken?.id;
+  
+          // Push data to the GTM dataLayer
+          if (typeof window !== "undefined" && window.dataLayer) {
+            window.dataLayer.push({
+              event: "login",
+              login_method: "email-password",
+              user_id: userId || "unknown",
+            });
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+      });
+  
     closeModal();
   }
+  
+
+
+
+
 
   function handleSignUp() {
     return openModal('SIGN_UP_VIEW');
@@ -83,15 +116,31 @@ const LoginForm: React.FC<LoginFormProps> = ({
           const token = response.data?.token;
   
           if (token) {
+            // Save the token in localStorage
             localStorage.setItem("token", token);
+  
+            // Decode the token to extract the user ID
+            const decodedToken = jwtDecode(token);
+            const userId = decodedToken?.id; // Replace 'id' with the actual field from your token
+  
+            // Push data to the GTM dataLayer
+            if (typeof window !== 'undefined' && window.dataLayer) {
+              window.dataLayer.push({
+                event: "login",
+                login_method: "Google",
+                user_id: userId || "unknown",
+              });
+            }
+  
             setMessageType("success");
           } else {
             setMessage("Failed to retrieve token from backend.");
-            setMessageType('error');
+            setMessageType("error");
           }
         } catch (backendError) {
+          console.error("Backend error:", backendError);
           setMessage("Failed to communicate with backend.");
-          setMessageType('error');
+          setMessageType("error");
         }
       }
     }

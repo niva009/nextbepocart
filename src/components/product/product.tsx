@@ -41,6 +41,7 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
 
 
   const hasFired = useRef(false);
+  const gtmFire = useRef(false);
 
   let cleanUrl = null;
 
@@ -52,7 +53,7 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
   
     if (data?.product && !hasFired.current) {
       try {
-        console.log("Product data:", data.product);
+        // console.log("Product data:", data.product);
         window.fbq('track', 'ViewContent', {
           content_category: data.product.categoryName,
           content_name: data.product.name,
@@ -62,12 +63,58 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
           currency: 'INR',
         });
         hasFired.current = true; // Prevent further triggers
-        console.log("ViewContent event triggered");
+        // console.log("ViewContent event triggered");
       } catch (error) {
         console.error("Facebook Pixel error:", error);
       }
     }
   }, [data?.product]);
+
+
+
+  ////////gtm tracking//////
+
+  useEffect(() => {
+    if (data?.product && !gtmFire.current) {
+      try {
+        window.dataLayer = window.dataLayer || []; 
+        window.dataLayer.push({
+          event: "view_item",
+          ecommerce: {
+            currency: "INR",
+            value: data.product.salePrice,
+            items: [
+              {
+                item_id: data.product.id,
+                item_name: data.product.name,
+                item_brand: firstWord,
+                item_category: data.product.mainCategory,
+                item_category2: data.product.categoryName,
+                item_list_id: data.product.category,
+                item_list_name: data.product.categoryName,
+                item_variant: selectedColor|| "black",
+                price: data.product.salePrice,
+              },
+            ],
+          },
+        });
+
+        // Set gtmFire to true to prevent duplicate firing
+        gtmFire.current = true;
+      } catch (error) {
+        console.error("GTM view_item event error:", error);
+      }
+    }
+  }, [data?.product, selectedColor]);
+
+
+
+
+  // console.log(window.dataLayer);
+
+
+
+  // <----------------->
 
 
 
@@ -160,7 +207,7 @@ const structuredData = {
   },
 };
 
-console.log("Structured Data:", structuredData);
+// console.log("Structured Data:", structuredData);
 
 
 
@@ -232,10 +279,48 @@ console.log("Structured Data:", structuredData);
       quantity: selectedQuantity // Make sure to pass a valid quantity
     });
   };
+
+
+
+  const gtmAddCart = () => {
+    if (typeof window !== "undefined" && window.dataLayer) {
+  
+      window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+      window.dataLayer.push({
+        event: "add_to_cart",
+        ecommerce: {
+          currency: "INR",
+          value: data?.product?.salePrice,
+          items: [
+            {
+              item_id: data?.product?.id,
+              item_name: data?.product?.name,
+              affiliation: "Bepocart",
+              discount: data?.product?.discount,
+              index: 0,
+              item_brand: firstWord,
+              item_category: data?.product?.mainCategory,
+              item_category2: data?.product?.categoryName,
+              item_list_id: data?.product?.category,
+              item_list_name: data?.product?.categoryName,
+              item_variant: "green", // Update with dynamic data if available
+              location_id: "ChIJIQBpAG2ahYAR_6128GcTUEo", // Replace with actual location if dynamic
+              price: data?.prooduct?.salePrice,
+              quantity: selectedQuantity,
+            },
+          ],
+        },
+      });
+    } else {
+      console.error("dataLayer is not available on the window object.");
+    }
+  };
+  
  
   const handleCart = () =>{
     handleTrackCart();
     addToCart()
+    gtmAddCart();
   }
 
 
@@ -384,7 +469,7 @@ console.log("Structured Data:", structuredData);
       });
   };
 
-  console.log("selected iamgee..:", selectedImage);
+  // console.log("selected iamgee..:", selectedImage);
 
   return (
     <div className="pt-6 pb-2 md:pt-7">
