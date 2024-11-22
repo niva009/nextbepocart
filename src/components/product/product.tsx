@@ -22,7 +22,6 @@ import Script from 'next/script';
 
 const ProductSingleDetails = ({ data, lang ,reviews}) => {
   const { t } = useTranslation(lang, 'common');
-  const pathname = useParams();
   const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
   const router = useRouter();
   const { width } = useWindowSize();
@@ -38,14 +37,17 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
   const [addToCartLoader, setAddToCartLoader] = useState(false);
   const [errorMessage , setErrorMessage] = useState('');
   const [addToWishlistLoader, setAddToWishlistLoader] = useState(false);
-  const queryClient = useQueryClient(); // Initialize the query client
+  const queryClient = useQueryClient(); 
 
 
   const hasFired = useRef(false);
 
-const fullUrl = window.location.href
-console.log("full url of an website",fullUrl)
+  let cleanUrl = null;
 
+  if (typeof window !== "undefined") {
+    const fullUrl = window.location.href;
+    cleanUrl = fullUrl.split('?')[0]; 
+  }
   useEffect(() => {
   
     if (data?.product && !hasFired.current) {
@@ -101,8 +103,8 @@ console.log("full url of an website",fullUrl)
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Product",
-  "@id": fullUrl,
-  "link": fullUrl,
+  "@id": cleanUrl,
+  "url": cleanUrl,
   "name": data?.product?.name,
   "image": data?.product?.image,
   "description": data?.product?.description,
@@ -140,7 +142,7 @@ const structuredData = {
   // Offers: Price and availability details
   "offers": {
     "@type": "Offer",
-    "link": fullUrl,
+    "url": cleanUrl,
     "priceCurrency": "INR",
     "price": data?.product?.salePrice,
     "priceValidUntil": "2024-12-31", // Example expiration date
