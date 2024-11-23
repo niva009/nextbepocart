@@ -102,6 +102,43 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
     });
   };
 
+
+    const items = cartItems?.map(product => ({
+    item_id: product.id, // Product ID
+    item_name: product?.name, // Product name
+    affiliation: "Bepocart", // Affiliation
+    discount: product.discount, // Discount applied to the product
+    item_brand: product?.name.split(' ')[0]?.trim() || "", // First word of the product name as brand, fallback to empty string if undefined
+    item_category: product?.mainCategory || "", // Main category, fallback to empty string
+    item_category2: product?.categoryName || "", // Secondary category, fallback to empty string
+    item_list_id: product?.category || "", // Category ID, fallback to empty string
+    item_list_name: product?.categoryName || "", // Category name, fallback to empty string
+    item_variant: "green", // Variant (hardcoded as green)
+    price: product?.price || 0, // Product price, fallback to 0 if undefined
+    quantity: product?.quantity || 1, // Product quantity, fallback to 1 if undefined
+  }));
+
+  //add shipping infoooo////////
+
+  if (window && window.dataLayer) {
+    window.dataLayer.push({
+      event: "add_shipping_info",
+      ecommerce: {
+        currency: "INR", // Correct currency code for Indian Rupees
+        value: parseFloat(subTotal || 0).toFixed(2), // Ensure subTotal is parsed as a float and provide a fallback
+        items: items || [], // Ensure items is an array and provide a fallback
+      },
+    });
+  }
+  
+
+
+
+
+
+
+
+
   useEffect(() => {
     if (data) {
       setCartItems(data.data || []);
@@ -158,6 +195,11 @@ const toPaymentPage = () =>{
     quantity:product.quantity,
 
   }))
+
+
+
+  
+
 
  const totalQuantity = cartItems?.reduce((sum, product) => sum + product?.quantity, 0)
  const contentIds = cartItems?.map(product => product.id.toString());

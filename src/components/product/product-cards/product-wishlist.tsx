@@ -35,9 +35,42 @@ export const ProductWishlist: React.FC<ProductWishlistProps> = ({ id, product })
       };
 
 
+      const gtmtrackWishlist = () => {
+        if (product) {
+          window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+          window.dataLayer.push({
+            event: "add_to_wishlist",
+            ecommerce: {
+              currency: "INR",
+              value: product?.salePrice || 0, // Default to 0 if salePrice is undefined
+              items: [
+                {
+                  item_id: product?.id || "", // Default to an empty string if id is undefined
+                  item_name: product?.name || "", // Default to an empty string if name is undefined
+                  affiliation: "Bepocart",
+                  discount: product?.discount || 0, // Default to 0 if discount is undefined
+                  index: 0,
+                  item_category: product?.mainCategory || "", // Default to an empty string if mainCategory is undefined
+                  item_category2: product?.categoryName || "", // Default to an empty string if categoryName is undefined
+                  item_list_id: product?.category || "", // Default to an empty string if category is undefined
+                  item_list_name: product?.categoryName || "", // Default to an empty string if categoryName is undefined
+                  item_variant: "yellow", // Fixed the syntax error with extra double quotes
+                //   location_id: "ChIJIQBpAG2ahYAR_6128GcTUEo", // Fixed the syntax error with extra double quotes
+                  price:product?.price || 10.01, // Default to 10.01 if price is undefined
+                  quantity: 1, // Assuming a default quantity of 1
+                },
+              ],
+            },
+          });
+        }
+      };
+
+
       const wishlist = () =>{
         handleTrackWishlist();
         handleWishlistToggle()
+      gtmtrackWishlist ();
+
       }
 
     const handleWishlistToggle = () => {

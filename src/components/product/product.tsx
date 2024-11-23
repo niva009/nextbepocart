@@ -303,8 +303,7 @@ const structuredData = {
               item_category2: data?.product?.categoryName,
               item_list_id: data?.product?.category,
               item_list_name: data?.product?.categoryName,
-              item_variant: "green", // Update with dynamic data if available
-              location_id: "ChIJIQBpAG2ahYAR_6128GcTUEo", // Replace with actual location if dynamic
+              item_variant: "red", // Update with dynamic data if available
               price: data?.prooduct?.salePrice,
               quantity: selectedQuantity,
             },
@@ -322,6 +321,38 @@ const structuredData = {
     addToCart()
     gtmAddCart();
   }
+
+  const gtmtrackWishlist = () => {
+    if (data && data?.product) {
+      window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+      window.dataLayer.push({
+        event: "add_to_wishlist",
+        ecommerce: {
+          currency: "INR",
+          value: data?.product?.salePrice || 0, // Default to 0 if salePrice is undefined
+          items: [
+            {
+              item_id: data?.product?.id || "", // Default to an empty string if id is undefined
+              item_name: data?.product?.name || "", // Default to an empty string if name is undefined
+              affiliation: "Bepocart",
+              discount: data?.product?.discount || 0, // Default to 0 if discount is undefined
+              index: 0,
+              item_brand: firstWord || "", // Default to an empty string if firstWord is undefined
+              item_category: data?.product?.mainCategory || "", // Default to an empty string if mainCategory is undefined
+              item_category2: data?.product?.categoryName || "", // Default to an empty string if categoryName is undefined
+              item_list_id: data?.product?.category || "", // Default to an empty string if category is undefined
+              item_list_name: data?.product?.categoryName || "", // Default to an empty string if categoryName is undefined
+              item_variant: "green", // Fixed the syntax error with extra double quotes
+              location_id: "ChIJIQBpAG2ahYAR_6128GcTUEo", // Fixed the syntax error with extra double quotes
+              price: data?.product?.price || 10.01, // Default to 10.01 if price is undefined
+              quantity: 1, // Assuming a default quantity of 1
+            },
+          ],
+        },
+      });
+    }
+  };
+  
 
 
   const handleTrackWishlist = () => {
@@ -341,6 +372,7 @@ const structuredData = {
   const wishlistAdd = () =>{
     handleTrackWishlist();
     addToWishlist()
+    gtmtrackWishlist()
   }
 
 
