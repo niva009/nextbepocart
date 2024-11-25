@@ -85,6 +85,7 @@ const items = cartItems?.map(product => ({
   item_id: product.id, // Product ID
   item_name: product?.name, // Product name
   affiliation: "Bepocart", // Affiliation
+  payment_method: paymentMethod,
   discount: product.discount, // Discount applied to the product
   item_brand: product?.name.split(' ')[0]?.trim() || "", // First word of the product name as brand, fallback to empty string if undefined
   item_category: product?.mainCategory || "", // Main category, fallback to empty string

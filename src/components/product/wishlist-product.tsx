@@ -1,8 +1,11 @@
+'use client';
+
 import WishlistProductCard from '@components/product/wishlist-product-card';
 import { useWishlistProductsQuery } from '@framework/product/get-wishlist-product';
 import ProductCardLoader from '@components/ui/loaders/product-card-loader';
 import Alert from '@components/ui/alert';
 import cn from 'classnames';
+import { useState, useEffect } from 'react';
 
 interface ProductWishlistProps {
   className?: string;
@@ -17,11 +20,23 @@ export default function ProductWishlistGrid({
   const { data, isLoading, error } = useWishlistProductsQuery({
     limit: limit,
   });
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Handle empty cart message
+  useEffect(() => {
+    if (!data || data === 'undefined' || (Array.isArray(data) && data.length === 0)) {
+      setErrorMessage('Cart is empty');
+    } else {
+      setErrorMessage('');
+    }
+  }, [data]);
 
   return (
     <div className={cn(className)}>
       {error ? (
         <Alert message={error?.message} />
+      ) : errorMessage ? (
+        <div className="text-center text-green-500">{errorMessage}</div>
       ) : (
         <div className="flex flex-col">
           {isLoading
@@ -31,17 +46,13 @@ export default function ProductWishlistGrid({
                   uniqueKey={`product--key-${idx}`}
                 />
               ))
-            : Array.isArray(data) && data.length > 0 // Ensure `data` is an array with items
-            ? data.map((product: any) => (
+            : data.map((product: any) => (
                 <WishlistProductCard
                   key={`product--key${product.id}`}
                   product={product}
                   lang={lang}
                 />
-              ))
-            : (
-              <div>No wishlist products found.</div> // Fallback if `data` is empty or not an array
-            )}
+              ))}
         </div>
       )}
     </div>

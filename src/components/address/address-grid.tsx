@@ -10,6 +10,7 @@ import { useTranslation } from 'src/app/i18n/client';
 import axios from 'axios';
 import { useQueryClient } from 'react-query';
 import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
+import {useStateContext} from 'src/app/context/usecontext'
 
 const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
   address,
@@ -19,6 +20,7 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
   const { openModal } = useModalAction();
   const token = localStorage.getItem("token");
   const queryClient = useQueryClient();
+  const { triggerAction} = useStateContext();
 
   function handlePopupView(item: any) {
     openModal('ADDRESS_VIEW_AND_EDIT', item);
@@ -41,7 +43,6 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
   const [selected, setSelected] = useState(address[0]);
 
   useEffect(() => {
-    // Store the selected address ID in localStorage when the component mounts or selected changes
     if (selected?.id) {
       localStorage.setItem("addressid", selected.id);
     }
@@ -53,6 +54,7 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
         value={selected}
         onChange={(value) => {
           setSelected(value);
+          triggerAction("address clicked successfully")
           // Store the selected address ID in localStorage
           localStorage.setItem("addressid", value.id);
         }}

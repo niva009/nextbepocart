@@ -211,7 +211,7 @@ export default function Cart({ lang }: { lang: string }) {
           </div>
         </div>
         <Link
-          href={cartItems.length > 0 ? `/${lang}${ROUTES.CHECKOUT}` : `/${lang}`}
+          href={cartItems.length > 0 ? '/en/checkout': '/en'}
           className={cn(
             'w-full px-5 py-3 flex items-center justify-center bg-heading rounded font-semibold text-sm text-brand-light bg-brand hover:bg-opacity-90',
             { 'cursor-not-allowed bg-fill-four hover:bg-fill-four': cartItems.length === 0 }

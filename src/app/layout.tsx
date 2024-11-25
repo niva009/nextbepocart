@@ -7,6 +7,7 @@ import './[lang]/globals.css';
 import '@assets/css/google-font.css';
 import {jwtDecode} from 'jwt-decode';
 import { useEffect, useState } from 'react';
+import { StateProvider} from './context/usecontext'
 
 const fontBai = FontBai({
   weight: ['400', '500', '600', '700'],
@@ -144,8 +145,10 @@ export default function RootLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           ></iframe>
         </noscript>
-
+        <StateProvider>
         {children}
+        </StateProvider>
+
 
         <Analytics />
       </body>

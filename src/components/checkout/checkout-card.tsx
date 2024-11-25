@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import SearchResultLoader from '@components/ui/loaders/search-result-loader';
 import { useCartQuery } from '@framework/product/get-cart-product';
 import axios from 'axios';
+import {useStateContext} from 'src/app/context/usecontext'
 
 const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
   const { t } = useTranslation(lang, 'common');
@@ -27,30 +28,36 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
   const [addressId, setAddressId] = useState("");
 
   const [addressData, setAddressData] = useState({});
+  const { actionState } = useStateContext();
 
 
-  useEffect(() => {
-    // Ensure this runs only in the browser
-    if (typeof window !== 'undefined') {
-      const savedToken = localStorage.getItem('token');
-      const savedAddressId = localStorage.getItem('addressid');
+  // useEffect(() => {
+  //   // Ensure this runs only in the browser
+  //   if (typeof window !== 'undefined') {
+  //     const savedToken = localStorage.getItem('token');
+  //     const savedAddressId = localStorage.getItem('addressid');
 
-      setToken(savedToken);
-      setAddressId(savedAddressId);
-    }
-  }, []);
+  //     setToken(savedToken);
+  //     setAddressId(savedAddressId);
+  //   }
+  // }, []);
 
+
+  // if (actionState){
+  //   setIsAddressAvailable(true);
+  //   console.log("address trigered");
+  // }
   console.log("token info", token);
   console.log('addressiddd', addressId);
 
   useEffect(() => {
     const fetchAddress = async () => {
       try {
-        if (!addressId) {
-          setLoading(false);
-          setIsAddressAvailable(false);
-          return;
-        }
+        // if (!addressId) {
+        //   setLoading(false);
+        //   // setIsAddressAvailable(false);
+        //   return;
+        // }
 
         const { data } = await axios.get('https://bepocart.in/get-address/', {
           headers: {
@@ -68,10 +75,10 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
           setAddressData(foundAddress);
         }
 
-        setIsAddressAvailable(true); // Convert to boolean
+        // setIsAddressAvailable(true); // Convert to boolean
       } catch (error) {
         console.error('Error fetching address:', error);
-        setIsAddressAvailable(false);
+        // setIsAddressAvailable(false);
       } finally {
         setLoading(false);
       }
@@ -159,7 +166,7 @@ const toPaymentPage = () =>{
   
 
   function orderHeader() {
-    if (cartItems && isAddressAvailable) {
+    if (cartItems) {
       router.push(`/${lang}${ROUTES.PAYMENT}`);
     }
   }
@@ -238,19 +245,22 @@ const toPaymentPage = () =>{
           checkoutFooter.map((item) => (
             <CheckoutCardFooterItem item={item} key={item.id} />
           ))}
-        <Button
-          variant="formButton"
-          className={cn(
-            'w-full mt-8 mb-5 rounded font-semibold px-4 py-3 transition-all',
-            !cartItems || !isAddressAvailable
-              ? 'opacity-40 cursor-not-allowed'
-              : '!bg-brand !text-brand-light'
-          )}
-          onClick={toPaymentPage}
-          disabled={!isAddressAvailable}
-        >
-          {t('button-order-now')}
-        </Button>
+
+          
+<Button
+  variant="formButton"
+  className={cn(
+    'w-full mt-8 mb-5 rounded font-semibold px-4 py-3 transition-all',
+    !cartItems || !actionState
+      ? 'opacity-40 cursor-not-allowed'
+      : '!bg-brand !text-brand-light'
+  )}
+  onClick={toPaymentPage}
+  disabled={!actionState} // Disable button if actionState is not available
+>
+  {t('button-order-now')}
+</Button>
+
       </div>
       <Text className="mt-8">
         {t('text-by-placing-your-order')}{' '}
