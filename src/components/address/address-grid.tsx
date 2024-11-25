@@ -10,7 +10,7 @@ import { useTranslation } from 'src/app/i18n/client';
 import axios from 'axios';
 import { useQueryClient } from 'react-query';
 import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
-import {useStateContext} from 'src/app/context/usecontext'
+import { useStateContext } from 'src/app/context/usecontext';
 
 const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
   address,
@@ -20,7 +20,7 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
   const { openModal } = useModalAction();
   const token = localStorage.getItem("token");
   const queryClient = useQueryClient();
-  const { triggerAction} = useStateContext();
+  const { triggerAction } = useStateContext();
 
   function handlePopupView(item: any) {
     openModal('ADDRESS_VIEW_AND_EDIT', item);
@@ -40,7 +40,7 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
   }
 
   address = address || [];
-  const [selected, setSelected] = useState(address[0]);
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     if (selected?.id) {
@@ -54,7 +54,7 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
         value={selected}
         onChange={(value) => {
           setSelected(value);
-          triggerAction("address clicked successfully")
+          triggerAction("address clicked successfully");
           // Store the selected address ID in localStorage
           localStorage.setItem("addressid", value.id);
         }}
@@ -106,7 +106,12 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
       </RadioGroup>
 
       <div className="flex mt-5 sm:justify-end md:mt-10 lg:mt-20 save-change-button">
-        <Button className="w-full sm:w-auto">{t('button-save-changes')}</Button>
+        <Button
+          className="w-full sm:w-auto"
+          disabled={!selected} // Disable button if no address is selected
+        >
+          {t('button-save-changes')}
+        </Button>
       </div>
     </div>
   );

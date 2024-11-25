@@ -247,19 +247,27 @@ const toPaymentPage = () =>{
           ))}
 
           
-<Button
-  variant="formButton"
-  className={cn(
-    'w-full mt-8 mb-5 rounded font-semibold px-4 py-3 transition-all',
-    !cartItems || !actionState
-      ? 'opacity-40 cursor-not-allowed'
-      : '!bg-brand !text-brand-light'
+<div className="w-full">
+  {(!cartItems || !actionState) && (
+    <div className="text-red-500 text-sm mb-4 mt-6">
+      {t('please-select-address')} {/* Message for the user */}
+    </div>
   )}
-  onClick={toPaymentPage}
-  disabled={!actionState} // Disable button if actionState is not available
->
-  {t('button-order-now')}
-</Button>
+  <Button
+    variant="formButton"
+    className={cn(
+      'w-full mt-8 mb-5 rounded font-semibold px-4 py-3 transition-all',
+      !cartItems || !actionState
+        ? 'opacity-40 cursor-not-allowed'
+        : '!bg-brand !text-brand-light'
+    )}
+    onClick={toPaymentPage}
+    disabled={!actionState} // Disable button if actionState is not available
+  >
+    {t('button-order-now')}
+  </Button>
+</div>
+
 
       </div>
       <Text className="mt-8">

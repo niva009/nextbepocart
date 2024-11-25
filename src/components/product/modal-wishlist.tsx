@@ -57,10 +57,12 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
       queryClient.invalidateQueries(API_ENDPOINTS.CART); 
       deleteItem();
       onClose();
-      toast.success("Product added to cart successfully!", { position: "top-right" });
+        toast.success("Product added to cart successfully!", { position: "top-right" , autoClose:1500});
+
     } catch (error: any) {
       console.error("Error adding product to cart:", error);
-      toast.error(`Error adding to cart: ${error.response?.data?.message || error.message}`, { position: "top-right" });
+
+        toast.error(`Error adding to cart: ${error.response?.data?.message || error.message}`, { position: "top-right", autoClose:1500 });
     }
   };
 

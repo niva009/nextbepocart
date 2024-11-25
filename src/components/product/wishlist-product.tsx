@@ -25,7 +25,7 @@ export default function ProductWishlistGrid({
   // Handle empty cart message
   useEffect(() => {
     if (!data || data === 'undefined' || (Array.isArray(data) && data.length === 0)) {
-      setErrorMessage('Cart is empty');
+      setErrorMessage('wishlist  is empty');
     } else {
       setErrorMessage('');
     }
