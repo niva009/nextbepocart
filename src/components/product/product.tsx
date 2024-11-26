@@ -207,12 +207,6 @@ const structuredData = {
   },
 };
 
-// console.log("Structured Data:", structuredData);
-
-
-
-
-  // schema integration sigle end.........../
   
 
 

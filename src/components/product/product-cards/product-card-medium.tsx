@@ -1,3 +1,5 @@
+'use client'
+
 import cn from 'classnames';
 import Image from '@components/ui/image';
 import usePrice from '@framework/product/use-price';
@@ -5,6 +7,7 @@ import {Product} from '@framework/types';
 import {useModalAction} from '@components/common/modal/modal.context';
 import useWindowSize from '@utils/use-window-size';
 import {useCart} from '@contexts/cart/cart.context';
+import { useState, useEffect } from 'react';
 
 import {productPlaceholder} from '@assets/placeholders';
 import dynamic from 'next/dynamic';
@@ -63,29 +66,103 @@ function RenderPopupOrAddToCart({props}: { props: Object }) {
     return <AddToCart data={data} variant="mercury" lang={lang} />;
 }
 
-function RenderLabelStock({props}: { props: Object }) {
-    let {data, lang}: any = props;
-    const {t} = useTranslation(lang, 'common');
-    const {id, quantity, product_type} = data ?? {};
-    const {isInCart, isInStock} = useCart();
-    const outOfStock = isInCart(id) && !isInStock(id);
-   
-    if (Number(quantity) < 1 || outOfStock) {
-        return (
-            <p className="font-medium flex items-center space-x-1 text-[12px] text-skin-label_out out_stock">
-                <CheckIcon fill={"text-skin-label_in"} opacity="1"/>
-                <span> {t('text-out-stock')} </span>
-            </p>
-        );
-    }
-    return (
-        <p className="font-medium flex items-center space-x-1 text-[12px] text-skin-label_in in_stock">
-            <CheckIcon fill={"text-skin-label_in"} opacity="1"/>
-            <span> {t('text-in-stock')} </span>
-            <span className="text-brand-dark"><b>{quantity}</b> {t('text-items')}</span>
+const RenderLabelStock = ({ slug, lang }: { slug: string; lang: string }) => {
+    const { t } = useTranslation(lang, 'common');
+    const [stock, setStock] = useState(0);
+    const [outOfStock, setOutOfStock] = useState(false);
+    const [selectedColor, setSelectedColor] = useState<string>('');
+    const [selectedImage, setSelectedImage] = useState<any>(null);
+    const [sizes, setSizes] = useState<any[]>([]);
+    const [selectedSize, setSelectedSize] = useState<string>('');
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      const fetchProductData = async () => {
+        try {
+          setLoading(true);
+          const response = await fetch(`https://bepocart.in/product/${slug}/`);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch product data for slug: ${slug}`);
+          }
+          const productData = await response.json();
+  
+          if (productData?.product?.type === 'variant' && productData?.images?.length > 0) {
+            // Handle variant product
+            const firstAvailableColor = productData.images.find((image: any) =>
+              image.stock_info.some((sizeInfo: any) => sizeInfo.stock > 0)
+            );
+  
+            if (firstAvailableColor) {
+              setSelectedColor(firstAvailableColor.color);
+              setSelectedImage(firstAvailableColor);
+              setSizes(firstAvailableColor.stock_info);
+  
+              const firstAvailableSize = firstAvailableColor.stock_info.find(
+                (sizeInfo: any) => sizeInfo.stock > 0
+              );
+  
+              if (firstAvailableSize) {
+                setSelectedSize(firstAvailableSize.size);
+                setStock(firstAvailableSize.stock);
+                setOutOfStock(false);
+              } else {
+                setStock(0);
+                setOutOfStock(true);
+              }
+            } else {
+              setStock(0);
+              setOutOfStock(true);
+            }
+          } else if (productData?.product?.type === 'single' && productData?.images?.[0]) {
+            // Handle single product
+            const singleProductStock = productData.images[0].stock || 0;
+            setSelectedImage(productData.images[0]);
+            setStock(singleProductStock);
+            setOutOfStock(singleProductStock < 1);
+          } else {
+            // Fallback case
+            setStock(0);
+            setOutOfStock(true);
+          }
+        } catch (error) {
+          console.error('Error fetching product data:', error);
+          setStock(0);
+          setOutOfStock(true);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchProductData();
+    }, [slug]);
+  
+    if (loading) {
+      return (
+        <p className="font-medium flex items-center space-x-1 text-[12px] text-skin-label_in loading">
+          <span>{t('stock-info-loading')}</span>
         </p>
+      );
+    }
+  
+    if (Number(stock) < 1 || outOfStock) {
+      return (
+        <p className="font-medium flex items-center space-x-1 text-[12px] text-skin-label_out out_stock">
+          <CheckIcon fill="text-skin-label_in" opacity="1" />
+          <span>{t('text-out-stock')}</span>
+        </p>
+      );
+    }
+  
+    return (
+      <p className="font-medium flex items-center space-x-1 text-[12px] text-skin-label_in in_stock">
+        <CheckIcon fill="text-skin-label_in" opacity="1" />
+        <span>{t('text-in-stock')}</span>
+        <span className="text-brand-dark">
+          <b>{stock}</b> {t('text-items')}
+        </span>
+      </p>
     );
-}
+  };
 
 const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, variant = "default"}) => {
     const {id, name, image, quantity, slug, salePrice, price, discount} = product ?? {};
@@ -164,7 +241,8 @@ const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, va
           )}
                 </div>
                 <div className="mt-3 ">
-                    <RenderLabelStock props={{ data: product, lang: lang }} />
+          <RenderLabelStock slug={slug} lang={lang} />
+                  
                 </div>
                 <div className="block product-cart-button font-semibold">
                     <ProductWishlist product={product} id={id}/>
