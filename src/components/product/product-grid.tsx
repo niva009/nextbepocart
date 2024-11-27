@@ -1,3 +1,5 @@
+'useclient'
+
 import type { FC } from 'react';
 import { usePathname } from 'next/navigation';
 import Alert from '@components/ui/alert';
@@ -20,6 +22,9 @@ interface ProductGridProps {
 export const ProductGrid: FC<ProductGridProps> = ({ className = '', lang,viewAs }) => {
   const { t } = useTranslation(lang, 'common');
   const pathname = usePathname();
+
+
+  console.log("pathname", pathname);
 
   const { getParams, query } = useQueryParam(pathname ?? '/');
 

@@ -94,7 +94,7 @@ const RenderLabelStock = ({ slug, lang }: { slug: string; lang: string }) => {
   if (loading) {
     return (
       <p className="font-medium flex items-center space-x-1 text-[12px] text-skin-label_in loading">
-        <span>{t('stock-info-loading')}</span>
+        <span>{t('stock-info')}</span>
       </p>
     );
   }
