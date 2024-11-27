@@ -16,6 +16,7 @@ import ProductWithBestDeals from "@components/product/product-with-best-deals";
 import ListingTabsElectronicFeed from '@components/product/feeds/listingtabs-electronic-feed';
 import LatestblogCarousel from '@components/common/latestblog-carousel';
 
+
 export const metadata: Metadata = {
     title: 'Bepocart',
     description: 'bepocart',
@@ -34,6 +35,7 @@ export default async function Page({ params: {lang} }: {params:{ lang:string}}){
     return (
         <>
             <Container>
+  
                 <div className="grid xl:gap-[5px] grid-cols-1 xl:grid-cols-12">
                     <HeroSliderBlock
                         heroBanner={sliderBanner}
@@ -48,9 +50,12 @@ export default async function Page({ params: {lang} }: {params:{ lang:string}}){
                         girdClassName="xl:gap-[5px]"
                         className="xl:col-span-4 mb-5 xl:mb-12"
                     />
+  
                 </div>
                 <CategoryGridBlock lang={lang} className="mb-8 lg:mb-12" variant={''}/>
             </Container>
+ 
+            
             <div className={'bg-zinc-100 py-10 sm:py-14'}>
                 <Container>
                     <ProductWithBestDeals lang={lang} className={'navSlider'}/>
@@ -61,7 +66,7 @@ export default async function Page({ params: {lang} }: {params:{ lang:string}}){
                         grid={1}
                         className="mb-8 lg:mb-15"
                     />
-                    <ListingTabsElectronicFeed lang={lang} colSiderbar={false}/>
+              <ListingTabsElectronicFeed lang={lang} colSiderbar={false}/>
                     <BannerGrid
                         lang={lang}
                         data={gridHero2}

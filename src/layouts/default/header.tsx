@@ -21,6 +21,7 @@ import CategoryDropdownMenu from '@components/category/category-dropdown-menu';
 import {useTranslation} from 'src/app/i18n/client';
 import { useRouter } from 'next/navigation';
 
+
 const AuthMenu = dynamic(() => import('@layouts/header/auth-menu'), {
     ssr: false,
 });
@@ -97,7 +98,7 @@ const Header: React.FC<HeaderProps> = ({className, lang}) => {
                                 <text className={`hidden md:block truncate`}>
                                     phone: +91 6235084759
                                 </text>
-                                <div className="flex flex-shrink-0 smx-auto pace-s-5">
+                       <div className="flex flex-shrink-0 smx-auto pace-s-5">
                                     <HeaderMenutop
                                         data={site_header.topmenu}
                                         className="flex transition-all duration-200 ease-in-out"

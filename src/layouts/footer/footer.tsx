@@ -25,6 +25,7 @@ const Footer: React.FC<FooterProps> = ({variant = 'default',className,showWidget
                     className
                 )}
         >
+   
             <Widgets widgets={widgets} variant={variant} lang={lang} showWidgetServices={showWidgetServices}/>
             <Copyright payment={payment} variant={variant} lang={lang}/>
         </footer>

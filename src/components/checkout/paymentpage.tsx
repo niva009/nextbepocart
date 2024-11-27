@@ -241,7 +241,7 @@ const paymentButton = () =>{
         },
       };
 
-      const paymentObject = new window.Razorpay(options);
+      const paymentObject = new (window as any).Razorpay(options);
       paymentObject.open();
     } catch (error) {
       console.error('Error creating Razorpay order:', error);
