@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 
 export const fetchBestSellerProducts = async ({ queryKey }: any) => {
   const [_key, _params] = queryKey;
-  const response = await axios.get('https://bepocart.in/best-sale/');
+  const response = await axios.get('http://72.167.55.172:8000/best-sale/');
   const {data} = response
   return data as Product[];
 

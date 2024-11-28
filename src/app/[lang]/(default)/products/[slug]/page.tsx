@@ -9,7 +9,7 @@ export default async function Page({
   params: { lang, slug },
 }) {
   // Fetch product data
-  const resProduct = await fetch(`https://bepocart.in/product/${slug}/`, { cache: "no-store" });
+  const resProduct = await fetch(`http://72.167.55.172:8000/product/${slug}/`, { cache: "no-store" });
   const data = await resProduct.json();
 
   if (!data?.product) {
@@ -17,7 +17,7 @@ export default async function Page({
   }
 
   // Fetch reviews using data.product.id instead of slug
-  const resReviews = await fetch(`https://bepocart.in/review/${data?.product?.id}/`);
+  const resReviews = await fetch(`http://72.167.55.172:8000/review/${data?.product?.id}/`);
   const reviewsData = await resReviews.json();
 
 

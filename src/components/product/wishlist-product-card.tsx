@@ -34,7 +34,7 @@ const WishlistProductCard: FC<ProductProps> = ({ product, lang }) => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`https://bepocart.in/wishlist-delete/${id}/`, {
+      await axios.delete(`http://72.167.55.172:8000/wishlist-delete/${id}/`, {
         headers: { Authorization: `${token}` },
       });
       setFavorite(true);

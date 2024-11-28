@@ -23,7 +23,7 @@ const CartItem: React.FC<CartItemProps> = ({ lang, item, onRemove, onQuantityInc
         return;
       }
 
-      await axios.delete(`https://bepocart.in/cart-delete/${id}/`, {
+      await axios.delete(`http://72.167.55.172:8000/cart-delete/${id}/`, {
         headers: { Authorization: `${token}` },
       });
       onRemove(id);

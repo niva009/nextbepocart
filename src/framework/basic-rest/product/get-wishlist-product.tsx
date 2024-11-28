@@ -6,7 +6,7 @@ import axios from 'axios';
 export const fetchWishlistProducts = async ({ queryKey }: any) => {
   const token = localStorage.getItem("token");
   const [_key, _params] = queryKey;
-  const response = await axios.get('https://bepocart.in/wishlist/',{
+  const response = await axios.get('http://72.167.55.172:8000/wishlist/',{
     headers:{'Authorization':`${token}`}
   });
   const data = response.data.data

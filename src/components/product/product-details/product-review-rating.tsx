@@ -19,7 +19,7 @@ const ProductReviewRating: FC<{ lang: string; productId: string }> = ({ lang, pr
     // Fetch reviews using the fetch API
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`https://bepocart.in/review/${productId}/`);
+        const response = await fetch(`http://72.167.55.172:8000/review/${productId}/`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

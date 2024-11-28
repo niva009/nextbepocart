@@ -12,7 +12,7 @@ module.exports = {
   }),
 
   images: {
-    domains: ['bepocart-bkt-1.s3.amazonaws.com'],
+    domains: ['72.167.55.172'],
   },
 
   async redirects() {

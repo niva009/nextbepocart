@@ -51,7 +51,7 @@ const AddAddressForm: React.FC<{ lang: string }> = ({ lang }) => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `https://bepocart.in/add-address/`,
+        `http://72.167.55.172:8000/add-address/`,
         values,
         {
           headers: {

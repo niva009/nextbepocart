@@ -147,7 +147,7 @@ export default function Cart({ lang }: { lang: string }) {
     );
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`https://bepocart.in/cart/increment/${id}/`, { quantity: newQuantity }, {
+      await axios.put(`http://72.167.55.172:8000/cart/increment/${id}/`, { quantity: newQuantity }, {
         headers: { Authorization: `${token}` },
       });
       refetch(); // Refresh cart data
@@ -165,7 +165,7 @@ export default function Cart({ lang }: { lang: string }) {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`https://bepocart.in/cart/decrement/${id}/`, { quantity: newQuantity }, {
+      await axios.put(`http://72.167.55.172:8000/cart/decrement/${id}/`, { quantity: newQuantity }, {
         headers: { Authorization: `${token}` },
       });
       refetch(); // Refresh cart data

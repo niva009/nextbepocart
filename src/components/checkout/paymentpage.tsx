@@ -148,7 +148,7 @@ const paymentButton = () =>{
     if (paymentMethod === 'COD') {
       try {
         const res = await axios.post(
-          `https://bepocart.in/order/create/${addressId}/`,
+          `http://72.167.55.172:8000/order/create/${addressId}/`,
           { payment_method: paymentMethod, coupon_code: couponCode },
           { headers: { Authorization: `${token}` } }
         );
@@ -188,7 +188,7 @@ const paymentButton = () =>{
 
     try {
       const initialResponse = await axios.post(
-        `https://bepocart.in/order/create/${addressId}/`,
+        `http://72.167.55.172:8000/order/create/${addressId}/`,
         { coupon_code: couponCode, payment_method: paymentMethod },
         { headers: { Authorization: `${token}` } }
       );
@@ -210,7 +210,7 @@ const paymentButton = () =>{
 
           try {
             const result = await axios.post(
-              'https://bepocart.in/verify-razorpay-payment/',
+              'http://72.167.55.172:8000/verify-razorpay-payment/',
               {
                 order_id: razorpay_order_id,
                 coupon_code: couponCode,

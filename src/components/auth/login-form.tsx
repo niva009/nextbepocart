@@ -49,7 +49,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
     });
   
     axios
-      .post("https://bepocart.in/manual-login", { email, password })
+      .post("http://72.167.55.172:8000/manual-login", { email, password })
       .then((response) => {
         const token = response.data?.token;
   
@@ -112,7 +112,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         const { name, email } = session.user;
   
         try {
-          const response = await axios.post('https://bepocart.in/google-login/', { name, email });
+          const response = await axios.post('http://72.167.55.172:8000/google-login/', { name, email });
           const token = response.data?.token;
   
           if (token) {

@@ -80,7 +80,7 @@ const RenderLabelStock = ({ slug, lang }: { slug: string; lang: string }) => {
       const fetchProductData = async () => {
         try {
           setLoading(true);
-          const response = await fetch(`https://bepocart.in/product/${slug}/`);
+          const response = await fetch(`http://72.167.55.172:8000/product/${slug}/`);
           if (!response.ok) {
             throw new Error(`Failed to fetch product data for slug: ${slug}`);
           }
@@ -196,7 +196,7 @@ const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, va
                     className="text-skin-base font-semibold text-sm leading-5 min-h-[40px] line-clamp-2 mt-1 mb-2 hover:text-brand"
                 >
                     <Image
-                        src={image || productPlaceholder}
+                        src={`http://72.167.55.172:8000${image}` || productPlaceholder}
                         alt={name || 'Product Image'}
                         width={180}
                         height={180}
