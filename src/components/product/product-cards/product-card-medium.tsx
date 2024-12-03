@@ -196,7 +196,7 @@ const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, va
                     className="text-skin-base font-semibold text-sm leading-5 min-h-[40px] line-clamp-2 mt-1 mb-2 hover:text-brand"
                 >
                     <Image
-                         src={`https://bepocart.in/${image || 'productPlaceholder'}`}
+                         src={`https://bepocart.in/${image}`}
                         alt={name || 'Product Image'}
                         width={180}
                         height={180}
