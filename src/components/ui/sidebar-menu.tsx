@@ -82,13 +82,13 @@ function SidebarMenuItem({ className, item, depth = 0, lang }: any) {
         >
           {icon && (
             <div className="inline-flex shrink-0 2xl:w-12 2xl:h-12 3xl:w-auto 3xl:h-auto">
-              <Image
-                src={icon ?? '/assets/placeholder/category-small.svg'}
-                alt={name || t('text-category-thumbnail')}
-                width={40}
-                height={40}
-                style={{ width: 'auto', height: 'auto' }}
-              />
+           <Image
+  src={`https://bepocart.in/${icon}`}
+  alt={name || t('text-category-thumbnail')}
+  width={40}
+  height={40}
+/>
+
             </div>
           )}
           <span className="capitalize">{name}</span>

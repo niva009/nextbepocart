@@ -21,7 +21,7 @@ const SearchProduct: React.FC<SearchProductProps> = ({ lang, item }) => {
     >
       <div className="relative flex w-20 rounded-md overflow-hidden flex-shrink-0 cursor-pointer me-4">
         <Image
-          src={image  || searchProductPlaceholder}
+          src={`https://bepocart.in/${image}`}
           width={70}
           height={70}
           alt={name || 'Product Image'}

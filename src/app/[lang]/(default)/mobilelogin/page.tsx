@@ -14,7 +14,7 @@ export default function MobileLogin() {
   const handleRequestOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://72.167.55.172:8000/generate-otp/', {
+      const response = await axios.post('https://bepocart.in/generate-otp/', {
         phone: emailOrPhone,
       });
 
@@ -36,7 +36,7 @@ export default function MobileLogin() {
   const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://72.167.55.172:8000/verification-otp/', {
+      const response = await axios.post('https://bepocart.in/verification-otp/', {
         otp,
         phone: emailOrPhone,
       });

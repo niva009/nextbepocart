@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const fetchAddress = async () => {
   const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
-  const { data } = await axios.get('http://72.167.55.172:8000/get-address/', {
+  const { data } = await axios.get('https://bepocart.in/get-address/', {
     headers: {
       Authorization: ` ${token}`, 
     },

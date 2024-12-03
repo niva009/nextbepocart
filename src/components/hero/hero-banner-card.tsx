@@ -28,8 +28,9 @@ export default function HeroBannerCard({
     const {width} = useWindowSize();
     const { name,image } = banner;
 
+    console.log("banner99999", banner);
 
-    console.log("banner.0000", banner);
+
     const selectedImage = getImage(width!, image);
     return heroContentCard ? (
         <div
@@ -43,7 +44,7 @@ export default function HeroBannerCard({
           className
         )}
         style={{
-          backgroundImage: `url('${image}')`,
+            backgroundImage: `url('https://bepocart.in/${image}')`, 
           backgroundPosition: 'center center'
         }}
       >

@@ -33,7 +33,7 @@ const PaymentPage: React.FC<{ lang: string }> = ({ lang }) => {
   useEffect(() => {
     const fetchCouponData = async () => {
       try {
-        const response = await axios.get('http://72.167.55.172:8000/cupons/');
+        const response = await axios.get('https://bepocart.in/cupons/');
         setCouponData(response.data);
       } catch (error) {
         console.error("Error fetching coupon data:", error);

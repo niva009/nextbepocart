@@ -16,7 +16,7 @@ export interface SignUpInputType {
 }
 
 async function signUp(input: SignUpInputType) {
-  const response = await axios.post('http://72.167.55.172:8000/register/', input);
+  const response = await axios.post('https://bepocart.in/register/', input);
   console.log(response)
   return response.data;
 }

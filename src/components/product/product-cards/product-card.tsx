@@ -35,7 +35,7 @@ const RenderLabelStock = ({ slug, lang }: { slug: string; lang: string }) => {
     const fetchProductData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://72.167.55.172:8000/product/${slug}/`);
+        const response = await fetch(`https://bepocart.in/product/${slug}/`);
         if (!response.ok) {
           throw new Error(`Failed to fetch product data for slug: ${slug}`);
         }
@@ -94,7 +94,7 @@ const RenderLabelStock = ({ slug, lang }: { slug: string; lang: string }) => {
   if (loading) {
     return (
       <p className="font-medium flex items-center space-x-1 text-[12px] text-skin-label_in loading">
-        <span>{t('stock-info-loading')}</span>
+        <span>{t('stock-info')}</span>
       </p>
     );
   }
@@ -118,6 +118,7 @@ const RenderLabelStock = ({ slug, lang }: { slug: string; lang: string }) => {
     </p>
   );
 };
+
 const ProductCard: React.FC<ProductProps> = ({ product, className, lang, variant = 'default' }) => {
   const { id, name, image, slug, salePrice, price, discount } = product ?? {};
   const { width } = useWindowSize();
@@ -145,7 +146,7 @@ const ProductCard: React.FC<ProductProps> = ({ product, className, lang, variant
             className="text-skin-base font-semibold text-sm leading-5 min-h-[40px] line-clamp-2 mt-1 mb-2 hover:text-brand"
           >
             <Image
-              src={`http://72.167.55.172:8000${image}` || productPlaceholder}
+              src={`https://bepocart.in/${image || 'productPlaceholder'}`}
               alt={name || 'Product Image'}
               width={180}
               height={180}

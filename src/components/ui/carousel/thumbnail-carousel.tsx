@@ -99,14 +99,15 @@ const ThumbnailCarousel: React.FC<Props> = ({
               key={`product-gallery-${index}`}
               className="flex items-center justify-center"
             >
-              <Image
-                src={url}
-                alt={`Product gallery ${index}`}
-                width={500}
-                height={500}
-                className="mx-auto rounded-lg"
-                priority
-              />
+            <Image
+  src={`https://bepocart.in/${url}`}
+  alt={`Product gallery ${index}`}
+  width={500}
+  height={500}
+  className="mx-auto rounded-lg"
+  priority
+/>
+
             </SwiperSlide>
           ))}
         </Swiper>
@@ -143,7 +144,7 @@ const ThumbnailCarousel: React.FC<Props> = ({
               className="flex items-center justify-center cursor-pointer rounded overflow-hidden border border-border-base transition hover:opacity-75"
             >
               <Image
-                src={url ?? productGalleryPlaceholder}
+                src={`https://bepocart.in/${url}`}
                 alt={`Product thumb gallery ${index}`}
                 width={170}
                 height={170}

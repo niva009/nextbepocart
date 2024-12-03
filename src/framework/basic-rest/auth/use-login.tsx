@@ -10,7 +10,7 @@ export interface LoginInputType {
   password: string;
 }
 async function login(input: LoginInputType) {
-const response =  await axios.post('http://72.167.55.172:8000/login/',input);
+const response =  await axios.post('https://bepocart.in/login/',input);
 return response.data; 
 }
 export const useLoginMutation = () => {

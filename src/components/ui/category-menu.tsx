@@ -41,7 +41,7 @@ const { name,image, children: subcategories, icon, type , slug} = item;
           {image && (
             <div className="inline-flex w-8 shrink-0 3xl:h-auto">
               <Image
-                src={image  || '/assets/placeholder/category-small.svg'}
+                src={`https://bepocart.in/${image}`}
                 alt={name || t('text-category-thumbnail')}
                 width={25}
                 height={25}

@@ -417,9 +417,12 @@ const structuredData = {
         });
       }
     } catch (error) {
-      if (error.response && error.response.status === 400) {
+      if (error.response && error.response.status === 401) {
+        // Redirect to sign in if unauthorized
+        router.push('/en/signin');
+      } else if (error.response && error.response.status === 400) {
         // Show specific error message if status is 400
-        toast.error('product aleady exist in cart', {
+        toast.error('Product already exists in cart', {
           position: width > 768 ? 'bottom-right' : 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -442,6 +445,7 @@ const structuredData = {
       setAddToCartLoader(false);
     }
   };
+  
   
   
 
@@ -521,7 +525,7 @@ const structuredData = {
             ) : (
               <div className="flex items-center justify-center w-auto">
                 <Image
-                  src={data?.product?.image ?? '/product-placeholder.svg'}
+                  src={`https://bepocart.in/${data?.product?.image || '/product-placeholder.svg'}`}
                   alt={data?.product?.name}
                   width="full"
                   height={680}

@@ -20,7 +20,7 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
 
   const fetchProductDetails = async () => {
     try {
-      const response = await axios.get(`http://72.167.55.172:8000/product/${slug}/`);
+      const response = await axios.get(`https://bepocart.in/product/${slug}/`);
       const productData = response.data;
       setProductDetails(productData);
 
@@ -43,7 +43,7 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
   const addToCart = async (productId: string) => {
     try {
       await axios.post(
-        `http://72.167.55.172:8000/cart/${productId}/`,
+        `https://bepocart.in/cart/${productId}/`,
         {
           size: selectedSize,
           color: selectedColor,

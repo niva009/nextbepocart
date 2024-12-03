@@ -28,7 +28,7 @@ export const ReviewModal: FC<ModalProps> = ({ productId, onClose }) => {
     try {
       setIsSubmitting(true);
       await axios.post(
-        `http://72.167.55.172:8000/product-review/${productId}/`,
+        `https://bepocart.in/product-review/${productId}/`,
         {
           rating:rating,
           review_text: reviewText,

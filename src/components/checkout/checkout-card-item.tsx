@@ -19,7 +19,7 @@ export const CheckoutItem: React.FC<{ item: Item }> = ({ item }) => {
     <div className="flex items-center py-4 border-b border-border-base">
       <div className="flex w-16 h-16 border rounded-md border-border-base shrink-0">
         <Image
-          src={item?.image ?? '/assets/placeholder/order-product.svg'}
+          src={`https://bepocart.in/${item?.image}`}
           alt="item image"
           className="rounded-md ltr:mr-5 rtl:ml-5"
           width={64}

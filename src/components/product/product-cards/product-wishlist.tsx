@@ -80,7 +80,7 @@ export const ProductWishlist: React.FC<ProductWishlistProps> = ({ id, product })
             return;
         }
 
-        axios.post(`http://72.167.55.172:8000/add-wishlist/${id}/`, {}, {
+        axios.post(`https://bepocart.in/add-wishlist/${id}/`, {}, {
             headers: {
                 Authorization: `${token}`,
             },

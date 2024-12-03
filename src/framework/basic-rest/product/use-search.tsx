@@ -12,7 +12,7 @@ export const fetchSearchedProducts = async ({ queryKey }: any) => {
   }
 
   const { data } = await axios.get(
-    `http://72.167.55.172:8000/search-products/?q=${params.text}`
+    `https://bepocart.in/search-products/?q=${params.text}`
   );
 
   return data;

@@ -34,7 +34,7 @@ const WishlistProductCard: FC<ProductProps> = ({ product, lang }) => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://72.167.55.172:8000/wishlist-delete/${id}/`, {
+      await axios.delete(`https://bepocart.in/wishlist-delete/${id}/`, {
         headers: { Authorization: `${token}` },
       });
       setFavorite(true);
@@ -70,7 +70,7 @@ const WishlistProductCard: FC<ProductProps> = ({ product, lang }) => {
           <div className="flex overflow-hidden max-w-[80px] transition duration-200 ease-in-out transform group-hover:scale-105">
             <Link href={`/en/products/${slug}`}>
               <Image
-                src={productImage || placeholderImage}
+                src={`https://bepocart.in/${productImage }`}
                 alt={slug || 'Product Image'}
                 width={80}
                 height={80}

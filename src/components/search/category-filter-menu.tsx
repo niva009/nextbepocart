@@ -99,7 +99,7 @@ function CategoryFilterMenuItem({
           {icon && (
             <div className="inline-flex shrink-0 2xl:w-12 2xl:h-12 3xl:w-auto 3xl:h-auto ltr:mr-2.5 rtl:ml-2.5 md:ltr:mr-4 md:rtl:ml-4 2xl:ltr:mr-3 2xl:rtl:ml-3 3xl:ltr:mr-4 3xl:rtl:ml-4">
               <Image
-                src={icon ?? '/assets/placeholder/category-small.svg'}
+                src={`https://bepocart.in/${icon}`}
                 alt={name || t('text-category-thumbnail')}
                 width={40}
                 height={40}

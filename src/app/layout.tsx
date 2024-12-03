@@ -46,7 +46,7 @@ export default function RootLayout({
     if (userData) {
       const token = localStorage.getItem("token");
 
-      fetch('http://72.167.55.172:8000/get-address/', {
+      fetch('https://bepocart.in/get-address/', {
         headers: {
           Authorization: `${token}`,
         },

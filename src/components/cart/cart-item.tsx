@@ -23,7 +23,7 @@ const CartItem: React.FC<CartItemProps> = ({ lang, item, onRemove, onQuantityInc
         return;
       }
 
-      await axios.delete(`http://72.167.55.172:8000/cart-delete/${id}/`, {
+      await axios.delete(`https://bepocart.in/cart-delete/${id}/`, {
         headers: { Authorization: `${token}` },
       });
       onRemove(id);
@@ -52,7 +52,7 @@ const CartItem: React.FC<CartItemProps> = ({ lang, item, onRemove, onQuantityInc
     <div className="group w-full flex items-center text-brand-light py-4 border-b border-border-one relative">
       <div className="relative flex rounded overflow-hidden w-[90px] h-[90px]">
         <Image
-          src={item?.image}
+          src={`https://bepocart.in/${item?.image}`}
           width={100}
           height={100}
           alt={item.name || 'Product Image'}
