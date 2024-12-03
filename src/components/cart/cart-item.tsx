@@ -51,7 +51,7 @@ const CartItem: React.FC<CartItemProps> = ({ lang, item, onRemove, onQuantityInc
   return (
     <div className="group w-full flex items-center text-brand-light py-4 border-b border-border-one relative">
       <div className="relative flex rounded overflow-hidden w-[90px] h-[90px]">
-        <Image
+        <img
           src={`https://bepocart.in/${item?.image}`}
           width={100}
           height={100}

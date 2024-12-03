@@ -69,7 +69,7 @@ const WishlistProductCard: FC<ProductProps> = ({ product, lang }) => {
         <div className="relative mt-1 shrink-0">
           <div className="flex overflow-hidden max-w-[80px] transition duration-200 ease-in-out transform group-hover:scale-105">
             <Link href={`/en/products/${slug}`}>
-              <Image
+              <img
                 src={`https://bepocart.in/${productImage }`}
                 alt={slug || 'Product Image'}
                 width={80}

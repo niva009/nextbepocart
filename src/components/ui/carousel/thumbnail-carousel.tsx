@@ -99,7 +99,7 @@ const ThumbnailCarousel: React.FC<Props> = ({
               key={`product-gallery-${index}`}
               className="flex items-center justify-center"
             >
-            <Image
+            <img
   src={`https://bepocart.in/${url}`}
   alt={`Product gallery ${index}`}
   width={500}
@@ -143,7 +143,7 @@ const ThumbnailCarousel: React.FC<Props> = ({
               key={`product-thumb-gallery-${index}`}
               className="flex items-center justify-center cursor-pointer rounded overflow-hidden border border-border-base transition hover:opacity-75"
             >
-              <Image
+              <img
                 src={`https://bepocart.in/${url}`}
                 alt={`Product thumb gallery ${index}`}
                 width={170}

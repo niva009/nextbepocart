@@ -20,7 +20,7 @@ const SearchProduct: React.FC<SearchProductProps> = ({ lang, item }) => {
       className="flex items-center justify-start w-full h-auto group"
     >
       <div className="relative flex w-20 rounded-md overflow-hidden flex-shrink-0 cursor-pointer me-4">
-        <Image
+        <img
           src={`https://bepocart.in/${image}`}
           width={70}
           height={70}

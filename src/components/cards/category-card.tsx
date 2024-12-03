@@ -38,7 +38,7 @@ const CategoryCard: React.FC<Props> = ({lang, item, href, className,variant}) =>
                          }
                      )}
                 >
-                    <Image
+                    <img
                     src={`https://bepocart.in/${image || 'productPlaceholder'}`}
                         alt={name || t('text-card-thumbnail')}
                         width={100}

@@ -82,7 +82,7 @@ function SidebarMenuItem({ className, item, depth = 0, lang }: any) {
         >
           {icon && (
             <div className="inline-flex shrink-0 2xl:w-12 2xl:h-12 3xl:w-auto 3xl:h-auto">
-           <Image
+           <img
   src={`https://bepocart.in/${icon}`}
   alt={name || t('text-category-thumbnail')}
   width={40}

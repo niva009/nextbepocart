@@ -85,7 +85,7 @@ const ProductFlashSellCard: React.FC<ProductProps> = ({
         <div className="relative flex-shrink-0 ">
           <div className="relative card-img-container overflow-hidden cursor-pointer mx-auto w-full h-[180px] md:h-[200px] ">
             <Link href={`/${lang}${ROUTES.PRODUCTS}/${slug}`} >
-            <Image
+            <img
               src={`https://bepocart.in/${image}`}
               alt={name || 'Product Image'}
               width={250}

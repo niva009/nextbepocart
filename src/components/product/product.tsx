@@ -524,7 +524,7 @@ const structuredData = {
             
             ) : (
               <div className="flex items-center justify-center w-auto">
-                <Image
+                <img
                   src={`https://bepocart.in/${data?.product?.image || '/product-placeholder.svg'}`}
                   alt={data?.product?.name}
                   width="full"
