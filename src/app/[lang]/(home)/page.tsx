@@ -31,7 +31,6 @@ export default async function Page({ params: {lang} }: {params:{ lang:string}}){
     const sliderBanner = res.data.banner;
 
 
-    console.log("oyo banner", sliderBanner);
 
 
 

@@ -150,10 +150,10 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Product",
-  "@id": cleanUrl,
+  "@id": data.product.id,
   "url": cleanUrl,
   "name": data?.product?.name,
-  "image": data?.product?.image,
+  "image":`https://bepocart.in ${data?.product?.image}`,
   "description": data?.product?.description,
   "brand": {
     "@type": "Brand",

@@ -45,8 +45,8 @@ const ProductList: React.FC<ProductProps> = ({product, className, lang}) => {
                     className="block h-full flex align-center"
                 >
     
-                    <Image
-                        src={image || productPlaceholder}
+                    <img
+                        src={`https://bepocart.in/${image}`}
                         alt={name || 'Product Image'}
                         width={180}
                         height={180}

@@ -19,6 +19,8 @@ function SidebarMenuItem({ className, item, depth = 0, lang }: any) {
 
 const { name,image, children: subcategories, icon, type , slug} = item;
 
+console.log("pranav", item );
+
     const dir = getDirection(lang);
   return (
     <>

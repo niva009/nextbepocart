@@ -32,7 +32,7 @@ const CategoryListCard: React.FC<Props> = ({
                     className
                 )}
             >
-                <Image
+                <img
                     src={`https://bepocart.in/${image?.original}`}
                     alt={name || t('text-category-thumbnail')}
                     width={variant === 'antique' ? 80 : 255}
@@ -54,6 +54,8 @@ const CategoryListCard: React.FC<Props> = ({
         {Array.isArray(children) ? (
             <ul key="content" className="py-3 text-[14px] leading-6">
                 {children.slice(0, SUBCATEGORIES_LIMITS)?.map((currentItem: any, idx:number) => {
+
+                    console.log("123..:", currentItem);
                     return (
                         <li className="pb-1 hover:text-skin-primary" key={`${idx}`}>
                             <Link
@@ -62,6 +64,7 @@ const CategoryListCard: React.FC<Props> = ({
                             {currentItem.name}
                             </Link>
                         </li>
+                        
                     );
                 })}
             </ul>
