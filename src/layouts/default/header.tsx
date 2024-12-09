@@ -96,7 +96,7 @@ const Header: React.FC<HeaderProps> = ({className, lang}) => {
                         <Container>
                             <div className="h-11 flex justify-between items-center">
                                 <text className={`hidden md:block truncate`}>
-                                    phone: +91 6235084759
+                                    phone: +91 7025499747
                                 </text>
                        <div className="flex flex-shrink-0 smx-auto pace-s-5">
                                     <HeaderMenutop

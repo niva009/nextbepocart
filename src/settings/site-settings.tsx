@@ -54,7 +54,7 @@ export const siteSettings = {
           {
             id: 1,
             path: '/search?category=cycling-apparel&sort_by=lowest',
-            label: 'APPARLES',
+            label: 'APPAREL',
             subMenu: [
               {
                 id: 1,
