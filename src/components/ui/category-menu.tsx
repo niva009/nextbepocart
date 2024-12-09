@@ -101,6 +101,8 @@ function SidebarMenu({ items, className,categoriesLimit, lang }: any) {
     );
     const { t } = useTranslation(lang, 'common');
 
+    console.log("090990")
+
     function handleCategoryMenu() {
     setcategoryMenuToggle(!categoryMenuToggle);
     }

@@ -24,6 +24,8 @@ export default function CategoryDropdownMenu({
         limit: 15,
     });
     
+
+    console.log(90909)
     return (
         <div className={cn('absolute z-30 w-72 lg:w-full', className)}>
             <div className="max-h-full">

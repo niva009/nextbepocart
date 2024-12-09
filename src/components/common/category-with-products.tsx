@@ -92,7 +92,7 @@ export default function CategoryWithProducts({
       <div className="hidden xl:block shrink-0 ltr:pr-7 rtl:pl-7 2xl:ltr:pr-8 2xl:rtl:pl-8 xl:w-[320px] 2xl:w-[356px] pt-px">
         <div className="flex flex-col overflow-hidden border rounded-md border-border-base">
           <h2 className="tracking-wide px-5 py-4 text-[#312C01] bg-yellow-50 font-bold text-sm ">
-            {t('text-all-categories')}
+            {/* {t('text-all-categories')} */}
           </h2>
           <div className="flex flex-col justify-between">
             {data?.categories?.data?.slice(0, 11)?.map((category) => (
