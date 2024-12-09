@@ -153,7 +153,7 @@ console.log("produyct inaaaaaaa..:", data?.product?.image);
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Product",
-  "@id": data?.product?.id,
+  "@id": cleanUrl,
   "url": cleanUrl,
   "name": data?.product?.name,
   "image":`https://bepocart.in${data?.product?.image}`,
@@ -162,8 +162,6 @@ const structuredData = {
     "@type": "Brand",
     "name": firstWord, // The first word of the product name
   },
-  "gtin": "4003318980251", // Optional: Use real GTIN if available
-
   // Reviews: Mapping through the reviews array
   ...(reviews.length > 0 && {
     "review": reviews.map((rev) => ({

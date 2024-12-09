@@ -22,7 +22,7 @@ const ImageLightBox: React.FC<ImgGalleryProps> = ({ gallery, startIndex = 0 }) =
 
     // Map gallery to slides format for Lightbox
     const slidesGallery = gallery?.map((image) => ({
-        src: image
+        src: `https://bepocart.in${image}`
     }));
 
     // Function to open the Lightbox with a specific image
