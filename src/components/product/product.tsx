@@ -147,13 +147,16 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
 
 // Assuming data, reviews, avgRating, etc. are already fetched and populated
 
+
+console.log("produyct inaaaaaaa..:", data?.product?.image);
+
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Product",
-  "@id": data.product.id,
+  "@id": data?.product?.id,
   "url": cleanUrl,
   "name": data?.product?.name,
-  "image":`https://bepocart.in ${data?.product?.image}`,
+  "image":`https://bepocart.in${data?.product?.image}`,
   "description": data?.product?.description,
   "brand": {
     "@type": "Brand",
