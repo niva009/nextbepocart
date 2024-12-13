@@ -227,11 +227,20 @@ const structuredData = {
           setStock(firstAvailableSize.stock);
         }
       }
-    } else if (data?.product?.type === 'single' && data?.images?.[0]) {
-      setSelectedImage(data.images[0]);
-      setStock(data.images[0].stock || 0);
+    } else if (data?.product?.type === 'single' && data?.images?.length > 0) {
+      const firstAvailableImage = data.images.find((image) => image.stock > 0);
+      if (firstAvailableImage) {
+        setSelectedImage(firstAvailableImage);
+        setSelectedColor(firstAvailableImage.color);
+        setStock(firstAvailableImage.stock || 0);
+      }
     }
   }, [data]);
+  
+
+
+
+
 
   const handleColorChange = (colorOption) => {
     setErrorMessage("");
