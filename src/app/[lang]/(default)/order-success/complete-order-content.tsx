@@ -42,7 +42,7 @@ export default function OrderSuccess() {
   useEffect(() => {
     if (orderData) {
       window.dataLayer.push({
-        event: "Purchase", 
+        event: "purchase", 
         item_id: orderData?.content_ids,
         items: orderData?.contents,
         affiliation: "bepocart",
