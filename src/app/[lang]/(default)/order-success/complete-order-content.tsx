@@ -7,6 +7,9 @@ export default function OrderSuccess() {
   const router = useRouter();
   const [orderData, setOrderData] = useState(null);
 
+
+  console.log("order dataaa" , orderData);
+
   // Load order data from localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -34,6 +37,26 @@ export default function OrderSuccess() {
       });
     }
   }, [orderData]);
+
+
+  useEffect(() => {
+    if (orderData) {
+      window.dataLayer.push({
+        event: "Purchase", 
+        item_id: orderData?.content_ids,
+        items: orderData?.contents,
+        affiliation: "bepocart",
+        payment_method: orderData?.payment_method, // Corrected 'payment_methord'
+        coupon_code: orderData?.coupon_code,
+        currency: "INR",
+        transaction_id: orderData?.transaction_id,
+        item_brand: "bepocart",
+        customer_segment: orderData?.customer_segment,
+        value: orderData?.value,
+      });
+    }
+  }, [orderData]);
+  
 
   const handleBackToHome = () => {
     router.push('/');
