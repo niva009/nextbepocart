@@ -1,41 +1,29 @@
-'useclient'
+'use client';
 
-import type { FC } from 'react';
-import { usePathname } from 'next/navigation';
+import { FC, useEffect, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import ProductCardAlpine from '@components/product/product-cards/product-card';
 import ProductCardLoader from '@components/ui/loaders/product-card-loader';
 import ProductCardList from '@components/product/product-cards/product-list-view';
 import { useProductsQuery } from '@framework/product/get-all-products';
-import { LIMITS } from '@framework/utils/limits';
 import { Product } from '@framework/types';
 import { useTranslation } from 'src/app/i18n/client';
-import useQueryParam from '@utils/use-query-params';
 
 interface ProductGridProps {
   lang: string;
   className?: string;
-    viewAs: boolean;
+  viewAs: boolean;
 }
 
-export const ProductGrid: FC<ProductGridProps> = ({ className = '', lang,viewAs }) => {
+export const ProductGrid: FC<ProductGridProps> = ({ className = '', lang, viewAs }) => {
   const { t } = useTranslation(lang, 'common');
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-
-  console.log("pathname", pathname);
-
-  const { getParams, query } = useQueryParam(pathname ?? '/');
-
-  const newQuery: any = getParams(
-      // @ts-ignore
-      `${process.env.NEXT_PUBLIC_WEBSITE_URL}${query}`,
-  );
-
-
-  console.log("query..:", query);
-  console.log("new -query",newQuery);
+  // Extract query parameters dynamically
+  const queryParams = Object.fromEntries(searchParams.entries());
 
   const {
     isFetching: isLoading,
@@ -44,15 +32,16 @@ export const ProductGrid: FC<ProductGridProps> = ({ className = '', lang,viewAs 
     hasNextPage,
     data,
     error,
-  } = useProductsQuery(newQuery); 
-
-
-  
+  } = useProductsQuery(queryParams); // Dynamically pass queryParams
 
   return (
     <>
       <div
-          className={`${ viewAs ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-1.5' : 'grid grid-cols-1 gap-1.5'} ${className}`}
+        className={`${
+          viewAs
+            ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-1.5'
+            : 'grid grid-cols-1 gap-1.5'
+        } ${className}`}
       >
         {error ? (
           <div className="col-span-full">
@@ -67,26 +56,25 @@ export const ProductGrid: FC<ProductGridProps> = ({ className = '', lang,viewAs 
           ))
         ) : (
           data?.pages?.map((page: any) => {
-              if(viewAs) {
-                  return page?.data?.map((product: Product) => (
-                      <ProductCardAlpine
-                          key={`product--key-${product.id}`}
-                          product={product}
-                          lang={lang}
-                      />
-                  ));
-              }else{
-                  return page?.data?.map((product: Product) => (
-                      <ProductCardList
-                          key={`product--key-${product.id}`}
-                          product={product}
-                          lang={lang}
-                      />
-                  ));
-              }
+            if (viewAs) {
+              return page?.data?.map((product: Product) => (
+                <ProductCardAlpine
+                  key={`product--key-${product.id}`}
+                  product={product}
+                  lang={lang}
+                />
+              ));
+            } else {
+              return page?.data?.map((product: Product) => (
+                <ProductCardList
+                  key={`product--key-${product.id}`}
+                  product={product}
+                  lang={lang}
+                />
+              ));
+            }
           })
         )}
-        {/* end of error state */}
       </div>
       {hasNextPage && (
         <div className="mt-1.5 py-5 text-center bg-white rounded">
