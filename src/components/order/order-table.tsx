@@ -75,11 +75,12 @@ const OrderTable: React.FC<{ orders?: any[] }> = ({ orders = [] }) => {
                 )}
               </td>
               <td className="px-4 py-2 border-b">
-                <img
-                  src={order.image}
-                  alt="Product"
-                  className="w-16 h-16 object-cover rounded"
-                />
+              <img
+  src={`https://bepocart.in/${order.image}`}
+  alt="Product"
+  className="w-16 h-16 object-cover rounded"
+/>
+
               </td>
               <td className="px-4 py-2 border-b">{order.quantity}</td>
               <td className="px-4 py-2 border-b">₹{order.price}</td>
@@ -98,7 +99,7 @@ const OrderTable: React.FC<{ orders?: any[] }> = ({ orders = [] }) => {
                     Add Review
                   </button>
                 ) : (
-                  'please add a review if the order is completed'
+                  'please add a review after the order is completed'
                 )}
               </td>
             </tr>

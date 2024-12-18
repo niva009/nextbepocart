@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { signIn, getSession } from 'next-auth/react'; 
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+
 interface LoginFormProps {
   lang: string;
   isPopup?: boolean;
@@ -41,7 +42,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
     formState: { errors },
   } = useForm<LoginInputType>();
 
- 
   function onSubmit({ email, password }: LoginInputType) {
     login({
       email,
@@ -55,12 +55,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
   
         if (token) {
           localStorage.setItem("token", token);
-  
-          // Decode the token to extract the user ID
           const decodedToken = jwtDecode(token);
           const userId = decodedToken?.id;
-  
-          // Push data to the GTM dataLayer
           if (typeof window !== "undefined" && window.dataLayer) {
             window.dataLayer.push({
               event: "login",
@@ -76,11 +72,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
   
     closeModal();
   }
-  
-
-
-
-
 
   function handleSignUp() {
     return openModal('SIGN_UP_VIEW');
@@ -93,7 +84,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
   async function handleGoogleLogin() {
     try {
       const result = await signIn('google', { redirect: false });
-  
       if (result?.error) {
         setMessage(result.error);
         setMessageType('error');
@@ -110,20 +100,13 @@ const LoginForm: React.FC<LoginFormProps> = ({
       const session = await getSession();
       if (session?.user) {
         const { name, email } = session.user;
-  
         try {
           const response = await axios.post('https://bepocart.in/google-login/', { name, email });
           const token = response.data?.token;
-  
           if (token) {
-            // Save the token in localStorage
             localStorage.setItem("token", token);
-  
-            // Decode the token to extract the user ID
             const decodedToken = jwtDecode(token);
-            const userId = decodedToken?.id; // Replace 'id' with the actual field from your token
-  
-            // Push data to the GTM dataLayer
+            const userId = decodedToken?.id;
             if (typeof window !== 'undefined' && window.dataLayer) {
               window.dataLayer.push({
                 event: "login",
@@ -131,7 +114,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 user_id: userId || "unknown",
               });
             }
-  
             setMessageType("success");
           } else {
             setMessage("Failed to retrieve token from backend.");
@@ -144,14 +126,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
         }
       }
     }
-  
     checkSessionAndSendToken();
   }, []);
-  
+
   return (
     <div className={cn('w-full relative', className)}>
       {isPopup && <CloseButton onClick={closeModal} />}
-
       <div className="flex mx-auto overflow-hidden rounded-lg bg-brand-light">
         <div className="md:w-1/2 registration hidden md:block relative">
           <Image src="/assets/images/login.png" alt="signin" width={718} height={600} />
@@ -161,23 +141,33 @@ const LoginForm: React.FC<LoginFormProps> = ({
             <h4 className="text-xl font-semibold text-brand-dark sm:text-2xl">
               {t('common:text-welcome-back')}
             </h4>
-            <div className="mt-3 text-sm text-center text-body">
-              {t('common:text-don’t-have-account')}
-              <button
-                type="button"
-                className="text-sm text-brand hover:no-underline focus:outline-none"
-                onClick={handleSignUp}
-              >
-                {t('common:text-create-account')}
-              </button>
-            </div>
           </div>
+
+          {/* Social Login Options */}
+          <div className="flex flex-col items-center space-y-4 mb-6">
+            <button
+              className="flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-brand-dark shadow-md hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
+              onClick={handleGoogleLogin}
+            >
+              <FaGoogle className="w-6 h-6 mr-2" />
+              <span className="text-base font-medium">Sign in with Google</span>
+            </button>
+            <Link href="/en/mobilelogin">
+              <button
+                onClick={() => closeModal()}
+                className="flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-brand-dark shadow-md hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
+              >
+                <span className="text-base font-medium">Login with mobile Number</span>
+              </button>
+            </Link>
+          </div>
+
+          {/* Email and Password Login */}
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="flex flex-col space-y-3.5">
               <Input
                 label="email"
                 type="email"
-                style={{ color: "black" }}
                 {...register('email', {
                   required: `${t('forms:email-required')}`,
                   pattern: {
@@ -213,30 +203,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
               </Button>
             </div>
           </form>
-
-          <div className="flex flex-col items-center mt-6">
-            <span className="text-sm text-brand-dark opacity-70">
-              {t('common:text-or')}
-            </span>
-            {/* Enhanced Google Login Button */}
-            <button
-              className="flex items-center justify-center w-full mt-4 px-4 py-3 border border-gray-300 rounded-lg bg-white text-brand-dark shadow-md hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
-              onClick={handleGoogleLogin}
-            >
-              <FaGoogle className="w-6 h-6 mr-2" />
-              <span className="text-base font-medium">Sign in with Google</span>
-            </button>
-
-            {/* Login with OTP Button */}
-            <Link href="/en/mobilelogin">
-              <button
-                onClick={() => closeModal()} // Close the modal when the button is clicked
-                className="flex items-center justify-center w-full mt-4 px-4 py-3 border border-gray-300 rounded-lg bg-white text-brand-dark shadow-md hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
-              >
-                <span className="text-base font-medium">Login with OTP</span>
-              </button>
-            </Link>
-          </div>
 
           {message && (
             <p className={`mt-4 ${messageType === "error" ? "text-red-500" : "text-green-500"}`}>
