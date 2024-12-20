@@ -23,7 +23,7 @@ export default function MainCategoryPage() {
         </div>
       </Container>
     );
-  }route
+  }
   return (
     <Container>
       <div className="pt-10">
