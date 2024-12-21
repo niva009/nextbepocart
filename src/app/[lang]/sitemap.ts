@@ -1,9 +1,7 @@
 import type { MetadataRoute } from 'next';
 import axios from 'axios';
-import { NextResponse } from 'next/server';
 
-export async function GET() {
-  // Static pages
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages = [
     {
       url: 'https://bepocart.com/en/about',
@@ -37,76 +35,41 @@ export async function GET() {
     },
   ];
 
-  let productPages = [];
-  let categoryPages = [];
+  let productPages: MetadataRoute.Sitemap = [];
+  let categoryPages: MetadataRoute.Sitemap = [];
 
   try {
-    // Fetch products
-    const { data } = await axios.get('https://bepocart.in/products/');
-    const products = data.products || [];
+    const productResponse = await axios.get('https://bepocart.in/products/');
+    const products = productResponse.data.products || [];
     productPages = products.map((product: any) => ({
       url: `https://bepocart.com/en/products/${product.slug}`,
       lastModified: new Date().toISOString(),
       changeFrequency: 'weekly',
       priority: 0.8,
-      images: product.image ? [`https://bepocart.in${product.image}`] : undefined,
+      images: product.image ? [`https://bepocart.in${product.image}`] : [],
     }));
   } catch (error) {
-    console.error('Error fetching product data:', error);
+    console.error('Error fetching product data:', error.message);
   }
 
   try {
-    // Fetch categories
-    const { data } = await axios.get('https://bepocart.in/subcategorys/');
-    const categories = Array.isArray(data.data) ? data.data : [];
+    const categoryResponse = await axios.get('https://bepocart.in/subcategorys/');
+    const categories = Array.isArray(categoryResponse.data.data) ? categoryResponse.data.data : [];
     categoryPages = categories.map((category: any) => ({
       url: `https://bepocart.com/en/${category.categoryName}/${category.slug}`,
       lastModified: new Date().toISOString(),
       changeFrequency: 'weekly',
       priority: 0.8,
-      images: category.image ? [`https://bepocart.in${category.image}`] : undefined,
+      images: category.image ? [`https://bepocart.in${category.image}`] : [],
     }));
   } catch (error) {
-    console.error('Error fetching category data:', error);
+    console.error('Error fetching category data:', error.message);
   }
 
   // Combine all pages
   const sitemap = [...staticPages, ...productPages, ...categoryPages];
 
-  // Generate XML
-  const sitemapXml = `
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-      ${sitemap
-        .map((page) => `
-        <url>
-          <loc>${page.url}</loc>
-          <lastmod>${page.lastModified}</lastmod>
-          <changefreq>${page.changeFrequency}</changefreq>
-          <priority>${page.priority}</priority>
-          ${
-            page.images
-              ? page.images
-                  .map(
-                    (img: string) => `
-              <image:image>
-                <image:loc>${img}</image:loc>
-              </image:image>
-            `
-                  )
-                  .join('')
-              : ''
-          }
-        </url>
-      `)
-        .join('')}
-    </urlset>
-  `.trim();
+  console.log('Generated Sitemap:', sitemap); // Debugging purpose
 
-  // Return response with correct headers
-  return new NextResponse(sitemapXml, {
-    headers: {
-      'Content-Type': 'application/xml',
-      'Cache-Control': 's-maxage=3600, stale-while-revalidate',
-    },
-  });
+  return sitemap;
 }
