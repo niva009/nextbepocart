@@ -4,6 +4,6 @@ Disallow: /en/my-account
 Disallow: /en/signup
 Disallow: /en/signin
 Disallow: ?sort_by=
-Disallow: /en/search
+Disallow: /search
 Disallow: https://bepocart.in
 Sitemap: https://bepocart.com/en/sitemap.xml
