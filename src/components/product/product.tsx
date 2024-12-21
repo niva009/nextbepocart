@@ -148,7 +148,7 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
 // Assuming data, reviews, avgRating, etc. are already fetched and populated
 
 
-console.log("produyct inaaaaaaa..:", data?.product?.image);
+// console.log("produyct inaaaaaaa..:", data?.product?.image);
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -192,7 +192,7 @@ const structuredData = {
     "@type": "Offer",
     "url": cleanUrl,
     "priceCurrency": "INR",
-    "price": data?.product?.salePrice,
+    "price": data?.product?.price,
     "priceValidUntil": "2024-12-31", // Example expiration date
     "itemCondition": "https://schema.org/NewCondition",
     "availability": "https://schema.org/InStock",
@@ -205,6 +205,20 @@ const structuredData = {
       "@type": "Organization",
       "name": "Bepoart", // Assuming "Bepoart" is your brand name
     },
+    "hasPriceSpecification": [
+      {
+        "@type": "UnitPriceSpecification",
+        "priceCurrency": "INR",
+        "price": data?.product?.price || 0,
+        "priceType": "ListPrice"
+      },
+      {
+        "@type": "UnitPriceSpecification",
+        "priceCurrency": "INR",
+        "price": data?.product?.salePrice,
+        "priceType": "SalePrice"
+      }
+    ]
   },
 };
 

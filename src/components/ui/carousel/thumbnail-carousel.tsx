@@ -63,7 +63,7 @@ const ThumbnailCarousel: React.FC<Props> = ({
   ]);
 
 
-  console.log("image url..:", imageUrls)
+  // console.log("image url..:", imageUrls)
 
   // Ensure Swiper is properly instantiated by using useEffect
   useEffect(() => {

@@ -30,7 +30,7 @@ const BannerCard: React.FC<BannerProps> = ({
     const {slug, title, image} = banner;
 
 
-    console.log("sider banner inmage..:", banner);
+    // console.log("sider banner inmage..:", banner);
     const selectedImage = getImage(width!, image);
     return (
         <div className={cn('mx-auto', className)}>

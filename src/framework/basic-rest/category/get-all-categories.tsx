@@ -12,7 +12,7 @@ export const fetchCategories = async ({ queryKey }: any) => {
 
   const { data } = response.data;
 
-  console.log("reponse from category dataaa..:",data)
+  // console.log("reponse from category dataaa..:",data)
 
   // Return the data as per your type
   return { categories: data as Category[] };

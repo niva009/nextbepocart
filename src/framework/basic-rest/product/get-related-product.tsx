@@ -15,7 +15,7 @@ export const fetchRelatedProducts = async ({ queryKey }: any) => {
   // Make a request without any authorization header
   const response = await axios.get(`https://bepocart.in/related-products/${slug}/`);
   const data = response?.data?.data; // Ensure 'data' is accessed after response is received
-  console.log("related products:", data);
+  // console.log("related products:", data);
   return data;
 };
 

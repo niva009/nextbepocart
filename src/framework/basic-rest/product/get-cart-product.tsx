@@ -11,8 +11,8 @@ export const fetchCartProducts = async ({ queryKey }: any) => {
   });
   const data = response.data.data;
   const subTotal = response.data.Subtotal;
-  console.log("cart items:", data);
-  console.log("subtotal in cart:", subTotal);
+  // console.log("cart items:", data);
+  // console.log("subtotal in cart:", subTotal);
   return { data, subTotal }; // return both data and subTotal
 };
 

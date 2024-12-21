@@ -6,7 +6,7 @@ export const fetchPopularProducts = async ({ queryKey }: any) => {
   const [_key, _params] = queryKey;
   const response = await axios.get('https://bepocart.in/offers/');
   const {data}= response.data
-  console.log("offer-product.....:",data);
+  // console.log("offer-product.....:",data);
   return data as Product[];
 };
 export const usePopularProductsQuery = (options: QueryOptionsType) => {

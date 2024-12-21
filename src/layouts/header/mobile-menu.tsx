@@ -47,6 +47,8 @@ const MobileMenu = () => {
     const fetchCategories = async () => {
       try {
         const response = await fetch('https://bepocart.in/category/');
+
+        console.log("subcategory information...:", response)
         const data = await response.json();
         if (data.status === 'success') {
           setCategories(data.data);

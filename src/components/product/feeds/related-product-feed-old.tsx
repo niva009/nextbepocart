@@ -23,7 +23,7 @@ const RelatedProductFeedOld: React.FC<RelatedProductsProps> = ({
     slug,
   });
 
-  console.log("releted product detilssss:", data);
+  // console.log("releted product detilssss:", data);
   return (
     <ProductsCarousel
       sectionHeading="text-related-products"

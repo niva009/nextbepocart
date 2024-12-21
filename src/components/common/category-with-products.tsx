@@ -11,6 +11,7 @@ import { Product } from '@framework/types';
 import { useBestSellerGroceryProductsQuery } from '@framework/product/get-all-this-week-products';
 import ProductCardAlpine from '@components/product/product-cards/product-card-medium';
 import { useTranslation } from 'src/app/i18n/client';
+import { slugify } from "@utils/slugify";
 
 function renderer({ days, hours, minutes, seconds, completed }: any) {
   if (completed) {
@@ -99,7 +100,7 @@ export default function CategoryWithProducts({
               <CategoryListCard
                 key={`category--key-${category.id}`}
                 category={category}
-                href={`${ROUTES.SEARCH}?category${category.slug}`}
+                href={`/en/${slugify(category.categoryName)}/${category.slug}`} 
                 className="transition border-b border-border-base last:border-b-0"
                 variant="small"
                 lang={lang}
