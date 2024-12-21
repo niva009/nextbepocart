@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import axios from 'axios';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Base URLs for static pages
+  // Static pages
   const staticPages = [
     {
       url: 'https://bepocart.com/en/about',
@@ -39,13 +39,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Dynamic product pages
   let productPages: MetadataRoute.Sitemap = [];
   try {
-    const { data: products } = await axios.get('https://bepocart.in/products/');
+    const { data } = await axios.get('https://bepocart.in/products/');
+    const products = data.products || []; // Extract array or default to an empty array
+    console.log('Parsed products:', products);
+
     productPages = products.map((product: any) => ({
       url: `https://bepocart.com/en/products/${product.slug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
-      images: product.image ? [`https://bepocart.com${product.image}`] : undefined,
+      images: product.image ? `https://bepocart.in${product.image}` : undefined, 
     }));
   } catch (error) {
     console.error('Error fetching product data:', error);
@@ -54,13 +57,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Dynamic category pages
   let categoryPages: MetadataRoute.Sitemap = [];
   try {
-    const { data: categories } = await axios.get('https://bepocart.in/subcategorys/');
+    const { data } = await axios.get('https://bepocart.in/subcategorys/');
+    const categories = Array.isArray(data.data) ? data.data : []; // Extract subcategories array
     categoryPages = categories.map((category: any) => ({
       url: `https://bepocart.com/en/${category.categoryName}/${category.slug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
-      images: category.image ? [`https://bepocart.com${category.image}`] : undefined,
+      images: category.image ? [`https://bepocart.in${category.image}`] : undefined, 
     }));
   } catch (error) {
     console.error('Error fetching category data:', error);
