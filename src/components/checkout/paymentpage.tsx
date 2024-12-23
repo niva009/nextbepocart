@@ -11,7 +11,6 @@ import { useRouter } from 'next/navigation';
 import { ROUTES } from '@utils/routes';
 import Link from 'next/link';
 import axios from 'axios';
-import Script from "next/script";
 
 interface CheckoutCardProps {
   lang: string;
@@ -47,87 +46,9 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
     }
   }, []);
 
-
-
-  //////for addd pixel code sssss////////
-
-  const content = cartItems?.map(product => ({
-    id:product.id,
-    name: product.name,
-    currency:"INR",
-    price: product.salePrice,
-    quantity:product.quantity,
-
-  }))
-
- const totalQuantity = cartItems?.reduce((sum, product) => sum + product?.quantity, 0)
- const contentIds = cartItems?.map(product => product.id.toString());
-
-
- const handleTrackCheckout = () => {
-
-  fbq('track', 'AddPaymentInfo', {
-    value: parseFloat(totalAmount).toFixed(2), // Ensure it's a number
-    currency: 'INR',
-    content_ids: contentIds,
-    contents: content,
-    content_type: 'product',
-    num_items: contentIds?.length || 0, 
-    quantity: totalQuantity,
-    payment_method: paymentMethod,
-    coupon_code:couponCode,
-  });
-};
-
-const  handletrackGtm = () =>{
-
-const items = cartItems?.map(product => ({
-  item_id: product.id, // Product ID
-  item_name: product?.name, // Product name
-  affiliation: "Bepocart", // Affiliation
-  payment_method: paymentMethod,
-  discount: product.discount, // Discount applied to the product
-  item_brand: product?.name.split(' ')[0]?.trim() || "", // First word of the product name as brand, fallback to empty string if undefined
-  item_category: product?.mainCategory || "", // Main category, fallback to empty string
-  item_category2: product?.categoryName || "", // Secondary category, fallback to empty string
-  item_list_id: product?.category || "", // Category ID, fallback to empty string
-  item_list_name: product?.categoryName || "", // Category name, fallback to empty string
-  item_variant: "black", // Variant (hardcoded as green)
-  price: product?.price || 0, // Product price, fallback to 0 if undefined
-  quantity: product?.quantity || 1, // Product quantity, fallback to 1 if undefined
-}));
-
-//add shipping infoooo////////
-
-if (window && window.dataLayer) {
-  window.dataLayer.push({
-    event: "add_payment_info",
-    ecommerce: {
-      currency: "INR", // Correct currency code for Indian Rupees
-      value: parseFloat(totalAmount || 0).toFixed(2), // Ensure subTotal is parsed as a float and provide a fallback
-      items: items || [], // Ensure items is an array and provide a fallback
-    },
-  });
-}
-}
-
-const paymentButton = () =>{
-  handleTrackCheckout();
-  handlePlaceOrder()
-  handletrackGtm()
-}
-
-  ////////pixel end ! ......////////////
-
-  const totalAmount =Math.round(subTotal - couponDiscount + shipping + codCharge)
-
-  const checkoutFooter = [
-    { id: 1, name: t('text-sub-total'), price: `₹${subTotal.toFixed(2)}` },
-    { id: 2, name: t('text-shipping'), price: `₹${shipping.toFixed(2)}` },
-    paymentMethod === 'COD' ? { id: 3, name: 'COD Charge', price: `₹${COD_CHARGE}` } : null,
-    couponDiscount > 0 ? { id: 4, name: 'Discount Price', price: `-₹${couponDiscount.toFixed(2)}`, style: { color: 'green' } } : null,
-    { id: 5, name: t('text-total'), price: `₹${totalAmount.toFixed(2)}` },
-  ].filter(Boolean);
+  const totalAmount = Math.round(
+    subTotal - (couponDiscount || 0) + shipping + codCharge
+  );
 
   const calculateShipping = (subTotal: number) => {
     const newShipping = subTotal < 500 ? 60 : 0;
@@ -145,6 +66,8 @@ const paymentButton = () =>{
       return;
     }
 
+
+    console.log("coupon code and payment methord..:", paymentMethod, couponCode);
     if (paymentMethod === 'COD') {
       try {
         const res = await axios.post(
@@ -152,7 +75,7 @@ const paymentButton = () =>{
           { payment_method: paymentMethod, coupon_code: couponCode },
           { headers: { Authorization: `${token}` } }
         );
-        router.push('/en/order-success', );
+        router.push('/en/order-success');
         localStorage.setItem('orderData', JSON.stringify(res?.data?.data));
       } catch (error) {
         console.error('Error creating COD order:', error);
@@ -182,7 +105,7 @@ const paymentButton = () =>{
     }
 
     if (totalAmount <= 0) {
-      alert('Invalid subtotal amount.');
+      alert('Invalid total amount.');
       return;
     }
 
@@ -235,7 +158,7 @@ const paymentButton = () =>{
           }
         },
         prefill: {
-          name: 'name',
+          name: 'John Doe',
           email: 'email@example.com',
           contact: '1234567890',
         },
@@ -249,10 +172,17 @@ const paymentButton = () =>{
     }
   }
 
+  const checkoutFooter = [
+    { id: 1, name: t('text-sub-total'), price: `₹${subTotal.toFixed(2)}` },
+    { id: 2, name: t('text-shipping'), price: `₹${shipping.toFixed(2)}` },
+    paymentMethod === 'COD' ? { id: 3, name: 'COD Charge', price: `₹${COD_CHARGE}` } : null,
+    couponDiscount > 0 ? { id: 4, name: 'Discount Price', price: `-₹${couponDiscount.toFixed(2)}`, style: { color: 'green' } } : null,
+    { id: 5, name: t('text-total'), price: `₹${totalAmount.toFixed(2)}` },
+  ].filter(Boolean);
+
   return (
     <>
-      <div className="px-4 pt-4 border rounded-md border-border-base text-brand-light xl:py-6 xl:px-7 bg-white rounded">
-        {/* Cart Items and Footer */}
+      <div className="px-4 pt-4 border rounded-md border-border-base text-brand-light xl:py-6 xl:px-7 bg-white">
         {cartItems.length > 0 ? (
           cartItems.map((item) => <CheckoutItem item={item} key={item.id} />)
         ) : (
@@ -260,7 +190,6 @@ const paymentButton = () =>{
         )}
         {checkoutFooter.map((item) => <CheckoutCardFooterItem item={item} key={item.id} />)}
 
-        {/* Payment Method */}
         <div className="mt-6">
           <p className="text-lg font-medium text-qblack mb-3">Payment Method</p>
           <div className="flex space-x-3 items-center">
@@ -273,7 +202,12 @@ const paymentButton = () =>{
           </div>
         </div>
 
-        <Button variant="formButton" className="w-full mt-8 mb-5 rounded font-semibold px-4 py-3 bg-brand text-brand-light" onClick={paymentButton} disabled={!addressId}>
+        <Button
+          variant="formButton"
+          className="w-full mt-8 mb-5 rounded font-semibold px-4 py-3 bg-brand text-brand-light"
+          onClick={handlePlaceOrder}
+          disabled={!addressId || !paymentMethod}
+        >
           Place Order Now
         </Button>
       </div>

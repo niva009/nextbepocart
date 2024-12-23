@@ -21,6 +21,8 @@ const PaymentPage: React.FC<{ lang: string }> = ({ lang }) => {
 
   const { data } = useCartQuery({});
 
+  console.log("Cart data:", data);
+
   useEffect(() => {
     if (data) {
       setCartItems(data.data || []);
@@ -56,20 +58,24 @@ const PaymentPage: React.FC<{ lang: string }> = ({ lang }) => {
         let discountAmount = 0;
 
         if (appliedCoupon.discount_product.length > 0) {
-          cartItems.forEach((item) => {
-            if (appliedCoupon.discount_product.includes(item.product)) {
-              discountAmount += appliedCoupon.coupon_type === "Percentage"
-                ? (item.salePrice * parseFloat(appliedCoupon.discount)) / 100
-                : Math.min(parseFloat(appliedCoupon.discount), item.salePrice);
-            }
+          const eligibleProducts = cartItems.filter(item =>
+            appliedCoupon.discount_product.includes(item.product)
+          );
+
+          eligibleProducts.forEach((item) => {
+            discountAmount += appliedCoupon.coupon_type === "Percentage"
+              ? (item.salePrice * parseFloat(appliedCoupon.discount)) / 100
+              : Math.min(parseFloat(appliedCoupon.discount), item.salePrice);
           });
         } else if (appliedCoupon.discount_category.length > 0) {
-          cartItems.forEach((item) => {
-            if (appliedCoupon.discount_category.includes(item.category)) {
-              discountAmount += appliedCoupon.coupon_type === "Percentage"
-                ? (item.salePrice * parseFloat(appliedCoupon.discount)) / 100
-                : Math.min(parseFloat(appliedCoupon.discount), item.salePrice);
-            }
+          const eligibleCategories = cartItems.filter(item =>
+            appliedCoupon.discount_category.includes(item.category)
+          );
+
+          eligibleCategories.forEach((item) => {
+            discountAmount += appliedCoupon.coupon_type === "Percentage"
+              ? (item.salePrice * parseFloat(appliedCoupon.discount)) / 100
+              : Math.min(parseFloat(appliedCoupon.discount), item.salePrice);
           });
         } else {
           discountAmount = appliedCoupon.coupon_type === "Percentage"
@@ -77,10 +83,15 @@ const PaymentPage: React.FC<{ lang: string }> = ({ lang }) => {
             : Math.min(parseFloat(appliedCoupon.discount), subTotal);
         }
 
-        setCouponDiscount(discountAmount);
+        if (discountAmount > 0) {
+          setCouponDiscount(discountAmount);
+        } else {
+          setIsCouponValid(false);
+          setCouponError("Coupon not applicable to any products in the cart.");
+        }
       } else {
         setIsCouponValid(false);
-        setCouponError("Coupon not applicable to any products in the cart or expired.");
+        setCouponError("Invalid or expired coupon.");
       }
     } else {
       setCouponError("Please enter a coupon code.");
@@ -130,7 +141,12 @@ const PaymentPage: React.FC<{ lang: string }> = ({ lang }) => {
 
         {/* Checkout Card Section */}
         <div className="lg:col-span-5 p-6 bg-white rounded shadow">
-          <PaymentSection lang={lang} couponDiscount={couponDiscount} couponCode={couponCode} />
+        <PaymentSection
+    lang={lang}
+    {...(isCouponValid
+      ? { couponDiscount, couponCode }
+      : {})}
+  />
         </div>
       </div>
     </div>
