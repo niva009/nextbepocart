@@ -1,23 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Input from '@components/ui/form/input';
 import PasswordInput from '@components/ui/form/password-input';
 import Button from '@components/ui/button';
 import { useForm } from 'react-hook-form';
-import { useLoginMutation, LoginInputType } from '@framework/auth/use-login';
 import { useTranslation } from 'src/app/i18n/client';
 import Image from '@components/ui/image';
 import { useModalAction } from '@components/common/modal/modal.context';
 import Switch from '@components/ui/switch';
 import CloseButton from '@components/ui/close-button';
-import { FaGoogle } from 'react-icons/fa';
-import cn from 'classnames';
-import Link from 'next/link';
-import { signIn, getSession } from 'next-auth/react'; 
+import { GoogleLogin, googleLogout } from '@react-oauth/google';
+import {jwtDecode} from 'jwt-decode';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import cn from 'classnames';
 
 interface LoginFormProps {
   lang: string;
@@ -32,42 +29,32 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   const { t } = useTranslation(lang);
   const { closeModal, openModal } = useModalAction();
-  const { mutate: login, isLoading } = useLoginMutation();
   const [remember, setRemember] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
-  const router = useRouter(); // Router hook for navigation
+  const [isLoading, setIsLoading] = useState(false); // Button loading state
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInputType>();
+  } = useForm();
 
-  async function onSubmit({ email, password }: LoginInputType) {
+  // Handle manual login with email and password
+  async function onSubmit({ email, password }: { email: string; password: string }) {
+    setIsLoading(true);
     try {
       const response = await axios.post("https://bepocart.in/manual-login", { email, password });
       const token = response.data?.token;
 
       if (token) {
         localStorage.setItem("token", token);
-        const decodedToken = jwtDecode(token);
-        const userId = decodedToken?.id;
-
-        if (typeof window !== "undefined" && window.dataLayer) {
-          window.dataLayer.push({
-            event: "login",
-            login_method: "email-password",
-            user_id: userId || "unknown",
-          });
-        }
-
         setMessageType("success");
         setMessage("Login successful!");
         closeModal();
 
-        // Redirect to home page after successful login
-        router.push('/');
+        // Redirect to home page
+        window.location.href = '/';
       } else {
         setMessageType("error");
         setMessage("Login failed. Please try again.");
@@ -76,96 +63,49 @@ const LoginForm: React.FC<LoginFormProps> = ({
       console.error("Login error:", error);
       setMessageType("error");
       setMessage("Login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
-  function handleSignUp() {
-    return openModal('SIGN_UP_VIEW');
-  }
-
-  function handleForgetPassword() {
-    return openModal('FORGET_PASSWORD');
-  }
-
-  async function handleGoogleLogin() {
+  // Handle Google Login Success
+  const handleGoogleLoginSuccess = async (response: any) => {
     try {
-      const result = await signIn('google', { redirect: false });
-      if (result?.error) {
-        setMessage(result.error);
-        setMessageType('error');
+      const idToken = response.credential; // Google ID Token
+      const decodedIdToken: any = jwtDecode(idToken); // Decode JWT to get user info
+      const { name, email } = decodedIdToken;
+
+      // Send user data to the backend for token generation
+      const result = await axios.post('https://bepocart.in/google-login/', {
+        name,
+        email,
+      });
+
+      const token = result.data?.token;
+      if (token) {
+        localStorage.setItem("token", token);
+        setMessageType("success");
+        setMessage("Login successful!");
+        closeModal();
+
+        // Redirect to home page
+        window.location.href = '/';
       } else {
-        const session = await getSession();
-        if (session?.user) {
-          const { name, email } = session.user;
-          const response = await axios.post('https://bepocart.in/google-login/', { name, email });
-          const token = response.data?.token;
-
-          if (token) {
-            localStorage.setItem("token", token);
-            const decodedToken = jwtDecode(token);
-            const userId = decodedToken?.id;
-
-            if (typeof window !== "undefined" && window.dataLayer) {
-              window.dataLayer.push({
-                event: "login",
-                login_method: "Google",
-                user_id: userId || "unknown",
-              });
-            }
-
-            setMessageType("success");
-            setMessage("Login successful!");
-            closeModal();
-
-            // Redirect to home page after successful login
-            router.push('/');
-          } else {
-            setMessage("Failed to retrieve token from backend.");
-            setMessageType("error");
-          }
-        }
+        throw new Error("Failed to retrieve token from backend.");
       }
     } catch (error) {
-      console.error("Error during Google login:", error);
-      setMessage("Google login failed");
-      setMessageType('error');
+      console.error("Google login error:", error);
+      setMessageType("error");
+      setMessage("Google login failed. Please try again.");
     }
-  }
+  };
 
-  // useEffect(() => {
-  //   async function checkSessionAndSendToken() {
-  //     const session = await getSession();
-  //     if (session?.user) {
-  //       const { name, email } = session.user;
-  //       try {
-  //         const response = await axios.post('https://bepocart.in/google-login/', { name, email });
-  //         const token = response.data?.token;
-  //         if (token) {
-  //           localStorage.setItem("token", token);
-  //           const decodedToken = jwtDecode(token);
-  //           const userId = decodedToken?.id;
-
-  //           if (typeof window !== 'undefined' && window.dataLayer) {
-  //             window.dataLayer.push({
-  //               event: "login",
-  //               login_method: "Google",
-  //               user_id: userId || "unknown",
-  //             });
-  //           }
-  //           setMessageType("success");
-  //         } else {
-  //           setMessage("Failed to retrieve token from backend.");
-  //           setMessageType("error");
-  //         }
-  //       } catch (backendError) {
-  //         console.error("Backend error:", backendError);
-  //         setMessage("Failed to communicate with backend.");
-  //         setMessageType("error");
-  //       }
-  //     }
-  //   }
-  //   checkSessionAndSendToken();
-  // }, []);
+  // Handle Google Login Failure
+  const handleGoogleLoginFailure = (error: any) => {
+    console.error("Google login failed:", error);
+    setMessageType("error");
+    setMessage("Google login failed. Please try again.");
+  };
 
   return (
     <div className={cn('w-full relative', className)}>
@@ -183,19 +123,16 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
           {/* Social Login Options */}
           <div className="flex flex-col items-center space-y-4 mb-6">
-            {/* <button
-              className="flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-brand-dark shadow-md hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
-              onClick={handleGoogleLogin}
-            >
-              <FaGoogle className="w-6 h-6 mr-2" />
-              <span className="text-base font-medium">Sign in with Google</span>
-            </button> */}
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={handleGoogleLoginFailure}
+            />
             <Link href="/en/mobilelogin">
               <button
                 onClick={() => closeModal()}
                 className="flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-brand-dark shadow-md hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
               >
-                <span className="text-base font-medium">Login with mobile Number</span>
+                <span className="text-base font-medium">Login with Mobile Number</span>
               </button>
             </Link>
           </div>
@@ -230,8 +167,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 </label>
                 <button
                   type="button"
-                  onClick={handleForgetPassword}
                   className="text-sm text-heading hover:text-brand-dark focus:outline-none"
+                  onClick={() => openModal('FORGET_PASSWORD')}
                 >
                   {t('common:text-forgot-password')}
                 </button>

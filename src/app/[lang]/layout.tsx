@@ -7,6 +7,7 @@ import { Metadata } from 'next';
 import ToasterProvider from 'src/app/provider/toaster-provider';
 import Providers from 'src/app/provider/provider';
 import { Bai_Jamjuree as FontBai } from 'next/font/google';
+import { GoogleOAuthProvider } from '@react-oauth/google'; // Google OAuth Provider
 // external
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -49,14 +50,17 @@ export default function RootLayout({
   return (
     <html lang={lang} dir={dir(lang)}>
       <body className={fontBai.variable}>
-        <Providers>
-          <ManagedUIContext>
-            {children}
-            <ManagedModal lang={lang} />
-            <ManagedDrawer lang={lang} />
-            <ToasterProvider />
-          </ManagedUIContext>
-        </Providers>
+        {/* Wrap the application with GoogleOAuthProvider */}
+        <GoogleOAuthProvider clientId={process.env.NEXT_GOOGLE_CLIENT_ID!}>
+          <Providers>
+            <ManagedUIContext>
+              {children}
+              <ManagedModal lang={lang} />
+              <ManagedDrawer lang={lang} />
+              <ToasterProvider />
+            </ManagedUIContext>
+          </Providers>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );
