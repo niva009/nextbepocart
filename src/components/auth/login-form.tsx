@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { signIn, getSession } from 'next-auth/react'; 
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import { useRouter } from 'next/navigation';
 
 interface LoginFormProps {
   lang: string;
@@ -35,6 +36,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
   const [remember, setRemember] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
+  const router = useRouter(); // Router hook for navigation
 
   const {
     register,
@@ -42,35 +44,39 @@ const LoginForm: React.FC<LoginFormProps> = ({
     formState: { errors },
   } = useForm<LoginInputType>();
 
-  function onSubmit({ email, password }: LoginInputType) {
-    login({
-      email,
-      password,
-    });
-  
-    axios
-      .post("https://bepocart.in/manual-login", { email, password })
-      .then((response) => {
-        const token = response.data?.token;
-  
-        if (token) {
-          localStorage.setItem("token", token);
-          const decodedToken = jwtDecode(token);
-          const userId = decodedToken?.id;
-          if (typeof window !== "undefined" && window.dataLayer) {
-            window.dataLayer.push({
-              event: "login",
-              login_method: "email-password",
-              user_id: userId || "unknown",
-            });
-          }
+  async function onSubmit({ email, password }: LoginInputType) {
+    try {
+      const response = await axios.post("https://bepocart.in/manual-login", { email, password });
+      const token = response.data?.token;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken?.id;
+
+        if (typeof window !== "undefined" && window.dataLayer) {
+          window.dataLayer.push({
+            event: "login",
+            login_method: "email-password",
+            user_id: userId || "unknown",
+          });
         }
-      })
-      .catch((error) => {
-        console.error("Login error:", error);
-      });
-  
-    closeModal();
+
+        setMessageType("success");
+        setMessage("Login successful!");
+        closeModal();
+
+        // Redirect to home page after successful login
+        router.push('/');
+      } else {
+        setMessageType("error");
+        setMessage("Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setMessageType("error");
+      setMessage("Login failed. Please try again.");
+    }
   }
 
   function handleSignUp() {
@@ -87,6 +93,37 @@ const LoginForm: React.FC<LoginFormProps> = ({
       if (result?.error) {
         setMessage(result.error);
         setMessageType('error');
+      } else {
+        const session = await getSession();
+        if (session?.user) {
+          const { name, email } = session.user;
+          const response = await axios.post('https://bepocart.in/google-login/', { name, email });
+          const token = response.data?.token;
+
+          if (token) {
+            localStorage.setItem("token", token);
+            const decodedToken = jwtDecode(token);
+            const userId = decodedToken?.id;
+
+            if (typeof window !== "undefined" && window.dataLayer) {
+              window.dataLayer.push({
+                event: "login",
+                login_method: "Google",
+                user_id: userId || "unknown",
+              });
+            }
+
+            setMessageType("success");
+            setMessage("Login successful!");
+            closeModal();
+
+            // Redirect to home page after successful login
+            router.push('/');
+          } else {
+            setMessage("Failed to retrieve token from backend.");
+            setMessageType("error");
+          }
+        }
       }
     } catch (error) {
       console.error("Error during Google login:", error);
@@ -95,39 +132,40 @@ const LoginForm: React.FC<LoginFormProps> = ({
     }
   }
 
-  useEffect(() => {
-    async function checkSessionAndSendToken() {
-      const session = await getSession();
-      if (session?.user) {
-        const { name, email } = session.user;
-        try {
-          const response = await axios.post('https://bepocart.in/google-login/', { name, email });
-          const token = response.data?.token;
-          if (token) {
-            localStorage.setItem("token", token);
-            const decodedToken = jwtDecode(token);
-            const userId = decodedToken?.id;
-            if (typeof window !== 'undefined' && window.dataLayer) {
-              window.dataLayer.push({
-                event: "login",
-                login_method: "Google",
-                user_id: userId || "unknown",
-              });
-            }
-            setMessageType("success");
-          } else {
-            setMessage("Failed to retrieve token from backend.");
-            setMessageType("error");
-          }
-        } catch (backendError) {
-          console.error("Backend error:", backendError);
-          setMessage("Failed to communicate with backend.");
-          setMessageType("error");
-        }
-      }
-    }
-    checkSessionAndSendToken();
-  }, []);
+  // useEffect(() => {
+  //   async function checkSessionAndSendToken() {
+  //     const session = await getSession();
+  //     if (session?.user) {
+  //       const { name, email } = session.user;
+  //       try {
+  //         const response = await axios.post('https://bepocart.in/google-login/', { name, email });
+  //         const token = response.data?.token;
+  //         if (token) {
+  //           localStorage.setItem("token", token);
+  //           const decodedToken = jwtDecode(token);
+  //           const userId = decodedToken?.id;
+
+  //           if (typeof window !== 'undefined' && window.dataLayer) {
+  //             window.dataLayer.push({
+  //               event: "login",
+  //               login_method: "Google",
+  //               user_id: userId || "unknown",
+  //             });
+  //           }
+  //           setMessageType("success");
+  //         } else {
+  //           setMessage("Failed to retrieve token from backend.");
+  //           setMessageType("error");
+  //         }
+  //       } catch (backendError) {
+  //         console.error("Backend error:", backendError);
+  //         setMessage("Failed to communicate with backend.");
+  //         setMessageType("error");
+  //       }
+  //     }
+  //   }
+  //   checkSessionAndSendToken();
+  // }, []);
 
   return (
     <div className={cn('w-full relative', className)}>
@@ -145,13 +183,13 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
           {/* Social Login Options */}
           <div className="flex flex-col items-center space-y-4 mb-6">
-            <button
+            {/* <button
               className="flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-brand-dark shadow-md hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
               onClick={handleGoogleLogin}
             >
               <FaGoogle className="w-6 h-6 mr-2" />
               <span className="text-base font-medium">Sign in with Google</span>
-            </button>
+            </button> */}
             <Link href="/en/mobilelogin">
               <button
                 onClick={() => closeModal()}
