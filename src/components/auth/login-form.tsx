@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Input from '@components/ui/form/input';
 import PasswordInput from '@components/ui/form/password-input';
 import Button from '@components/ui/button';
@@ -10,8 +10,8 @@ import Image from '@components/ui/image';
 import { useModalAction } from '@components/common/modal/modal.context';
 import Switch from '@components/ui/switch';
 import CloseButton from '@components/ui/close-button';
-import { GoogleLogin, googleLogout } from '@react-oauth/google';
-import {jwtDecode} from 'jwt-decode';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import Link from 'next/link';
 import cn from 'classnames';
@@ -33,10 +33,17 @@ const LoginForm: React.FC<LoginFormProps> = ({
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
   const [isLoading, setIsLoading] = useState(false); // Button loading state
+  const [fullUrl, setFullUrl] = useState('/'); // Fallback to '/' if localStorage is not defined
 
-  const fullUrl = localStorage.getItem("full-url")
+  // Retrieve full URL from localStorage in the client environment
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedFullUrl = localStorage.getItem('full-url');
+      setFullUrl(storedFullUrl || '/'); // Fallback to '/' if not present
+    }
+  }, []);
 
-  console.log("full url info" ,fullUrl);
+  console.log('Full URL info:', fullUrl);
 
   const {
     register,
@@ -48,25 +55,27 @@ const LoginForm: React.FC<LoginFormProps> = ({
   async function onSubmit({ email, password }: { email: string; password: string }) {
     setIsLoading(true);
     try {
-      const response = await axios.post("https://bepocart.in/manual-login", { email, password });
+      const response = await axios.post('https://bepocart.in/manual-login', { email, password });
       const token = response.data?.token;
 
       if (token) {
-        localStorage.setItem("token", token);
-        setMessageType("success");
-        setMessage("Login successful!");
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('token', token);
+        }
+        setMessageType('success');
+        setMessage('Login successful!');
         closeModal();
 
-        // Redirect to home page
-        window.location.href = '/';
+        // Redirect to the full URL or home page
+        window.location.href = fullUrl;
       } else {
-        setMessageType("error");
-        setMessage("Login failed. Please try again.");
+        setMessageType('error');
+        setMessage('Login failed. Please try again.');
       }
     } catch (error) {
-      console.error("Login error:", error);
-      setMessageType("error");
-      setMessage("Login failed. Please try again.");
+      console.error('Login error:', error);
+      setMessageType('error');
+      setMessage('Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -87,28 +96,30 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
       const token = result.data?.token;
       if (token) {
-        localStorage.setItem("token", token);
-        setMessageType("success");
-        setMessage("Login successful!");
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('token', token);
+        }
+        setMessageType('success');
+        setMessage('Login successful!');
         closeModal();
 
-        // Redirect to home page
-        window.location.href = fullUrl || '/';
+        // Redirect to the full URL or home page
+        window.location.href = fullUrl;
       } else {
-        throw new Error("Failed to retrieve token from backend.");
+        throw new Error('Failed to retrieve token from backend.');
       }
     } catch (error) {
-      console.error("Google login error:", error);
-      setMessageType("error");
-      setMessage("Google login failed. Please try again.");
+      console.error('Google login error:', error);
+      setMessageType('error');
+      setMessage('Google login failed. Please try again.');
     }
   };
 
   // Handle Google Login Failure
   const handleGoogleLoginFailure = (error: any) => {
-    console.error("Google login failed:", error);
-    setMessageType("error");
-    setMessage("Google login failed. Please try again.");
+    console.error('Google login failed:', error);
+    setMessageType('error');
+    setMessage('Google login failed. Please try again.');
   };
 
   return (
@@ -184,7 +195,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
           </form>
 
           {message && (
-            <p className={`mt-4 ${messageType === "error" ? "text-red-500" : "text-green-500"}`}>
+            <p className={`mt-4 ${messageType === 'error' ? 'text-red-500' : 'text-green-500'}`}>
               {message}
             </p>
           )}

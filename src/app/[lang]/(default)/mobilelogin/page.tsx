@@ -1,16 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import {jwtDecode} from 'jwt-decode'; // Corrected import for jwtDecode
+import { jwtDecode } from 'jwt-decode'; // Corrected import for jwtDecode
 
 export default function MobileLogin() {
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [otpRequested, setOtpRequested] = useState(false);
   const [error, setError] = useState('');
-  const fullUrl = localStorage.getItem("full-url")
+  const [fullUrl, setFullUrl] = useState('/'); // Fallback to '/' if localStorage is not available
+
+  // Fetch full URL from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedFullUrl = localStorage.getItem('full-url');
+      setFullUrl(storedFullUrl || '/'); // Set the full URL or fallback to '/'
+    }
+  }, []);
 
   const handleRequestOtp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,9 +76,9 @@ export default function MobileLogin() {
           draggable: true,
         });
 
-        // Redirect to home page after successful OTP verification
+        // Redirect to full URL after successful OTP verification
         setTimeout(() => {
-          window.location.href = fullUrl || '/';
+          window.location.href = fullUrl;
         }, 1500);
       } else {
         setError('OTP verification was not successful.');
