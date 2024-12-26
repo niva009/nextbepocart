@@ -12,7 +12,7 @@ import Text from '@components/ui/text';
 import { useTranslation } from 'src/app/i18n/client';
 import { useCartQuery } from '@framework/product/get-cart-product';
 import axios from 'axios';
-import { reduce } from 'lodash';
+
 
 export default function Cart({ lang }: { lang: string }) {
   const limit = 35;
@@ -109,9 +109,9 @@ export default function Cart({ lang }: { lang: string }) {
         window.dataLayer.push({
           event: "begin_checkout",
           ecommerce: {
-            currency: "INR", // Correct currency code for Indian Rupees
-            value: parseFloat(subTotal || 0).toFixed(2), // Ensure subTotal is parsed as a float and provide a fallback
-            items: items || [], // Ensure items is an array and provide a fallback
+            currency: "INR", 
+            value: parseFloat(subTotal || 0).toFixed(2), 
+            items: items || [], 
           },
         });
       }

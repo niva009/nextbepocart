@@ -9,12 +9,18 @@ export interface Item {
 export interface UpdateItemInput extends Partial<Omit<Item, 'id'>> {}
 
 export function addItemWithQuantity(
-  items: Item[],
+  items: Item[] = [],
   item: Item,
   quantity: number
 ) {
+  if (!Array.isArray(items)) {
+    console.error('Error: items is not an array', items);
+    return [];
+  }
+
   if (quantity <= 0)
     throw new Error("cartQuantity can't be zero or less than zero");
+
   const existingItemIndex = items.findIndex(
     (existingItem) => existingItem.id === item.id
   );
@@ -28,10 +34,15 @@ export function addItemWithQuantity(
 }
 
 export function removeItemOrQuantity(
-  items: Item[],
+  items: Item[] = [],
   id: Item['id'],
   quantity: number
 ) {
+  if (!Array.isArray(items)) {
+    console.error('Error: items is not an array', items);
+    return [];
+  }
+
   return items.reduce((acc: Item[], item) => {
     if (item.id === id) {
       const newQuantity = item.quantity! - quantity;
@@ -43,45 +54,91 @@ export function removeItemOrQuantity(
     return [...acc, item];
   }, []);
 }
+
 // Simple CRUD for Item
-export function addItem(items: Item[], item: Item) {
+export function addItem(items: Item[] = [], item: Item) {
+  if (!Array.isArray(items)) {
+    console.error('Error: items is not an array', items);
+    return [];
+  }
   return [...items, item];
 }
 
-export function getItem(items: Item[], id: Item['id']) {
+export function getItem(items: Item[] = [], id: Item['id']) {
+  if (!Array.isArray(items)) {
+    console.error('Error: items is not an array', items);
+    return undefined;
+  }
   return items.find((item) => item.id === id);
 }
 
 export function updateItem(
-  items: Item[],
+  items: Item[] = [],
   id: Item['id'],
   item: UpdateItemInput
 ) {
+  if (!Array.isArray(items)) {
+    console.error('Error: items is not an array', items);
+    return [];
+  }
+
   return items.map((existingItem) =>
     existingItem.id === id ? { ...existingItem, ...item } : existingItem
   );
 }
 
-export function removeItem(items: Item[], id: Item['id']) {
+export function removeItem(items: Item[] = [], id: Item['id']) {
+  if (!Array.isArray(items)) {
+    console.error('Error: items is not an array', items);
+    return [];
+  }
   return items.filter((existingItem) => existingItem.id !== id);
 }
 
-export function inStock(items: Item[], id: Item['id']) {
+export function inStock(items: Item[] = [], id: Item['id']) {
   const item = getItem(items, id);
   if (item) return item['quantity']! < item['stock']!;
   return false;
 }
 
-export const calculateItemTotals = (items: Item[]) =>
-  items.map((item) => ({
+// Totals Calculations
+export const calculateItemTotals = (items: Item[] = []) => {
+  if (!Array.isArray(items)) {
+    console.error('Error: items is not an array', items);
+    return [];
+  }
+
+  return items.map((item) => ({
     ...item,
-    itemTotal: item.price * item.quantity!,
+    itemTotal: item.price * (item.quantity || 0),
   }));
+};
 
-export const calculateTotal = (items: Item[]) =>
-  items.reduce((total, item) => total + item.quantity! * item.price, 0);
+export const calculateTotal = (items: Item[] = []) => {
+  if (!Array.isArray(items)) {
+    console.error('Error: items is not an array', items);
+    return 0;
+  }
 
-export const calculateTotalItems = (items: Item[]) =>
-  items.reduce((sum, item) => sum + item.quantity!, 0);
+  return items.reduce(
+    (total, item) => total + (item.quantity || 0) * item.price,
+    0
+  );
+};
 
-export const calculateUniqueItems = (items: Item[]) => items.length;
+export const calculateTotalItems = (items: Item[] = []) => {
+  if (!Array.isArray(items)) {
+    console.error('Error: items is not an array', items);
+    return 0;
+  }
+
+  return items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+};
+
+export const calculateUniqueItems = (items: Item[] = []) => {
+  if (!Array.isArray(items)) {
+    console.error('Error: items is not an array', items);
+    return 0;
+  }
+  return items.length;
+};
