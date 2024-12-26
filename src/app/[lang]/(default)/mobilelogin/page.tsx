@@ -10,6 +10,7 @@ export default function MobileLogin() {
   const [otp, setOtp] = useState('');
   const [otpRequested, setOtpRequested] = useState(false);
   const [error, setError] = useState('');
+  const fullUrl = localStorage.getItem("full-url")
 
   const handleRequestOtp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +70,7 @@ export default function MobileLogin() {
 
         // Redirect to home page after successful OTP verification
         setTimeout(() => {
-          window.location.href = '/';
+          window.location.href = fullUrl || '/';
         }, 1500);
       } else {
         setError('OTP verification was not successful.');

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Button from '@components/ui/button';
 import Counter from '@components/ui/counter';
-import { useParams, useRouter } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation'; // Correct hooks for App Router
 import useWindowSize from '@utils/use-window-size';
 import { useCart } from '@contexts/cart/cart.context';
 import { generateCartItem } from '@utils/generate-cart-item';
@@ -19,13 +19,16 @@ import { useQueryClient } from 'react-query';
 import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
 import { useRef } from 'react';
 import Script from 'next/script';
+import { useRouter } from 'next/navigation';
 
-const ProductSingleDetails = ({ data, lang ,reviews}) => {
+const ProductSingleDetails = ({ data, lang, reviews }) => {
   const { t } = useTranslation(lang, 'common');
   const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
-  const router = useRouter();
+  const pathname = usePathname(); // Get the current path
+  const searchParams = useSearchParams(); // Get query parameters
   const { width } = useWindowSize();
   const { addItemToCart } = useCart();
+  const router = useRouter();
 
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [favorite, setFavorite] = useState(false);
@@ -35,9 +38,22 @@ const ProductSingleDetails = ({ data, lang ,reviews}) => {
   const [selectedSize, setSelectedSize] = useState("");
   const [stock, setStock] = useState(0);
   const [addToCartLoader, setAddToCartLoader] = useState(false);
-  const [errorMessage , setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [addToWishlistLoader, setAddToWishlistLoader] = useState(false);
-  const queryClient = useQueryClient(); 
+  const [fullUrl, setFullUrl] = useState('');
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const origin = window.location.origin; // Get the origin (e.g., "http://localhost:3000")
+      const search = searchParams.toString(); // Convert search params to a string
+      const constructedUrl = `${origin}${pathname}${search ? `?${search}` : ''}`; // Combine parts to form the full URL
+      setFullUrl(constructedUrl);    
+    }
+  }, [pathname, searchParams]); 
+  
+
+  console.log("full url of the website,.....",fullUrl );
 
 
   const hasFired = useRef(false);
@@ -411,6 +427,7 @@ const structuredData = {
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
       if (!token) {
+        localStorage.setItem("full-url", fullUrl);
         router.push('/en/signin');
         setAddToCartLoader(false); // Stop loading if not authenticated
         return;

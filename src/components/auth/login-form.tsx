@@ -34,6 +34,10 @@ const LoginForm: React.FC<LoginFormProps> = ({
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
   const [isLoading, setIsLoading] = useState(false); // Button loading state
 
+  const fullUrl = localStorage.getItem("full-url")
+
+  console.log("full url info" ,fullUrl);
+
   const {
     register,
     handleSubmit,
@@ -89,7 +93,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         closeModal();
 
         // Redirect to home page
-        window.location.href = '/';
+        window.location.href = fullUrl || '/';
       } else {
         throw new Error("Failed to retrieve token from backend.");
       }
