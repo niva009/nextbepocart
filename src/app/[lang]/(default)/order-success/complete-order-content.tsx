@@ -1,14 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function OrderSuccess() {
-  const router = useRouter();
   const [orderData, setOrderData] = useState(null);
+  const router = useRouter();
 
-
-  console.log("order dataaa" , orderData);
+  console.log("order dataaa", orderData);
 
   // Load order data from localStorage
   useEffect(() => {
@@ -27,7 +26,7 @@ export default function OrderSuccess() {
         item_id: orderData?.content_ids,
         contents: orderData?.contents,
         affiliation: 'bepocart',
-        payment_method: orderData?.payment_method, // Ensure this exists in the data
+        payment_method: orderData?.payment_method,
         coupon_code: orderData?.coupon_code,
         currency: "INR",
         transaction_id: orderData?.transaction_id,
@@ -37,7 +36,6 @@ export default function OrderSuccess() {
       });
     }
   }, [orderData]);
-
 
   useEffect(() => {
     if (orderData) {
@@ -46,7 +44,7 @@ export default function OrderSuccess() {
         item_id: orderData?.content_ids,
         items: orderData?.contents,
         affiliation: "bepocart",
-        payment_method: orderData?.payment_method, // Corrected 'payment_methord'
+        payment_method: orderData?.payment_method,
         coupon_code: orderData?.coupon_code,
         currency: "INR",
         transaction_id: orderData?.transaction_id,
@@ -56,7 +54,20 @@ export default function OrderSuccess() {
       });
     }
   }, [orderData]);
-  
+
+  // Reload the entire page only once
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hasReloaded = localStorage.getItem('hasReloaded');
+
+      if (!hasReloaded) {
+        localStorage.setItem('hasReloaded', 'true'); // Set flag
+        setTimeout(() => {
+          window.location.reload(); // Fully reload the page
+        }, 2000);
+      }
+    }
+  }, []);
 
   const handleBackToHome = () => {
     router.push('/');
