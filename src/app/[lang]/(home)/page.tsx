@@ -29,6 +29,7 @@ export default async function Page({ params: {lang} }: {params:{ lang:string}}){
 
     const res = await axios.get('https://bepocart.in/banners/');
     const sliderBanner = res.data.banner;
+    console.log("slider banner...:", sliderBanner);
 
 
 

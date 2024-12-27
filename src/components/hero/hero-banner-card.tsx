@@ -28,7 +28,7 @@ export default function HeroBannerCard({
     const {width} = useWindowSize();
     const { name,image } = banner;
 
-    // console.log("banner99999", banner);
+    console.log("banner99999", image);
 
 
     const selectedImage = getImage(width!, image);
