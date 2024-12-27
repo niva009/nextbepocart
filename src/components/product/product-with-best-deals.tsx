@@ -109,8 +109,8 @@ const ProductWithBestDeals: React.FC<ProductFeedProps> = ({
 
             {/* Product Section */}
             {error ? (
-                // <Alert message={error?.message} className="col-span-full" />
-                <Alert message="OFFER START  TOMORROW!" />
+                <Alert message={error?.message} className="col-span-full" />
+                // <Alert message="OFFER START  TOMORROW!" />
             ) : (
                 <div className="xl:flex gap-1 relative heightFull">
                     {/* Background Thumbnail */}
