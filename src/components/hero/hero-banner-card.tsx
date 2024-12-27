@@ -37,7 +37,7 @@ export default function HeroBannerCard({
         className={cn(
           'w-full bg-no-repeat bg-cover bg-center flex items-center rounded',
           {
-            'min-h-[600px]': variant === 'slider', // Increase height for mobile view
+            'min-h-[700px]': variant === 'slider', // Increase height for mobile view
             'md:min-h-[400px]': variant === 'slider', // Height for larger screens (md and above)
             'bg-fill-thumbnail': variant !== 'antique',
           },
@@ -45,7 +45,8 @@ export default function HeroBannerCard({
         )}
         style={{
             backgroundImage: `url('https://bepocart.in/${image}')`, 
-          backgroundPosition: 'center center'
+          backgroundPosition: 'center center',
+          height:'100px'
         }}
       >
             <div
