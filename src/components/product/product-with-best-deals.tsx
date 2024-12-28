@@ -28,7 +28,7 @@ const breakpoints = {
     '1024': { slidesPerView: 4 },
     '640': { slidesPerView: 3 },
     '0': { slidesPerView: 2 },
-};
+};  
 
 // Background image for the "Best Deals" section
 const backgroundThumbnail = '/assets/images/banner/home1/hotdeals.png';

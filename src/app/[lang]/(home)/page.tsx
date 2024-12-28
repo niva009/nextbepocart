@@ -63,12 +63,12 @@ export default async function Page({ params: {lang} }: {params:{ lang:string}}){
                 <Container>
                     <ProductWithBestDeals lang={lang} className={'navSlider'}/>
                     <BestSellerProductFeed lang={lang} className="mb-8 lg:mb-15"/>
-                    <BannerGrid
+                    {/* <BannerGrid
                         lang={lang}
                         data={gridHero}
                         grid={1}
                         className="mb-8 lg:mb-15"
-                    />
+                    /> */}
               <ListingTabsElectronicFeed lang={lang} colSiderbar={false}/>
                     <BannerGrid
                         lang={lang}
