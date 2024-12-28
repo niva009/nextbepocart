@@ -20,13 +20,13 @@ function ClientRenderedHighLightedBar({ lang }: { lang: string }) {
     <>
       {highlightedBar !== 'true' && (
         <HighlightedBar onClose={() => setHighlightedBar('true')}>
-          <div className="flex items-center">
+        <div className="flex items-center font-bold text-xl text-white-500">
             <p
               // @ts-ignore
               dangerouslySetInnerHTML={{ __html: t('text-highlighted-bar') }}
             />
           </div>
-          <Countdown date={Date.now() + 4000000 * 71} />
+          {/* <Countdown date={Date.now() + 4000000 * 71} /> */}
         </HighlightedBar>
       )}
     </>

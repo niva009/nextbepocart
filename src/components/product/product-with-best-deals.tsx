@@ -96,14 +96,15 @@ const ProductWithBestDeals: React.FC<ProductFeedProps> = ({
 
                 {/* Countdown */}
                 <div className="flex items-center gap-2">
-                    <h2 className="text-skin-base text-[14px]">{t('text-offer-end')}</h2>
-                    {isClient && (
+                <h2 className="text-skin-base text-red-600 font-bold text-[14px]">{t('text-offer-end')}</h2>
+
+                    {/* {isClient && (
                         <Countdown
                             date={tomorrowMidnight}
                             intervalDelay={1000}
                             renderer={renderer}
                         />
-                    )}
+                    )} */}
                 </div>
             </div>
 
