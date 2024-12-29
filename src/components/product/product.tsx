@@ -445,6 +445,8 @@ const structuredData = {
         }
       );
       queryClient.invalidateQueries(API_ENDPOINTS.CART);
+
+      console.log("responseee cart ...", response);
   
       if (response.status === 201) {
         toast.success('Added to the bag', {

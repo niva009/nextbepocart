@@ -151,7 +151,6 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
             );
 
             if (result.status === 200) {
-              queryClient.invalidateQueries(API_ENDPOINTS.CART);
               await refetch();
               setCartItems([]);
               setSubTotal(0);

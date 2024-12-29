@@ -55,7 +55,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
   async function onSubmit({ email, password }: { email: string; password: string }) {
     setIsLoading(true);
     try {
-      const response = await axios.post('https://bepocart.in/manual-login', { email, password });
+      const response = await axios.post('https://bepocart.in/login/', { email, password });
       const token = response.data?.token;
 
       if (token) {
@@ -157,6 +157,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
             <div className="flex flex-col space-y-3.5">
               <Input
                 label="email"
+                style={{color:"black"}}
                 type="email"
                 {...register('email', {
                   required: `${t('forms:email-required')}`,
@@ -177,9 +178,13 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 lang={lang}
               />
               <div className="flex items-center justify-between">
-                <label className="relative inline-block cursor-pointer switch">
-                  <Switch checked={remember} onChange={setRemember} />
-                </label>
+              <span className="text-sm text-body">
+  <Link href="/en/signup" onClick={() => closeModal()} className="text-brand hover:underline">
+    Register Now
+  </Link>
+</span>
+
+
                 <button
                   type="button"
                   className="text-sm text-heading hover:text-brand-dark focus:outline-none"
