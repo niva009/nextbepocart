@@ -220,10 +220,10 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
 
         <div className="mt-6">
           <p className="text-lg font-medium text-qblack mb-3">Payment Method</p>
-          <div className="flex space-x-3 items-center">
+          {/* <div className="flex space-x-3 items-center">
             <input type="radio" id="cashOnDelivery" name="paymentMethod" onChange={() => handlePaymentMethodChange('COD')} />
             <label htmlFor="cashOnDelivery" style={{ color: 'black' }}>Cash on Delivery</label>
-          </div>
+          </div> */}
           <div className="flex space-x-3 items-center mt-2">
             <input type="radio" id="razorpay" name="paymentMethod" onChange={() => handlePaymentMethodChange('razorpay')} />
             <label htmlFor="razorpay" style={{ color: 'black' }}>Razorpay</label>
