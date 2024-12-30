@@ -31,6 +31,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
   const [shipping, setShipping] = useState(0);
   const [codCharge, setCodCharge] = useState(0);
   const [addressId, setAddressId] = useState<string | null>(null);
+  const [loading, setIsLoading] = useState(false);
 
   const COD_CHARGE = 40;
 
@@ -78,6 +79,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
 
     try {
       if (paymentMethod === 'COD') {
+        setIsLoading(true);
         const res = await axios.post(
           `https://bepocart.in/order/create/${addressId}/`,
           { payment_method: paymentMethod, coupon_code: couponCode },
@@ -89,6 +91,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
         await refetch(); // Immediately fetch the updated cart
         setCartItems([]); // Clear local cart state
         setSubTotal(0); // Reset subtotal
+        setIsLoading(false);
         router.push('/en/order-success');
       } else {
         displayRazorpay();
@@ -96,6 +99,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
     } catch (error) {
       console.error('Error creating order:', error);
       alert('Order creation failed.');
+      setIsLoading(false);
     }
   };
 
@@ -112,7 +116,9 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
       return;
     }
 
+
     try {
+     setIsLoading(true);
       const initialResponse = await axios.post(
         `https://bepocart.in/order/create/${addressId}/`,
         { coupon_code: couponCode, payment_method: paymentMethod },
@@ -120,6 +126,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
       );
 
       const { razorpay_order_id } = initialResponse.data;
+      setIsLoading(false);
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
@@ -136,6 +143,8 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
           };
 
           try {
+            setIsLoading(true);
+
             const result = await axios.post(
               'https://bepocart.in/verify-razorpay-payment/',
               {
@@ -151,6 +160,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
             );
 
             if (result.status === 200) {
+              setIsLoading(false);
               await refetch();
               setCartItems([]);
               setSubTotal(0);
@@ -160,6 +170,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
               alert('Failed to create order. Please try again.');
             }
           } catch (error) {
+            setIsLoading(false);
             console.log('Error processing payment:', error);
             alert('Payment was successful, but there was an issue creating the order. Please try again.');
           }
@@ -209,10 +220,10 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
 
         <div className="mt-6">
           <p className="text-lg font-medium text-qblack mb-3">Payment Method</p>
-          {/* <div className="flex space-x-3 items-center">
+          <div className="flex space-x-3 items-center">
             <input type="radio" id="cashOnDelivery" name="paymentMethod" onChange={() => handlePaymentMethodChange('COD')} />
             <label htmlFor="cashOnDelivery" style={{ color: 'black' }}>Cash on Delivery</label>
-          </div> */}
+          </div>
           <div className="flex space-x-3 items-center mt-2">
             <input type="radio" id="razorpay" name="paymentMethod" onChange={() => handlePaymentMethodChange('razorpay')} />
             <label htmlFor="razorpay" style={{ color: 'black' }}>Razorpay</label>
@@ -220,13 +231,14 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
         </div>
 
         <Button
-          variant="formButton"
-          className="w-full mt-8 mb-5 rounded font-semibold px-4 py-3 bg-brand text-brand-light"
-          onClick={handlePlaceOrder}
-          disabled={!addressId || !paymentMethod}
-        >
-          Place Order Now
-        </Button>
+  variant="formButton"
+  className="w-full mt-8 mb-5 rounded font-semibold px-4 py-3 bg-brand text-brand-light"
+  onClick={handlePlaceOrder}
+  disabled={!addressId || !paymentMethod || loading} // Disable the button while loading
+>
+  {loading ? 'Loading...' : 'Place Order'} {/* Render text based on loading state */}
+</Button>
+
       </div>
 
       <Text className="mt-8">

@@ -178,6 +178,8 @@ const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, va
     }
 
     return (
+      <div>
+          <a href={`/${lang}${ROUTES.PRODUCTS}/${slug}`}className="block">
         <article
             className={cn(
                 'flex flex-col gap-2 product-card relative p-2 sm:p-4  h-full  bg-white',
@@ -249,6 +251,8 @@ const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, va
                 </div>
             </div>
         </article>
+        </a>
+        </div>
     );
 };
 

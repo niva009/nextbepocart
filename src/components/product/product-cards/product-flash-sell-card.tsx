@@ -72,26 +72,29 @@ const ProductFlashSellCard: React.FC<ProductProps> = ({
   
 
     return (
+      <div>
+        <a href={`/${lang}${ROUTES.PRODUCTS}/${slug}`}className="block">
       <article
         className={cn(
-          'flex flex-col gap-2 product-card relative  p-2 sm:p-4  h-full rounded bg-white',
+          'flex flex-col gap-2 product-card relative  p-2 sm:p-4  h-full cursor-pointer rounded bg-white',
           className,
           Number(quantity) < 1 || outOfStock
             ? 'card-image--nojump'
             : 'card-image--jump',
         )}
-        title={name}
-      >
+        >
+
         <div className="relative flex-shrink-0 ">
           <div className="relative card-img-container overflow-hidden cursor-pointer mx-auto w-full h-[180px] md:h-[200px] ">
-            <Link href={`/${lang}${ROUTES.PRODUCTS}/${slug}`} >
+          <Link
+            href={`/${lang}${ROUTES.PRODUCTS}/${slug}`}>
             <img
               src={`https://bepocart.in/${image}`}
               alt={name || 'Product Image'}
               width={250}
               height={250}
               quality={100}
-              className="object-cover bg-fill-thumbnail cursor-pointer"
+              style={{cursor:"pointer"}}
             />
             </Link>
           </div>
@@ -141,6 +144,8 @@ const ProductFlashSellCard: React.FC<ProductProps> = ({
           </div>
         </div>
       </article>
+      </a>
+      </div>
     );
 };
 
