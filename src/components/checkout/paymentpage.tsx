@@ -116,6 +116,8 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
       return;
     }
 
+    console.log("token..:",token);
+
 
     try {
      setIsLoading(true);
@@ -186,6 +188,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
       paymentObject.open();
     } catch (error) {
       console.error('Error creating Razorpay order:', error);
+      console.log("error razorpay...:", error);
       alert('Server error. Are you online?');
     }
   }
