@@ -23,6 +23,7 @@ interface ContactFormValues {
   city: string;
   state: string;
   pincode: string;
+  customer_name: string;
 }
 
 const AddAddressForm: React.FC<{ lang: string }> = ({ lang }) => {
@@ -37,6 +38,7 @@ const AddAddressForm: React.FC<{ lang: string }> = ({ lang }) => {
     formState: { errors },
   } = useForm<ContactFormValues>({
     defaultValues: {
+      customer_name: data?.customer_name || "",
       name: data?.name || '',
       address: data?.address || '',
       email: data?.email || '',
@@ -51,7 +53,7 @@ const AddAddressForm: React.FC<{ lang: string }> = ({ lang }) => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `https://bepocart.in/add-address/`,
+        `https://patrick-north-power-fence.trycloudflare.com/add-address/`,
         values,
         {
           headers: {
@@ -74,10 +76,19 @@ const AddAddressForm: React.FC<{ lang: string }> = ({ lang }) => {
         {t('common:text-add-delivery-address')}
       </Heading>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <div className="mb-6">
+          <Input
+            variant="solid"
+            label="customer Name"
+            {...register('customer_name', { required: 'Customer name is required' })}
+            error={errors.name?.message}
+            lang={lang}
+          />
+        </div>
         <div className="mb-6">
           <Input
             variant="solid"
-            label="Name"
+            label="house name"
             {...register('name', { required: 'Name is required' })}
             error={errors.name?.message}
             lang={lang}

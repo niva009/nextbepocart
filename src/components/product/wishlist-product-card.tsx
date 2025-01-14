@@ -34,7 +34,7 @@ const WishlistProductCard: FC<ProductProps> = ({ product, lang }) => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`https://bepocart.in/wishlist-delete/${id}/`, {
+      await axios.delete(`https://patrick-north-power-fence.trycloudflare.com/wishlist-delete/${id}/`, {
         headers: { Authorization: `${token}` },
       });
       setFavorite(true);
@@ -70,7 +70,7 @@ const WishlistProductCard: FC<ProductProps> = ({ product, lang }) => {
           <div className="flex overflow-hidden max-w-[80px] transition duration-200 ease-in-out transform group-hover:scale-105">
             <Link href={`/en/products/${slug}`}>
               <img
-                src={`https://bepocart.in/${productImage }`}
+                src={`https://patrick-north-power-fence.trycloudflare.com/${productImage }`}
                 alt={slug || 'Product Image'}
                 width={80}
                 height={80}

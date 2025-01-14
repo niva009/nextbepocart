@@ -43,7 +43,7 @@ console.log("pranav", item );
           {image && (
             <div className="inline-flex w-8 shrink-0 3xl:h-auto">
               <img
-                src={`https://bepocart.in/${image}`}
+                src={`https://patrick-north-power-fence.trycloudflare.com/${image}`}
                 alt={name || t('text-category-thumbnail')}
                 width={25}
                 height={25}

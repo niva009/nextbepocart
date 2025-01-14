@@ -3,7 +3,7 @@ import axios from "axios";
 import { useQuery } from 'react-query';
 
 // Adjust your API endpoint here
-const CATEGORY_API_ENDPOINT = 'https://bepocart.in/subcategorys/';
+const CATEGORY_API_ENDPOINT = 'https://patrick-north-power-fence.trycloudflare.com/subcategorys/';
 
 // Fetch categories from API
 export const fetchCategories = async ({ queryKey }: any) => {

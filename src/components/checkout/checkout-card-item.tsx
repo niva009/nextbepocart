@@ -19,7 +19,7 @@ export const CheckoutItem: React.FC<{ item: Item }> = ({ item }) => {
     <div className="flex items-center py-4 border-b border-border-base">
       <div className="flex w-16 h-16 border rounded-md border-border-base shrink-0">
         <img
-          src={`https://bepocart.in/${item?.image}`}
+          src={`https://patrick-north-power-fence.trycloudflare.com/${item?.image}`}
           alt="item image"
           className="rounded-md ltr:mr-5 rtl:ml-5"
           width={64}

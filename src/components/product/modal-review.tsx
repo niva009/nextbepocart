@@ -28,7 +28,7 @@ export const ReviewModal: FC<ModalProps> = ({ productId, onClose }) => {
     try {
       setIsSubmitting(true);
       await axios.post(
-        `https://bepocart.in/product-review/${productId}/`,
+        `https://patrick-north-power-fence.trycloudflare.com/product-review/${productId}/`,
         {
           rating:rating,
           review_text: reviewText,

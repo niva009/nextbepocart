@@ -59,7 +59,7 @@ const CheckoutCard: React.FC<{ lang: string }> = ({ lang }) => {
         //   return;
         // }
 
-        const { data } = await axios.get('https://bepocart.in/get-address/', {
+        const { data } = await axios.get('https://patrick-north-power-fence.trycloudflare.com/get-address/', {
           headers: {
             Authorization: `${token}`, // Add 'Bearer' if required, else just use token
           },

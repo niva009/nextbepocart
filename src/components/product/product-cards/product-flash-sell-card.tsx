@@ -89,7 +89,7 @@ const ProductFlashSellCard: React.FC<ProductProps> = ({
           <Link
             href={`/${lang}${ROUTES.PRODUCTS}/${slug}`}>
             <img
-              src={`https://bepocart.in/${image}`}
+              src={`https://patrick-north-power-fence.trycloudflare.com/${image}`}
               alt={name || 'Product Image'}
               width={250}
               height={250}

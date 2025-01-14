@@ -33,7 +33,7 @@ const CategoryListCard: React.FC<Props> = ({
                 )}
             >
                 <img
-                    src={`https://bepocart.in/${image?.original}`}
+                    src={`https://patrick-north-power-fence.trycloudflare.com/${image?.original}`}
                     alt={name || t('text-category-thumbnail')}
                     width={variant === 'antique' ? 80 : 255}
                     height={variant === 'antique' ? 80 : 160}

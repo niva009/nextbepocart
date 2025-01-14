@@ -39,7 +39,7 @@ const CategoryCard: React.FC<Props> = ({lang, item, href, className,variant}) =>
                      )}
                 >
                     <img
-                    src={`https://bepocart.in/${image || 'productPlaceholder'}`}
+                    src={`https://patrick-north-power-fence.trycloudflare.com/${image || 'productPlaceholder'}`}
                         alt={name || t('text-card-thumbnail')}
                         width={100}
                         height={100}

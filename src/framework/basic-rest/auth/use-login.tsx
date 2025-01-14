@@ -10,7 +10,7 @@ export interface LoginInputType {
   password: string;
 }
 async function login(input: LoginInputType) {
-const response =  await axios.post('https://bepocart.in/login/',input);
+const response =  await axios.post('https://patrick-north-power-fence.trycloudflare.com/login/',input);
 return response.data; 
 }
 export const useLoginMutation = () => {

@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    axios.get(`https://bepocart.in/coin/`, {
+    axios.get(`https://patrick-north-power-fence.trycloudflare.com/coin/`, {
       headers: {
         'Authorization': `${token}`,
       },

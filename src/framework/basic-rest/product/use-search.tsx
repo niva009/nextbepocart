@@ -12,7 +12,7 @@ export const fetchSearchedProducts = async ({ queryKey }: any) => {
   }
 
   const { data } = await axios.get(
-    `https://bepocart.in/search-products/?q=${params.text}`
+    `https://patrick-north-power-fence.trycloudflare.com/search-products/?q=${params.text}`
   );
 
   return data;

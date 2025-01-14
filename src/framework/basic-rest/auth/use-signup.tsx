@@ -16,7 +16,7 @@ export interface SignUpInputType {
 }
 
 async function signUp(input: SignUpInputType) {
-  const response = await axios.post('https://bepocart.in/register/', input);
+  const response = await axios.post('https://patrick-north-power-fence.trycloudflare.com/register/', input);
   console.log(response)
   return response.data;
 }

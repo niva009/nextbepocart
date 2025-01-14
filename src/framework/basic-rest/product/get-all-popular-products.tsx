@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import axios from "axios";
 export const fetchPopularProducts = async ({ queryKey }: any) => {
   const [_key, _params] = queryKey;
-  const response = await axios.get('https://bepocart.in/offers/');
+  const response = await axios.get('https://patrick-north-power-fence.trycloudflare.com/offers/');
   const {data}= response.data
   // console.log("offer-product.....:",data);
   return data as Product[];

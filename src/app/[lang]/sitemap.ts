@@ -39,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let categoryPages: MetadataRoute.Sitemap = [];
 
   try {
-    const productResponse = await axios.get('https://bepocart.in/products/');
+    const productResponse = await axios.get('https://patrick-north-power-fence.trycloudflare.com/products/');
     const products = productResponse.data.products || [];
     productPages = products.map((product: any) => ({
       url: `https://bepocart.com/en/products/${product.slug}`,
@@ -53,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   try {
-    const categoryResponse = await axios.get('https://bepocart.in/subcategorys/');
+    const categoryResponse = await axios.get('https://patrick-north-power-fence.trycloudflare.com/subcategorys/');
     const categories = Array.isArray(categoryResponse.data.data) ? categoryResponse.data.data : [];
     categoryPages = categories.map((category: any) => ({
       url: `https://bepocart.com/en/${category.categoryName}/${category.slug}`,

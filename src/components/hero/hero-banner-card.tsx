@@ -44,7 +44,7 @@ export default function HeroBannerCard({
           className
         )}
         style={{
-            backgroundImage: `url('https://bepocart.in/${image}')`, 
+            backgroundImage: `url('https://patrick-north-power-fence.trycloudflare.com/${image}')`, 
           backgroundPosition: 'center center',
           height:'100px'
         }}

@@ -434,7 +434,7 @@ const structuredData = {
       }
   
       const response = await axios.post(
-        `https://bepocart.in/cart/${data?.product?.id}/`,
+        `https://patrick-north-power-fence.trycloudflare.com/cart/${data?.product?.id}/`,
         {
           quantity: selectedQuantity,
           size: selectedSize,
@@ -500,7 +500,7 @@ const structuredData = {
   
     axios
       .post(
-        `https://bepocart.in/add-wishlist/${data?.product?.id}/`,
+        `https://patrick-north-power-fence.trycloudflare.com/add-wishlist/${data?.product?.id}/`,
         {},
         {
           headers: {
@@ -568,7 +568,7 @@ const structuredData = {
             ) : (
               <div className="flex items-center justify-center w-auto">
                 <img
-                  src={`https://bepocart.in/${data?.product?.image || '/product-placeholder.svg'}`}
+                  src={`https://patrick-north-power-fence.trycloudflare.com/${data?.product?.image || '/product-placeholder.svg'}`}
                   alt={data?.product?.name}
                   width="full"
                   height={680}
