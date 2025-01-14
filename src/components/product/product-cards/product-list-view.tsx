@@ -46,7 +46,7 @@ const ProductList: React.FC<ProductProps> = ({product, className, lang}) => {
                 >
     
                     <img
-                        src={`https://patrick-north-power-fence.trycloudflare.com/${image}`}
+                        src={`https://bepocart.in/${image}`}
                         alt={name || 'Product Image'}
                         width={180}
                         height={180}

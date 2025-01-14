@@ -23,7 +23,7 @@
           return;
         }
 
-        await axios.delete(`https://patrick-north-power-fence.trycloudflare.com/cart-delete/${id}/`, {
+        await axios.delete(`https://bepocart.in/cart-delete/${id}/`, {
           headers: { Authorization: `${token}` },
         });
         onRemove(id);
@@ -52,7 +52,7 @@
       <div className="group w-full flex items-center text-brand-light py-4 border-b border-border-one relative">
         <div className="relative flex rounded overflow-hidden w-[90px] h-[90px]">
           <img
-            src={`https://patrick-north-power-fence.trycloudflare.com/${item?.image}`}
+            src={`https://bepocart.in/${item?.image}`}
             width={100}
             height={100}
             alt={item.name || 'Product Image'}

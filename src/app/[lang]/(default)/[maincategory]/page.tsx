@@ -27,7 +27,7 @@ export const ProductGrid: FC<ProductGridProps> = ({ className = '', lang, slug }
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`https://patrick-north-power-fence.trycloudflare.com/subcategory/${slug}/`, {
+        const response = await axios.get(`https://bepocart.in/subcategory/${slug}/`, {
           params: { page },
           headers: {
             Accept: 'application/json',

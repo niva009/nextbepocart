@@ -4,7 +4,7 @@ import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
 import { useQuery } from 'react-query';
 
 export const fetchProduct = async (_slug: string) => {
-  const response = await axios.get(`https://patrick-north-power-fence.trycloudflare.com/product/${_slug}/`);
+  const response = await axios.get(`https://bepocart.in/product/${_slug}/`);
   const {data} = response;
   console.log("data..:",data);
   return data;

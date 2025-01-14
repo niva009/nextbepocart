@@ -81,7 +81,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
       if (paymentMethod === 'COD') {
         setIsLoading(true);
         const res = await axios.post(
-          `https://patrick-north-power-fence.trycloudflare.com/order/create/${addressId}/`,
+          `https://bepocart.in/order/create/${addressId}/`,
           { payment_method: paymentMethod, coupon_code: couponCode },
           { headers: { Authorization: `${token}` } }
         );
@@ -122,7 +122,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
     try {
      setIsLoading(true);
       const initialResponse = await axios.post(
-        `https://patrick-north-power-fence.trycloudflare.com/order/create/${addressId}/`,
+        `https://bepocart.in/order/create/${addressId}/`,
         { coupon_code: couponCode, payment_method: paymentMethod },
         { headers: { Authorization: `${token}` } }
       );
@@ -148,7 +148,7 @@ const PaymentSection: React.FC<CheckoutCardProps> = ({ lang, couponDiscount, cou
             setIsLoading(true);
 
             const result = await axios.post(
-              'https://patrick-north-power-fence.trycloudflare.com/verify-razorpay-payment/',
+              'https://bepocart.in/verify-razorpay-payment/',
               {
                 order_id: razorpay_order_id,
                 coupon_code: couponCode,

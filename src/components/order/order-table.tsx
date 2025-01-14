@@ -76,7 +76,7 @@ const OrderTable: React.FC<{ orders?: any[] }> = ({ orders = [] }) => {
               </td>
               <td className="px-4 py-2 border-b">
               <img
-  src={`https://patrick-north-power-fence.trycloudflare.com/${order.image}`}
+  src={`https://bepocart.in/${order.image}`}
   alt="Product"
   className="w-16 h-16 object-cover rounded"
 />

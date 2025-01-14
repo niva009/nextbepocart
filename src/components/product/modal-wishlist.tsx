@@ -20,7 +20,7 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
 
   const fetchProductDetails = async () => {
     try {
-      const response = await axios.get(`https://patrick-north-power-fence.trycloudflare.com/product/${slug}/`);
+      const response = await axios.get(`https://bepocart.in/product/${slug}/`);
       const productData = response.data;
       setProductDetails(productData);
 
@@ -43,7 +43,7 @@ export const WishlistModal: FC<ModalProps> = ({ slug, onClose, deleteItem }) => 
   const addToCart = async (productId: string) => {
     try {
       await axios.post(
-        `https://patrick-north-power-fence.trycloudflare.com/cart/${productId}/`,
+        `https://bepocart.in/cart/${productId}/`,
         {
           size: selectedSize,
           color: selectedColor,

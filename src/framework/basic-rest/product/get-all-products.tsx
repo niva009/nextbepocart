@@ -16,7 +16,7 @@ const fetchProducts = async ({ queryKey }: any) => {
   const { category, sort_by } = options || {};
 
   // Construct the initial URL for the subcategory endpoint
-  let url = `https://patrick-north-power-fence.trycloudflare.com/subcategory/${category}/`;
+  let url = `https://bepocart.in/subcategory/${category}/`;
 
   try {
     // Attempt to fetch data from the subcategory API
@@ -39,7 +39,7 @@ const fetchProducts = async ({ queryKey }: any) => {
     console.warn("Subcategory endpoint not found, attempting main category endpoint...");
 
     // Fallback URL for the main category endpoint
-    url = `https://patrick-north-power-fence.trycloudflare.com/category/${category}/products/`;
+    url = `https://bepocart.in/category/${category}/products/`;
 
     // Retry with the main category endpoint
     const { data } = await axios.get(url, {

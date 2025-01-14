@@ -7,7 +7,7 @@ export const fetchCartProducts = async ({ queryKey }: any) => {
   const token = localStorage.getItem("token");
   const [_key, _params] = queryKey;
 
-  const response = await axios.get('https://patrick-north-power-fence.trycloudflare.com/cart-products/', {
+  const response = await axios.get('https://bepocart.in/cart-products/', {
     headers: { Authorization: `${token}` },
   });
 

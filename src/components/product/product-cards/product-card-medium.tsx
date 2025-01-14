@@ -80,7 +80,7 @@ const RenderLabelStock = ({ slug, lang }: { slug: string; lang: string }) => {
       const fetchProductData = async () => {
         try {
           setLoading(true);
-          const response = await fetch(`https://patrick-north-power-fence.trycloudflare.com/product/${slug}/`);
+          const response = await fetch(`https://bepocart.in/product/${slug}/`);
           if (!response.ok) {
             throw new Error(`Failed to fetch product data for slug: ${slug}`);
           }
@@ -198,7 +198,7 @@ const ProductCardMedium: React.FC<ProductProps> = ({product, className, lang, va
                     className="text-skin-base font-semibold text-sm leading-5 min-h-[40px] line-clamp-2 mt-1 mb-2 hover:text-brand"
                 >
                     <img
-                         src={`https://patrick-north-power-fence.trycloudflare.com/${image}`}
+                         src={`https://bepocart.in/${image}`}
                         alt={name || 'Product Image'}
                         width={180}
                         height={180}

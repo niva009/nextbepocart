@@ -19,7 +19,7 @@ const ProductReviewRating: FC<{ lang: string; productId: string }> = ({ lang, pr
     // Fetch reviews using the fetch API
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`https://patrick-north-power-fence.trycloudflare.com/review/${productId}/`);
+        const response = await fetch(`https://bepocart.in/review/${productId}/`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

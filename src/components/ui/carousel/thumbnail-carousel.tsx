@@ -100,7 +100,7 @@ const ThumbnailCarousel: React.FC<Props> = ({
               className="flex items-center justify-center"
             >
             <img
-  src={`https://patrick-north-power-fence.trycloudflare.com/${url}`}
+  src={`https://bepocart.in/${url}`}
   alt={`Product gallery ${index}`}
   width={500}
   height={500}
@@ -144,7 +144,7 @@ const ThumbnailCarousel: React.FC<Props> = ({
               className="flex items-center justify-center cursor-pointer rounded overflow-hidden border border-border-base transition hover:opacity-75"
             >
               <img
-                src={`https://patrick-north-power-fence.trycloudflare.com/${url}`}
+                src={`https://bepocart.in/${url}`}
                 alt={`Product thumb gallery ${index}`}
                 width={170}
                 height={170}

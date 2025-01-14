@@ -55,7 +55,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
   async function onSubmit({ email, password }: { email: string; password: string }) {
     setIsLoading(true);
     try {
-      const response = await axios.post('https://patrick-north-power-fence.trycloudflare.com/login/', { email, password });
+      const response = await axios.post('https://bepocart.in/login/', { email, password });
       const token = response.data?.token;
 
       if (token) {
@@ -89,7 +89,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       const { name, email } = decodedIdToken;
 
       // Send user data to the backend for token generation
-      const result = await axios.post('https://patrick-north-power-fence.trycloudflare.com/google-login/', {
+      const result = await axios.post('https://bepocart.in/google-login/', {
         name,
         email,
       });

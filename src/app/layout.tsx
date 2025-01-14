@@ -46,7 +46,7 @@ export default function RootLayout({
     if (userData) {
       const token = localStorage.getItem("token");
 
-      fetch('https://patrick-north-power-fence.trycloudflare.com/get-address/', {
+      fetch('https://bepocart.in/get-address/', {
         headers: {
           Authorization: `${token}`,
         },

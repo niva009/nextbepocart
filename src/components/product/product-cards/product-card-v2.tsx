@@ -105,7 +105,7 @@ const ProductCardV2: React.FC<ProductProps> = ({product, className, lang,variant
             <div className="relative flex-shrink-0 overflow-hidden rounded-sm">
                 <div className="relative flex card-img-container   w-full">
                     <img
-                        src={`https://patrick-north-power-fence.trycloudflare.com/${image}`}
+                        src={`https://bepocart.in/${image}`}
                         alt={name || 'Product Image'}
                         width={262}
                         height={327}

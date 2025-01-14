@@ -35,7 +35,7 @@ const PaymentPage: React.FC<{ lang: string }> = ({ lang }) => {
   useEffect(() => {
     const fetchCouponData = async () => {
       try {
-        const response = await axios.get('https://patrick-north-power-fence.trycloudflare.com/cupons/');
+        const response = await axios.get('https://bepocart.in/cupons/');
         setCouponData(response.data);
       } catch (error) {
         console.error("Error fetching coupon data:", error);

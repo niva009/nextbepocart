@@ -46,7 +46,7 @@ const MobileMenu = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('https://patrick-north-power-fence.trycloudflare.com/category/');
+        const response = await fetch('https://bepocart.in/category/');
 
         console.log("subcategory information...:", response)
         const data = await response.json();

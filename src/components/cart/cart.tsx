@@ -147,7 +147,7 @@ export default function Cart({ lang }: { lang: string }) {
     );
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`https://patrick-north-power-fence.trycloudflare.com/cart/increment/${id}/`, { quantity: newQuantity }, {
+      await axios.put(`https://bepocart.in/cart/increment/${id}/`, { quantity: newQuantity }, {
         headers: { Authorization: `${token}` },
       });
       refetch(); // Refresh cart data
@@ -165,7 +165,7 @@ export default function Cart({ lang }: { lang: string }) {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`https://patrick-north-power-fence.trycloudflare.com/cart/decrement/${id}/`, { quantity: newQuantity }, {
+      await axios.put(`https://bepocart.in/cart/decrement/${id}/`, { quantity: newQuantity }, {
         headers: { Authorization: `${token}` },
       });
       refetch(); // Refresh cart data

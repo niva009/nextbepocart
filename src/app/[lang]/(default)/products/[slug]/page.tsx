@@ -16,7 +16,7 @@ export default async function Page({ params: { lang, slug } }) {
 
   try {
     // Fetch product data
-    const resProduct = await fetch(`https://patrick-north-power-fence.trycloudflare.com/product/${slug}/`, { cache: 'no-store' });
+    const resProduct = await fetch(`https://bepocart.in/product/${slug}/`, { cache: 'no-store' });
 
     if (!resProduct.ok) {
       throw new Error('Product fetch failed');
@@ -29,7 +29,7 @@ export default async function Page({ params: { lang, slug } }) {
     }
 
     // Fetch reviews using data.product.id instead of slug
-    const resReviews = await fetch(`https://patrick-north-power-fence.trycloudflare.com/review/${data?.product?.id}/`);
+    const resReviews = await fetch(`https://bepocart.in/review/${data?.product?.id}/`);
 
     if (!resReviews.ok) {
       throw new Error('Reviews fetch failed');

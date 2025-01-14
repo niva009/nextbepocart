@@ -28,7 +28,7 @@ const AddressGrid: React.FC<{ address?: any; lang: string }> = ({
 
   async function handleDelete(itemId: any) {
     try {
-      await axios.delete(`https://patrick-north-power-fence.trycloudflare.com/delete-address/${itemId}/`, {
+      await axios.delete(`https://bepocart.in/delete-address/${itemId}/`, {
         headers: {
           Authorization: `${token}`
         }
